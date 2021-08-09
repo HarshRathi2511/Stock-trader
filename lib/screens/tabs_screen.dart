@@ -34,31 +34,23 @@ class _TabsScreenState extends State<TabsScreen> {
           width: double.infinity,
           height: deviceSize.height * 0.075,
           child: GNav(
-              // backgroundColor: Color(0xFF232023),
-              // backgroundColor: Color(0xFF191717),
               haptic: true, // haptic feedback
               tabBorderRadius: 15,
-              tabActiveBorder: Border.all(
-                width: 0,
-                color: Color(0xFF232023),
-              ), // tab button border
-              tabBorder: Border.all(
-                color: Color(0xFF232023),
-                width: 0,
-              ),
               activeColor: Colors.white,
               color: Colors.white, // tab button border
               duration: Duration(milliseconds: 400), // tab animation duration
               gap: 8, // the tab button gap between icon and text
-              iconSize: 24, // tab button icon size
+              iconSize: deviceSize.width / 20, // tab button icon size
               padding: EdgeInsets.symmetric(
-                  horizontal: 20, vertical: 5), // navigation bar padding
+                horizontal: 20,
+                vertical: 5,
+              ), // navigation bar padding
               tabs: [
                 GButton(
                   icon: Icons.access_time_filled,
                   text: 'WatchList',
                   textStyle: TextStyle(
-                    fontSize: 16,
+                    fontSize: deviceSize.width / 26.5,
                     color: Colors.white,
                   ),
                 ),
@@ -66,15 +58,15 @@ class _TabsScreenState extends State<TabsScreen> {
                   icon: Icons.pie_chart,
                   text: 'Portfolio',
                   textStyle: TextStyle(
-                    fontSize: 16,
+                    fontSize: deviceSize.width / 26.5,
                     color: Colors.white,
                   ),
                 ),
                 GButton(
                   icon: Icons.compare_arrows_rounded,
-                  text: 'Transactions',
+                  text: 'Trades',
                   textStyle: TextStyle(
-                    fontSize: 16,
+                    fontSize: deviceSize.width / 26.5,
                     color: Colors.white,
                   ),
                 ),
@@ -82,7 +74,7 @@ class _TabsScreenState extends State<TabsScreen> {
                   icon: Icons.account_circle_outlined,
                   text: 'Profile',
                   textStyle: TextStyle(
-                    fontSize: 16,
+                    fontSize: deviceSize.width / 26.5,
                     color: Colors.white,
                   ),
                 )
