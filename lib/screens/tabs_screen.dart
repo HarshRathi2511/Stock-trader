@@ -16,13 +16,13 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   var changeTabScreen = [
     WatchlistScreen(),
-    MoversScreen(),
+    // MoversScreen(),
     PortfolioScreen(),
     TransactionScreen(),
     ProfileScreen(),
   ];
 
-  var _page = 0; //shows current page number
+  var _page = 1; //shows current page number
 
   @override
   Widget build(BuildContext context) {
@@ -40,56 +40,57 @@ class _TabsScreenState extends State<TabsScreen> {
           width: double.infinity,
           height: deviceSize.height * 0.075,
           child: GNav(
-              haptic: true, // haptic feedback
-              tabBorderRadius: 15,
-              activeColor: Colors.white,
-              color: Colors.white, // tab button border
-              duration: Duration(milliseconds: 400), // tab animation duration
-              gap: 8, // the tab button gap between icon and text
-              iconSize: deviceSize.width / 20, // tab button icon size
-              padding: EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 5,
+            haptic: true, // haptic feedback
+            tabBorderRadius: 15,
+            activeColor: Colors.white,
+            color: Colors.white, // tab button border
+            duration: Duration(milliseconds: 400), // tab animation duration
+            gap: 8, // the tab button gap between icon and text
+            iconSize: deviceSize.width / 20, // tab button icon size
+            padding: EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 5,
+            ), // navigation bar padding
+            tabs: [
+              GButton(
+                icon: Icons.access_time_filled,
+                text: 'WatchList',
+                textStyle: TextStyle(
+                  fontSize: deviceSize.width / 26.5,
+                  color: Colors.white,
+                ),
               ),
-              onTabChange: (value) => {
-                setState(() {
-                _page = value;
-              })
-              }, // navigation bar padding
-              tabs: [
-                GButton(
-                  icon: Icons.access_time_filled,
-                  text: 'WatchList',
-                  textStyle: TextStyle(
-                    fontSize: deviceSize.width / 26.5,
-                    color: Colors.white,
-                  ),
+              GButton(
+                icon: Icons.pie_chart,
+                text: 'Portfolio',
+                textStyle: TextStyle(
+                  fontSize: deviceSize.width / 26.5,
+                  color: Colors.white,
                 ),
-                GButton(
-                  icon: Icons.pie_chart,
-                  text: 'Portfolio',
-                  textStyle: TextStyle(
-                    fontSize: deviceSize.width / 26.5,
-                    color: Colors.white,
-                  ),
+              ),
+              GButton(
+                icon: Icons.compare_arrows_rounded,
+                text: 'Trades',
+                textStyle: TextStyle(
+                  fontSize: deviceSize.width / 26.5,
+                  color: Colors.white,
                 ),
-                GButton(
-                  icon: Icons.compare_arrows_rounded,
-                  text: 'Trades',
-                  textStyle: TextStyle(
-                    fontSize: deviceSize.width / 26.5,
-                    color: Colors.white,
-                  ),
+              ),
+              GButton(
+                icon: Icons.account_circle_outlined,
+                text: 'Profile',
+                textStyle: TextStyle(
+                  fontSize: deviceSize.width / 26.5,
+                  color: Colors.white,
                 ),
-                GButton(
-                  icon: Icons.account_circle_outlined,
-                  text: 'Profile',
-                  textStyle: TextStyle(
-                    fontSize: deviceSize.width / 26.5,
-                    color: Colors.white,
-                  ),
-                )
-              ]),
+              )
+            ],
+            onTabChange: (int selectedPageIndex) {
+              setState(() {
+                _page = selectedPageIndex;
+              });
+            },
+          ),
         ),
         body: changeTabScreen[_page],
       ),
