@@ -65,11 +65,11 @@ class ProfileScreen extends StatelessWidget {
           ),
           Expanded(
             child: GridView(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(2),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: deviceSize.width * 3 / deviceSize.height,
-                crossAxisSpacing: 5,
+                crossAxisSpacing: 0,
                 mainAxisSpacing: 5,
               ),
               children: [

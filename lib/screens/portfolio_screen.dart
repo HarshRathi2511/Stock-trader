@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
-// import 'package:pie_chart/pie_chart.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 class PortfolioScreen extends StatelessWidget {
-  const PortfolioScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
 
-    Map<String, double> pieChartDataMap = {
-      "Reliance": 5,
-      "Amazon": 3,
-      "Siemens": 2,
-      "Blue Origin": 2,
+    Map<String, double> dataMap = {
+      "Flutter": 5,
+      "React": 3,
+      "Xamarin": 2,
+      "Ionic": 2,
     };
+    List<Color> colorList = [
+      Colors.red,
+      Colors.green,
+      Colors.blue,
+      Colors.yellow,
+    ];
 
     Widget _buildStockListTile() {
       return ListTile(
@@ -34,7 +38,11 @@ class PortfolioScreen extends StatelessWidget {
           ),
         ),
         trailing: Text('+ \$31.87',
-            style: TextStyle(fontSize: 15, color: Colors.white)),
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            )),
       );
     }
 
@@ -44,13 +52,18 @@ class PortfolioScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Text(
-                    'My portfolio',
-                    style: TextStyle(
-                        color: Colors.white, fontSize: deviceHeight * 0.03),
-                  )),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'My portfolio',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: deviceWidth / 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
               ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(70)),
                 child: Container(
@@ -75,8 +88,10 @@ class PortfolioScreen extends StatelessWidget {
                               Text(
                                 '\$ 24.265',
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: deviceHeight * 0.04),
+                                  color: Colors.white,
+                                  fontSize: deviceHeight * 0.04,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ],
                           ),
@@ -91,8 +106,10 @@ class PortfolioScreen extends StatelessWidget {
                               Text(
                                 '\$ 24.265',
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: deviceHeight * 0.04),
+                                  color: Colors.white,
+                                  fontSize: deviceHeight * 0.04,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ],
                           ),
@@ -105,7 +122,10 @@ class PortfolioScreen extends StatelessWidget {
                       Chip(
                         label: Text(
                           '+  \$ 5.65',
-                          style: TextStyle(fontSize: 25),
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         backgroundColor: Colors.lightGreenAccent,
                       ),
@@ -122,36 +142,33 @@ class PortfolioScreen extends StatelessWidget {
                   height: deviceHeight * 0.3,
                   width: deviceWidth * 0.9,
                   color: blackgrey,
-                  // child: PieChart(
-                  //   dataMap: dataMap,
-                  //   animationDuration: Duration(milliseconds: 800),
-                  //   chartLegendSpacing: 32,
-                  //   chartRadius: MediaQuery.of(context).size.width / 3.2,
-                  //   colorList: colorList,
-                  //   initialAngleInDegree: 0,
-                  //   chartType: ChartType.ring,
-                  //   ringStrokeWidth: 32,
-                  //   centerText: "HYBRID",
-                  //   legendOptions: LegendOptions(
-                  //     showLegendsInRow: false,
-                  //     legendPosition: LegendPosition.right,
-                  //     showLegends: true,
-                  //     legendShape: _BoxShape.circle,
-                  //     legendTextStyle: TextStyle(
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //   ),
-                  //   chartValuesOptions: ChartValuesOptions(
-                  //     showChartValueBackground: true,
-                  //     showChartValues: true,
-                  //     showChartValuesInPercentage: false,
-                  //     showChartValuesOutside: false,
-                  //     decimalPlaces: 1,
-                  //   ),
-                  // ),
-                  child: Center(
-                      child: Text('pie chart here ',
-                          style: TextStyle(color: Colors.white))),
+                  child: PieChart(
+                    dataMap: dataMap,
+                    animationDuration: Duration(milliseconds: 800),
+                    chartLegendSpacing: 32,
+                    chartRadius: MediaQuery.of(context).size.width / 3.2,
+                    colorList: colorList,
+                    initialAngleInDegree: 0,
+                    chartType: ChartType.ring,
+                    ringStrokeWidth: 32,
+                    centerText: "HYBRID",
+                    legendOptions: LegendOptions(
+                      showLegendsInRow: false,
+                      legendPosition: LegendPosition.right,
+                      showLegends: true,
+                      legendShape: BoxShape.circle,
+                      legendTextStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    chartValuesOptions: ChartValuesOptions(
+                      showChartValueBackground: true,
+                      showChartValues: true,
+                      showChartValuesInPercentage: false,
+                      showChartValuesOutside: false,
+                      decimalPlaces: 1,
+                    ),
+                  ),
                 ),
               ),
               ClipRRect(
@@ -167,15 +184,18 @@ class PortfolioScreen extends StatelessWidget {
                           style: TextStyle(color: Colors.white))),
                 ),
               ),
-              Text('Stocks',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: deviceHeight * 0.03),
-                  textAlign: TextAlign.left),
-
+              Text(
+                'Stocks',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: deviceWidth / 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
               _buildStockListTile(),
               _buildStockListTile(),
               _buildStockListTile(),
-
             ],
           ),
         ),
