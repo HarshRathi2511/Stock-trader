@@ -27,6 +27,12 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    var changeTabScreen = [
+      WatchlistScreen(),
+      PortfolioScreen(),
+      TransactionScreen(),
+      ProfileScreen(),
+    ];
 
     return SafeArea(
       child: Scaffold(
@@ -44,7 +50,12 @@ class _TabsScreenState extends State<TabsScreen> {
               padding: EdgeInsets.symmetric(
                 horizontal: 20,
                 vertical: 5,
-              ), // navigation bar padding
+              ),
+              onTabChange: (value) => {
+                setState(() {
+                _page = value;
+              })
+              }, // navigation bar padding
               tabs: [
                 GButton(
                   icon: Icons.access_time_filled,
