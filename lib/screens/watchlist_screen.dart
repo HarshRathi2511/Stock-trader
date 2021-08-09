@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stock_trader/constants.dart';
 
 class WatchlistScreen extends StatelessWidget {
   final inputStockController = TextEditingController();
@@ -6,17 +7,6 @@ class WatchlistScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.black,
-      //   title: Text(
-      //     'Stock Trader',
-      //     style: TextStyle(
-      //       color: Colors.white,
-      //       fontWeight: FontWeight.w400,
-      //       fontSize: 24,
-      //     ),
-      //   ),
-      // ),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
@@ -42,7 +32,7 @@ class WatchlistScreen extends StatelessWidget {
             // padding: EdgeInsets.all(10),
             margin: EdgeInsets.all(15),
             decoration: BoxDecoration(
-              color: Color(0xFF22262B),
+              color: blackgrey,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
