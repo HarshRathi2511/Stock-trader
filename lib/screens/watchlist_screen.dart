@@ -19,7 +19,8 @@ class WatchlistScreen extends StatelessWidget {
                 'Watchlist',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: deviceSize.width / 21,
+                  fontSize: deviceSize.width / 18,
+                  fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -32,7 +33,7 @@ class WatchlistScreen extends StatelessWidget {
             // padding: EdgeInsets.all(10),
             margin: EdgeInsets.all(15),
             decoration: BoxDecoration(
-              color: blackgrey,
+              color: kBlackGrey,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
@@ -90,7 +91,7 @@ class WatchlistScreen extends StatelessWidget {
                 ),
               ),
               Text(
-                "Add stocks to track them here",
+                "Add stocks to track them here.",
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: deviceSize.width / 26,

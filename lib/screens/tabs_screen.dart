@@ -27,6 +27,12 @@ class _TabsScreenState extends State<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    var changeTabScreen = [
+      WatchlistScreen(),
+      PortfolioScreen(),
+      TransactionScreen(),
+      ProfileScreen(),
+    ];
 
     return SafeArea(
       child: Scaffold(
