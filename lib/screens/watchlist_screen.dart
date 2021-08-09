@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
+import 'package:stock_trader/provider/watchlist_provider.dart';
+import 'package:provider/provider.dart';
 
 class WatchlistScreen extends StatelessWidget {
   final inputStockController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final watchListProvider = Provider.of<WatchListProvider>(context);
+    // watchListProvider.watchList.
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -77,28 +81,41 @@ class WatchlistScreen extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: deviceSize.height * 0.1,
-              ),
-              Text(
-                "Your watchlist is empty!",
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: deviceSize.width / 26,
+          Text(
+            'Your watchlist',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: deviceSize.width * 0.05,
+            ),
+          ),
+          watchListProvider.numOfStocks == 0
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: deviceSize.height * 0.1,
+                    ),
+                    Text(
+                      "Your watchlist is empty!",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: deviceSize.width / 26,
+                      ),
+                    ),
+                    Text(
+                      "Add stocks to track them here.",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: deviceSize.width / 26,
+                      ),
+                    ),
+                  ],
+                )
+              : Expanded(
+                  child: ListView(
+                      // children: watchListProvider.watchList.forEach((element) {Tex})
+                      ),
                 ),
-              ),
-              Text(
-                "Add stocks to track them here.",
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: deviceSize.width / 26,
-                ),
-              ),
-            ],
-          )
         ],
       ),
     );
