@@ -5,9 +5,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('jhfvwkvbw',style: TextStyle(fontSize: 50,color: Colors.white),),
-      
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,  
     );
   }
 }
