@@ -7,7 +7,7 @@ class MoversScreen extends StatelessWidget {
   Widget build(BuildContext context) {
      return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Center(child: Text('page 1'),),
+      body: Center(child: Text('page 1',style:TextStyle(color: Colors.white))),
       
     );
   }
