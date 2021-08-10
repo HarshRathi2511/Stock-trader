@@ -22,7 +22,7 @@ class _TabsScreenState extends State<TabsScreen> {
     ProfileScreen(),
   ];
 
-  var _page = 1; //shows current page number
+  var _page = 0; //shows current page number
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class _TabsScreenState extends State<TabsScreen> {
           width: double.infinity,
           height: deviceSize.height * 0.09,
           child: GNav(
-            haptic: true, // haptic feedback
+             haptic: true, // haptic feedback
             tabBorderRadius: 15,
             activeColor: Colors.white,
             color: Colors.white, // tab button border
@@ -59,8 +59,10 @@ class _TabsScreenState extends State<TabsScreen> {
                 textStyle: TextStyle(
                   fontSize: deviceSize.width / 26.5,
                   color: Colors.white,
+
                 ),
               ),
+             
               GButton(
                 icon: Icons.pie_chart,
                 text: 'Portfolio',
@@ -69,6 +71,8 @@ class _TabsScreenState extends State<TabsScreen> {
                   color: Colors.white,
                 ),
               ),
+
+
               GButton(
                 icon: Icons.analytics,
                 text: 'News',
@@ -77,6 +81,7 @@ class _TabsScreenState extends State<TabsScreen> {
                   color: Colors.white,
                 ),
               ),
+
               GButton(
                 icon: Icons.compare_arrows_rounded,
                 text: 'Trades',
@@ -85,6 +90,7 @@ class _TabsScreenState extends State<TabsScreen> {
                   color: Colors.white,
                 ),
               ),
+
               GButton(
                 icon: Icons.account_circle_outlined,
                 text: 'Profile',
@@ -92,13 +98,14 @@ class _TabsScreenState extends State<TabsScreen> {
                   fontSize: deviceSize.width / 26,
                   color: Colors.white,
                 ),
-              )
+              ),
+
+           
             ],
-            onTabChange: (int selectedPageIndex) {
-              setState(() {
-                _page = selectedPageIndex;
-              });
+            onTabChange: (value) {
+              _page= value;
             },
+           
           ),
         ),
         body: changeTabScreen[_page],
@@ -106,3 +113,4 @@ class _TabsScreenState extends State<TabsScreen> {
     );
   }
 }
+

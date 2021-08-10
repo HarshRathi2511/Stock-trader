@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
+import 'package:provider/provider.dart';
+import 'package:stock_trader/providers/stocks.dart';
+import 'package:stock_trader/screens/stock_detail_screen.dart';
 
 class WatchlistScreen extends StatelessWidget {
+
   final inputStockController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final stocksData = Provider.of<Stocks>(context,listen: false);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -83,22 +89,39 @@ class WatchlistScreen extends StatelessWidget {
               SizedBox(
                 height: deviceSize.height * 0.1,
               ),
-              Text(
-                "Your watchlist is empty!",
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: deviceSize.width / 26,
-                ),
-              ),
-              Text(
-                "Add stocks to track them here.",
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: deviceSize.width / 26,
-                ),
-              ),
+              // Text(
+              //   "Your watchlist is empty!",
+              //   style: TextStyle(
+              //     color: Colors.grey,
+              //     fontSize: deviceSize.width / 26,
+              //   ),
+              // ),
+              // Text(
+              //   "Add stocks to track them here.",
+              //   style: TextStyle(
+              //     color: Colors.grey,
+              //     fontSize: deviceSize.width / 26,
+              //   ),
+              // ),
+              
             ],
-          )
+          ),
+          Container(
+            height: deviceSize.height*0.5,
+            child: ListView.builder(
+              itemCount: stocksData.stocks.length,
+              itemBuilder: (c,i){
+                return ListTile(
+                  title: Text(stocksData.stocks[i].title,style:profilePageStyle),
+                  trailing: Text(stocksData.stocks[i].price,style:profilePageStyle),
+                  onTap: (){
+                    Navigator.of(context).pushNamed(StockDetailScreen.routeName,arguments:stocksData.stocks[i].id);
+                  },
+ 
+                );
+              },
+            ),
+          ),
         ],
       ),
     );

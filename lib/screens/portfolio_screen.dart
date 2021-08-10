@@ -9,12 +9,14 @@ class PortfolioScreen extends StatelessWidget {
     final deviceWidth = MediaQuery.of(context).size.width;
 
     Map<String, double> dataMap = {
-      "Flutter": 5,
-      "React": 3,
-      "Xamarin": 2,
-      "Ionic": 2,
+
+      "Reliance": 5,
+      "Amazon": 3,
+      "Siemens": 2,
+      "Blue Origin": 2,
     };
-    List<Color> colorList = [
+    List<Color> colorList =[
+
       Colors.red,
       Colors.green,
       Colors.blue,
@@ -149,7 +151,10 @@ class PortfolioScreen extends StatelessWidget {
                     chartRadius: MediaQuery.of(context).size.width / 3.2,
                     colorList: colorList,
                     initialAngleInDegree: 0,
-                    chartType: ChartType.ring,
+
+                    chartType: ChartType.disc,
+
+
                     ringStrokeWidth: 32,
                     centerText: "HYBRID",
                     legendOptions: LegendOptions(
@@ -165,10 +170,12 @@ class PortfolioScreen extends StatelessWidget {
                       showChartValueBackground: true,
                       showChartValues: true,
                       showChartValuesInPercentage: false,
+
                       showChartValuesOutside: false,
                       decimalPlaces: 1,
                     ),
                   ),
+
                 ),
               ),
               ClipRRect(
