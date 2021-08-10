@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_trader/providers/orders.dart';
@@ -16,9 +17,15 @@ class StockDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final deviceHeight = deviceSize.height;
     final stocksData = Provider.of<Stocks>(context, listen: false);
     final quantityController = TextEditingController();
     String quantity = '0';
+    final marketSentimentMap = {'Market Sentiment': 78.8, '': 100 - 78.8};
+    final List<Color> colorList = [
+      Colors.green,
+      blackgrey,
+    ];
 
     final ordersData = Provider.of<Orders>(context, listen: false);
 
@@ -46,8 +53,8 @@ class StockDetailScreen extends StatelessWidget {
                 Container(
                   color: Colors.greenAccent[400],
                   width: double.infinity,
-                  padding:
-                      EdgeInsets.only(right: deviceSize.width * 0.7, top: 20,bottom: 5),
+                  // padding: EdgeInsets.only(
+                  //     right: deviceSize.width * 0.4, top: 20, bottom: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -57,6 +64,7 @@ class StockDetailScreen extends StatelessWidget {
                             fontSize: deviceSize.height * 0.04,
                             color: Colors.black),
                       ),
+                      Expanded(child: Text(' ')),
                       // Icon(Icons.signal_cellular_0_bar_rounded)
                     ],
                   ),
@@ -74,7 +82,7 @@ class StockDetailScreen extends StatelessWidget {
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(
-                      vertical: deviceSize.height * 0.007,
+                      vertical: deviceSize.height * 0.001,
                       horizontal: deviceSize.width * 0.02),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -93,9 +101,9 @@ class StockDetailScreen extends StatelessWidget {
                           ),
                           // controller: quantityController,
 
-                          // keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                            hintText: 'Select quantity',
+                            hintText: '    quantity',
                             border: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             // enabledBorder: InputBorder.,
@@ -117,11 +125,15 @@ class StockDetailScreen extends StatelessWidget {
                       Chip(
                         label: Text(
                           '\$' + loadedStock.price.toString(),
-                          style: TextStyle(fontSize: deviceSize.height * 0.03),
+                          style: TextStyle(
+                              fontSize: deviceSize.height * 0.03,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
                         ),
                         shadowColor: Colors.green[200],
                         elevation: 7,
                         padding: EdgeInsets.all(8),
+                        backgroundColor: Colors.blueGrey[900],
                       ),
                     ],
                   ),
@@ -181,24 +193,177 @@ class StockDetailScreen extends StatelessWidget {
       );
     }
 
+    Widget _buildTextRow(String dataType, String value) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Text(
+              dataType,
+              style: TextStyle(fontSize: 15, color: Colors.white60),
+            ),
+            SizedBox(
+              width: deviceSize.width * 0.02,
+            ),
+            Text(
+              value,
+              style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w300),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
-      
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-               Container(
-              child: Center(
-                child: Text(
-                  loadedStock.title,
-                  style: profilePageDataStyle,
-                  textAlign: TextAlign.center,
+              Container(
+                child: Center(
+                  child: Text(
+                    loadedStock.title,
+                    style: profilePageDataStyle,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ),
-            ),
-              
               SizedBox(
-                height: deviceSize.height * 0.1,
+                height: deviceSize.height * 0.03,
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(70),
+                child: Container(
+                  margin: EdgeInsets.all(deviceHeight * 0.02),
+                  padding: EdgeInsets.all(deviceHeight * 0.02),
+                  height: deviceSize.height * 0.6,
+                  width: double.infinity,
+                  color: blackgrey,
+                  child: Text('chart here', style: profilePageStyle),
+                ),
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(70),
+                child: Container(
+                  margin: EdgeInsets.all(deviceHeight * 0.02),
+                  padding: EdgeInsets.all(deviceHeight * 0.02),
+                  height: deviceSize.height * 0.3,
+                  width: double.infinity,
+                  color: blackgrey,
+                  child: Column(
+                    children: [
+                      Text(
+                        'Stats',
+                        style: TextStyle(
+                            color: Colors.blueGrey,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _buildTextRow('OPEN', '1323.05'),
+                          _buildTextRow('PREV CLOSE', '1323.05'),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _buildTextRow('HIGH', '1323.05'),
+                          _buildTextRow('LOW', '1323.05'),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _buildTextRow('52 WK HIGH', '1323.05'),
+                          _buildTextRow('52 WK LOW', '1323.05'),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _buildTextRow('MKT CAP', '1323.05'),
+                          _buildTextRow('VOL', '1323.05'),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _buildTextRow('CAP TYPE', '1323.05'),
+                          _buildTextRow('P/E', '1323.05'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(70),
+                child: Container(
+                  margin: EdgeInsets.all(deviceHeight * 0.02),
+                  padding: EdgeInsets.all(deviceHeight * 0.02),
+                  height: deviceSize.height * 0.3,
+                  width: double.infinity,
+                  color: blackgrey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Market Sentiment',
+                          style: TextStyle(
+                              color: Colors.blueGrey,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold)),
+                      Center(
+                        child: PieChart(
+                          dataMap: marketSentimentMap,
+                          chartType: ChartType.ring,
+                          chartRadius: deviceSize.width / 3.2,
+                          colorList: colorList,
+                          initialAngleInDegree: 0,
+                          legendOptions: LegendOptions(
+                            showLegendsInRow: false,
+                            legendPosition: LegendPosition.right,
+                            showLegends: true,
+                            legendShape: BoxShape.circle,
+                            legendTextStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      //display different text like bullish bearish depending on %
+                      Text(
+                        'Bullish',
+                        style: TextStyle(
+                            fontSize: deviceSize.height * 0.03,
+                            color: Colors.lightBlue[200]),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(70),
+                child: Container(
+                  margin: EdgeInsets.all(deviceHeight * 0.02),
+                  padding: EdgeInsets.all(deviceHeight * 0.02),
+                  height: deviceSize.height * 0.9,
+                  width: double.infinity,
+                  color: blackgrey,
+                  child: Text(
+                    'company wise news api here',
+                    style: profilePageStyle,
+                  ),
+                ),
               ),
             ],
           ),
