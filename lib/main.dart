@@ -1,4 +1,5 @@
 import 'package:provider/provider.dart';
+import 'package:stock_trader/providers/orders.dart';
 import 'package:stock_trader/providers/stocks.dart';
 import 'package:stock_trader/screens/stock_detail_screen.dart';
 import 'package:stock_trader/screens/tabs_screen.dart';
@@ -16,6 +17,9 @@ class MyApp extends StatelessWidget {
       providers:[
        ChangeNotifierProvider(
          create: (ctx)=>Stocks(),
+       ),
+       ChangeNotifierProvider(
+         create: (ctx)=>Orders(),
        ),
       ],
       child: MaterialApp(

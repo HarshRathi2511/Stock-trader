@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:stock_trader/providers/orders.dart';
 import 'package:stock_trader/providers/stocks.dart';
 import 'package:stock_trader/screens/stock_detail_screen.dart';
 import 'package:stock_trader/providers/share.dart';
@@ -10,12 +11,17 @@ class StockDetailScreen extends StatelessWidget {
 
   static const routeName = '/stock-detail';
 
+  
+
+
   @override
   Widget build(BuildContext context) {
     final deviceSize =MediaQuery.of(context).size;
     final stocksData = Provider.of<Stocks>(context, listen: false);
     final quantityController = TextEditingController();
      String quantity;
+
+     final ordersData = Provider.of<Orders>(context,listen: false);
 
 
     final route = ModalRoute.of(context);
@@ -46,7 +52,7 @@ class StockDetailScreen extends StatelessWidget {
                         color: Colors.white,
                       ),
                       controller: quantityController,
-                      onSubmitted: (_) {},
+                      
                       // keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         hintText: 'Select quantity of stocks',                 
@@ -64,9 +70,12 @@ class StockDetailScreen extends StatelessWidget {
                         quantity=value;
                         print(quantity);
                       },
+                      onSubmitted: (_) {},
                     ),
                   Text('Current Price ${loadedStock.price}',style: profilePageDataStyle,),
-                  ElevatedButton(onPressed: (){}, child: Text('BUY',style: profilePageDataStyle,)),
+                  ElevatedButton(onPressed: (){
+                    
+                  }, child: Text('BUY',style: profilePageDataStyle,)),
                   ElevatedButton(onPressed: (){}, child: Text('SELL',style: profilePageDataStyle,)),
                 ],
               ),

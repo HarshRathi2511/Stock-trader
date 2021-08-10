@@ -8,7 +8,7 @@ class TransactionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
-      Widget _buildStockListTile() {
+    Widget _buildStockListTile() {
       return ListTile(
         leading: Text(
           'icon here',
@@ -28,24 +28,28 @@ class TransactionScreen extends StatelessWidget {
             style: TextStyle(fontSize: 15, color: Colors.white)),
       );
     }
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
-          Padding(
-              padding: EdgeInsets.all(20),
-              child: Text(
-                'Transactions',
-                style: TextStyle(
-                    color: Colors.white, fontSize: deviceHeight * 0.03),
-              )),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            'Transactions',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: deviceWidth / 18,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
           _buildStockListTile(),
           _buildStockListTile(),
           _buildStockListTile(),
           _buildStockListTile(),
           _buildStockListTile(),
-
-
         ],
       ),
     );
