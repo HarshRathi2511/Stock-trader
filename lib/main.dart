@@ -1,6 +1,9 @@
 import 'package:provider/provider.dart';
 import 'package:stock_trader/provider/news_provider.dart';
 import 'package:stock_trader/provider/watchlist_provider.dart';
+import 'package:stock_trader/providers/orders.dart';
+import 'package:stock_trader/providers/stocks.dart';
+import 'package:stock_trader/screens/stock_detail_screen.dart';
 import 'package:stock_trader/screens/tabs_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -12,29 +15,38 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primaryColor: Colors.white, //Color(0xFF17242D),
-        // accentColor: Color(0xFF17242D),
-        fontFamily: 'Raleway',
-        // scaffoldBackgroundColor: Color(0xFF151A1A),
-        scaffoldBackgroundColor: Colors.black87,
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.red,
-        ),
-      ),
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (_) => WatchListProvider(),
+    return MultiProvider(
+      providers:[
+       ChangeNotifierProvider(
+         create: (ctx)=>Stocks(),
+       ),
+       ChangeNotifierProvider(
+         create: (ctx)=>Orders(),
+       ),
+       ChangeNotifierProvider(
+         create: (_) => WatchListProvider(),
+       ),
+       ChangeNotifierProvider(
+         create: (_) => NewsProvider(),
+       ),
+      ],
+      child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primaryColor: Colors.white, //Color(0xFF17242D),
+            // accentColor: Color(0xFF17242D),
+            fontFamily: 'Raleway',
+            // scaffoldBackgroundColor: Color(0xFF151A1A),
+            scaffoldBackgroundColor: Colors.black87,
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.red,
+            ),
           ),
-          ChangeNotifierProvider(
-            create: (_) => NewsProvider(),
+          home: TabsScreen(),
+          routes: {
+            StockDetailScreen.routeName :(ctx) => StockDetailScreen(),
+          },
           ),
-        ],
-        child: TabsScreen(),
-      ),
     );
   }
 }
