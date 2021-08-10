@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
-import 'package:stock_trader/provider/watchlist_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_trader/widgets/watchlist_card.dart';
+import './stock_detail_screen.dart';
+import '../providers/stock.dart';
 
 
 class WatchlistScreen extends StatelessWidget {
@@ -12,14 +13,13 @@ class WatchlistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final watchListProvider = Provider.of<WatchListProvider>(context);
+    final stockProvider = Provider.of<StockProvider>(context);
     var _watchList = [];
     // watchListProvider.watchList.
 
-    for (int i = 0; i < watchListProvider.numOfStocks; i++) {
-      _watchList.add(watchListProvider.watchList[i].values.toList()[0]);
+    for (int i = 0; i < stockProvider.watchListStockCount; i++) {
+      _watchList.add(stockProvider.watchListStocks[i].values.toList()[0]);
     }
-    final stocksData = Provider.of<Stocks>(context,listen: false);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -98,7 +98,7 @@ class WatchlistScreen extends StatelessWidget {
               fontSize: deviceSize.width * 0.05,
             ),
           ),
-          watchListProvider.numOfStocks == 0
+          stockProvider.watchListStockCount == 0
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -159,22 +159,22 @@ class WatchlistScreen extends StatelessWidget {
               
             ],
           ),
-          Container(
-            height: deviceSize.height*0.5,
-            child: ListView.builder(
-              itemCount: stocksData.stocks.length,
-              itemBuilder: (c,i){
-                return ListTile(
-                  title: Text(stocksData.stocks[i].title,style:profilePageStyle),
-                  trailing: Text(stocksData.stocks[i].price,style:profilePageStyle),
-                  onTap: (){
-                    Navigator.of(context).pushNamed(StockDetailScreen.routeName,arguments:stocksData.stocks[i].id);
-                  },
+          // Container(
+          //   height: deviceSize.height*0.5,
+          //   child: ListView.builder(
+          //     itemCount: stocksData.stocks.length,
+          //     itemBuilder: (c,i){
+          //       return ListTile(
+          //         title: Text(stocksData.stocks[i].title,style:profilePageStyle),
+          //         trailing: Text(stocksData.stocks[i].price,style:profilePageStyle),
+          //         onTap: (){
+          //           Navigator.of(context).pushNamed(StockDetailScreen.routeName,arguments:stocksData.stocks[i].id);
+          //         },
  
-                );
-              },
-            ),
-          ),
+          //       );
+          //     },
+          //   ),
+          // ),
         ],
       ),
     );

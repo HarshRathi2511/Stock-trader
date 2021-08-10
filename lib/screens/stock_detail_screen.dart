@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:provider/provider.dart';
-import 'package:stock_trader/providers/orders.dart';
-import 'package:stock_trader/providers/stocks.dart';
-import 'package:stock_trader/screens/stock_detail_screen.dart';
-import 'package:stock_trader/providers/share.dart';
+import 'package:stock_trader/providers/stock.dart';
 
 class StockDetailScreen extends StatelessWidget {
   const StockDetailScreen({Key? key}) : super(key: key);
@@ -17,19 +14,9 @@ class StockDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize =MediaQuery.of(context).size;
-    final stocksData = Provider.of<Stocks>(context, listen: false);
+    final stockProvider = Provider.of<StockProvider>(context, listen: false);
     final quantityController = TextEditingController();
      String quantity;
-
-     final ordersData = Provider.of<Orders>(context,listen: false);
-
-
-    final route = ModalRoute.of(context);
-    // This will NEVER fail
-    if (route == null) return SizedBox.shrink();
-    final String routeArgId = route.settings.arguments as String;
-
-    final loadedStock = stocksData.stocks.firstWhere((share) => share.id==routeArgId);
 
     return Scaffold(
       appBar: AppBar(
