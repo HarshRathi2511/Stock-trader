@@ -13,4 +13,4 @@ const TextStyle profilePageDataStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
-var isNewsLoading = true;
+var isNewsLoading = false;

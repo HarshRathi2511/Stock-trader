@@ -44,20 +44,29 @@ class NewsProvider with ChangeNotifier {
 
     print(res);
 
-    _length = res["totalResults"];
+    print("Desc ${res["articles"][0]["description"]}");
 
     for (var news in res["articles"]) {
-      _latestHeadlines.add(
-        News(
-          title: news["title"],
-          description: news["description"],
-          url: news["url"],
-          urlToImage: news["urlToImage"],
-          publishedAt: news["publishedAt"],
-          content: news["content"],
-          sourceName: news["source"]["name"],
-        ),
-      );
+      if (news["title"] != null &&
+          news["description"] != null &&
+          news["url"] != null &&
+          news["urlToImage"] != null &&
+          news["publishedAt"] != null &&
+          news["content"] != null &&
+          news["source"]["name"] != null) {
+        _length++;
+        _latestHeadlines.add(
+          News(
+            title: news["title"],
+            description: news["description"],
+            url: news["url"],
+            urlToImage: news["urlToImage"],
+            publishedAt: news["publishedAt"],
+            content: news["content"],
+            sourceName: news["source"]["name"],
+          ),
+        );
+      }
     }
   }
 }
