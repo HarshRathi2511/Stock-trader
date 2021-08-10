@@ -1,4 +1,6 @@
 import 'package:provider/provider.dart';
+import 'package:stock_trader/provider/news_provider.dart';
+import 'package:stock_trader/provider/watchlist_provider.dart';
 import 'package:stock_trader/providers/orders.dart';
 import 'package:stock_trader/providers/stocks.dart';
 import 'package:stock_trader/screens/stock_detail_screen.dart';
@@ -20,6 +22,12 @@ class MyApp extends StatelessWidget {
        ),
        ChangeNotifierProvider(
          create: (ctx)=>Orders(),
+       ),
+       ChangeNotifierProvider(
+         create: (_) => WatchListProvider(),
+       ),
+       ChangeNotifierProvider(
+         create: (_) => NewsProvider(),
        ),
       ],
       child: MaterialApp(
