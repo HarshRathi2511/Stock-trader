@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
-import 'package:stock_trader/provider/watchlist_provider.dart';
+import 'package:stock_trader/providers/watchlist_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_trader/widgets/watchlist_card.dart';
+import './stock_detail_screen.dart';
+import '../providers/stocks.dart';
 
 
 class WatchlistScreen extends StatelessWidget {

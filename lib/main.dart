@@ -1,8 +1,9 @@
 import 'package:provider/provider.dart';
-import 'package:stock_trader/provider/news_provider.dart';
-import 'package:stock_trader/provider/watchlist_provider.dart';
+import 'package:stock_trader/providers/news_provider.dart';
+import 'package:stock_trader/providers/watchlist_provider.dart';
 import 'package:stock_trader/providers/orders.dart';
 import 'package:stock_trader/providers/stocks.dart';
+import 'package:stock_trader/screens/news_detail_screen.dart';
 import 'package:stock_trader/screens/stock_detail_screen.dart';
 import 'package:stock_trader/screens/tabs_screen.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
           home: TabsScreen(),
           routes: {
             StockDetailScreen.routeName :(ctx) => StockDetailScreen(),
+            NewsDetailScreen.routeName  : (ctx) => NewsDetailScreen(),
           },
           ),
     );

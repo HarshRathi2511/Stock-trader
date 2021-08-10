@@ -1,6 +1,5 @@
 //class defining a single share
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 
 class Share with ChangeNotifier {
   final String title;
@@ -23,7 +22,7 @@ class Share with ChangeNotifier {
        isWatchlist=false;
      }
      else {
-       isWatchlist==true;
+       isWatchlist=true;
      }
 
      notifyListeners();
