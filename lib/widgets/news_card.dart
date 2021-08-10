@@ -26,7 +26,7 @@ class NewsCard extends StatelessWidget {
               vertical: 8,
             ),
             width: double.infinity,
-            height: deviceSize.height * 0.125,
+            height: deviceSize.height * 0.2,
             decoration: BoxDecoration(
               color: kBlackGrey,
               borderRadius: BorderRadius.circular(15),
@@ -40,9 +40,13 @@ class NewsCard extends StatelessWidget {
                     bottomLeft: Radius.circular(15),
                     bottomRight: Radius.zero,
                   ),
-                  child: Image.network(
-                    urlToImage,
-                    fit: BoxFit.fill,
+                  child: Container(
+                    width: deviceSize.width * 0.4,
+                    height: deviceSize.height * 0.2,
+                    child: Image.network(
+                      urlToImage,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -54,33 +58,33 @@ class NewsCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       LimitedBox(
+                        maxWidth: deviceSize.width * 0.50,
                         child: Text(
                           title,
                           overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
                           style: TextStyle(
                             color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                            // fontWeight: FontWeight.bold,
                             fontSize: 18,
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      LimitedBox(
-                        // flex: 4,
-                        maxWidth: deviceSize.width * 0.55,
-                        maxHeight: deviceSize.height * 0.125 * 0.9,
-                        child: Text(
-                          description,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
+                      // SizedBox(
+                      //   height: 5,
+                      // ),
+                      // LimitedBox(
+                      //   // flex: 4,
+                      //   maxWidth: deviceSize.width * 0.55,
+                      //   maxHeight: deviceSize.height * 0.125 * 0.9,
+                      //   child: Text(
+                      //     description,
+                      //     overflow: TextOverflow.ellipsis,
+                      //     maxLines: 3,
+                      //     style: TextStyle(
+                      //       color: Colors.white,
+                      //     ),
+                      //   ),
+                      // )
                     ],
                   ),
                 )

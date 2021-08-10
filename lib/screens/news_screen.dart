@@ -13,35 +13,35 @@ class NewsScreen extends StatefulWidget {
 class _NewsScreenState extends State<NewsScreen> {
   var didErrorOccur = false;
   @override
-  // void didChangeDependencies() async {
-  //   final newsProvider = Provider.of<NewsProvider>(context);
-  //   try {
-  //     await newsProvider.getData();
-  //     setState(() {
-  //       isNewsLoading = false;
-  //     });
-  //   } catch (_) {
-  //     showDialog(
-  //         context: context,
-  //         builder: (_) {
-  //           return AlertDialog(
-  //             title: Text('An error occurred!'),
-  //             content: Text('Try again later'),
-  //             actions: [
-  //               TextButton(
-  //                 onPressed: () => Navigator.pop(context, 'OK'),
-  //                 child: const Text('OK'),
-  //               ),
-  //             ],
-  //           );
-  //         });
-  //     setState(() {
-  //       isNewsLoading = false;
-  //       didErrorOccur = true;
-  //     });
-  //   }
-  //   super.didChangeDependencies();
-  // }
+  void didChangeDependencies() async {
+    final newsProvider = Provider.of<NewsProvider>(context);
+    try {
+      await newsProvider.getData();
+      setState(() {
+        isNewsLoading = false;
+      });
+    } catch (_) {
+      showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              title: Text('An error occurred!'),
+              content: Text('Try again later'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          });
+      setState(() {
+        isNewsLoading = false;
+        didErrorOccur = true;
+      });
+    }
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,48 +67,49 @@ class _NewsScreenState extends State<NewsScreen> {
               ),
             ),
           ),
-          // isNewsLoading
-          //     ? Expanded(
-          //         child: Center(child: CircularProgressIndicator()),
-          //       )
-          //     : didErrorOccur
-          //         ? Expanded(
-          //             child: Center(
-          //               child: Text(
-          //                 'Error faced while getting your news!',
-          //                 style: TextStyle(
-          //                   color: Colors.grey,
-          //                   fontSize: deviceSize.width / 26,
-          //                 ),
-          //               ),
-          //             ),
-          //           )
-          //         : Expanded(
-          //             child: ListView.builder(
-          //               itemCount: newsProvider.length,
-          //               itemBuilder: (_, index) {
-          //                 return NewsCard(
-          //                     title: 'Mumbai havoc',
-          //                     description:
-          //                         'A havoc occurred in Mumbai yesterday',
-          //                     urlToImage:
-          //                         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT91AeV4UF1XdtfCalQLygCgSYFXnB11uKyBg&usqp=CAU");
-          //               },
-          //             ),
-          //           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 1,
-              itemBuilder: (_, index) {
-                return NewsCard(
-                    title: 'Mumbai havoc',
-                    description:
-                        'A havoc occurred in Mumbai yesterday,A havoc occurred in Mumbai yesterday,A havoc occurred in Mumbai yesterday',
-                    urlToImage:
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT91AeV4UF1XdtfCalQLygCgSYFXnB11uKyBg&usqp=CAU");
-              },
-            ),
-          ),
+          isNewsLoading
+              ? Expanded(
+                  child: Center(child: CircularProgressIndicator()),
+                )
+              : didErrorOccur
+                  ? Expanded(
+                      child: Center(
+                        child: Text(
+                          'Error faced while getting your news!',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: deviceSize.width / 26,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: newsProvider.length,
+                        itemBuilder: (_, index) {
+                          return NewsCard(
+                            title: newsProvider.latestHeadlines[index].title,
+                            description:
+                                newsProvider.latestHeadlines[index].description,
+                            urlToImage:
+                                newsProvider.latestHeadlines[index].urlToImage,
+                          );
+                        },
+                      ),
+                    ),
+          // Expanded(
+          //   child: ListView.builder(
+          //     itemCount: 1,
+          //     itemBuilder: (_, index) {
+          //       return NewsCard(
+          //           title: 'Mumbai havoc',
+          //           description:
+          //               'A havoc occurred in Mumbai yesterday,A havoc occurred in Mumbai yesterday,A havoc occurred in Mumbai yesterday',
+          //           urlToImage:
+          //               "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT91AeV4UF1XdtfCalQLygCgSYFXnB11uKyBg&usqp=CAU");
+          //     },
+          //   ),
+          // ),
         ],
       ),
     );
