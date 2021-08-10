@@ -53,7 +53,7 @@ class NewsDetailScreen extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 10,
+              height: deviceSize.height * 0.075,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),

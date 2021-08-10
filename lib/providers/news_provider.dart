@@ -69,4 +69,42 @@ class NewsProvider with ChangeNotifier {
       }
     }
   }
+
+  Future<void> getStockNewsByQuery(query) async {
+    final link = Uri.parse(
+        "https://newsapi.org/v2/everything?q={query}&sortBy=popularity&apiKey=9417487a30c2456e90da08fd903d5487");
+
+    final response = await http.get(link);
+    final res = json.decode(response.body);
+
+    print(res);
+
+    print("Desc ${res["articles"][0]["description"]}");
+
+    for (var news in res["articles"]) {
+      if (news["title"] != null &&
+          news["description"] != null &&
+          news["url"] != null &&
+          news["urlToImage"] != null &&
+          news["publishedAt"] != null &&
+          news["content"] != null &&
+          news["source"]["name"] != null) {
+        if (_length >= 20) {
+          break;
+        }
+        _length++;
+        _latestHeadlines.add(
+          News(
+            title: news["title"],
+            description: news["description"],
+            url: news["url"],
+            urlToImage: news["urlToImage"],
+            publishedAt: news["publishedAt"],
+            content: news["content"],
+            sourceName: news["source"]["name"],
+          ),
+        );
+      }
+    }
+  }
 }
