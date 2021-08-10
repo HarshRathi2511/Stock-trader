@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
-// import 'package:pie_chart/pie_chart.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 class PortfolioScreen extends StatelessWidget {
   const PortfolioScreen({Key? key}) : super(key: key);
@@ -10,12 +10,18 @@ class PortfolioScreen extends StatelessWidget {
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
 
-    Map<String, double> pieChartDataMap = {
+    Map<String, double> dataMap = {
       "Reliance": 5,
       "Amazon": 3,
       "Siemens": 2,
       "Blue Origin": 2,
     };
+    List<Color> colorList =[
+      Colors.red,
+      Colors.green,
+      Colors.blue,
+      Colors.yellow,
+    ];
 
     Widget _buildStockListTile() {
       return ListTile(
@@ -122,36 +128,34 @@ class PortfolioScreen extends StatelessWidget {
                   height: deviceHeight * 0.3,
                   width: deviceWidth * 0.9,
                   color: blackgrey,
-                  // child: PieChart(
-                  //   dataMap: dataMap,
-                  //   animationDuration: Duration(milliseconds: 800),
-                  //   chartLegendSpacing: 32,
-                  //   chartRadius: MediaQuery.of(context).size.width / 3.2,
-                  //   colorList: colorList,
-                  //   initialAngleInDegree: 0,
-                  //   chartType: ChartType.ring,
-                  //   ringStrokeWidth: 32,
-                  //   centerText: "HYBRID",
-                  //   legendOptions: LegendOptions(
-                  //     showLegendsInRow: false,
-                  //     legendPosition: LegendPosition.right,
-                  //     showLegends: true,
-                  //     legendShape: _BoxShape.circle,
-                  //     legendTextStyle: TextStyle(
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //   ),
-                  //   chartValuesOptions: ChartValuesOptions(
-                  //     showChartValueBackground: true,
-                  //     showChartValues: true,
-                  //     showChartValuesInPercentage: false,
-                  //     showChartValuesOutside: false,
-                  //     decimalPlaces: 1,
-                  //   ),
-                  // ),
-                  child: Center(
-                      child: Text('pie chart here ',
-                          style: TextStyle(color: Colors.white))),
+                  child: PieChart(
+                    dataMap: dataMap,
+                    animationDuration: Duration(milliseconds: 800),
+                    chartLegendSpacing: 32,
+                    chartRadius: MediaQuery.of(context).size.width / 3.2,
+                    colorList: colorList,
+                    initialAngleInDegree: 0,
+                    chartType: ChartType.disc,
+                    ringStrokeWidth: 32,
+                    centerText: "HYBRID",
+                    legendOptions: LegendOptions(
+                      showLegendsInRow: false,
+                      legendPosition: LegendPosition.right,
+                      showLegends: true,
+                      legendShape: BoxShape.circle,
+                      legendTextStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    chartValuesOptions: ChartValuesOptions(
+                      showChartValueBackground: true,
+                      showChartValues: true,
+                      showChartValuesInPercentage: false,
+                      showChartValuesOutside: true,
+                      decimalPlaces: 1,
+                    ),
+                  ),
+                  
                 ),
               ),
               ClipRRect(
