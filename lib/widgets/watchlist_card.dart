@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stock_trader/constants.dart';
 
 class WatchListStockCard extends StatelessWidget {
   late final String symbol;
@@ -21,13 +22,33 @@ class WatchListStockCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
+        height: 80,
+        margin: EdgeInsets.all(10),
+        color: kBlackGrey,
+        width: double.infinity,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            stockIcon,
-            Column(children: [
-              Text(symbol),
-              Text(title),
-            ]),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(children: [
+                stockIcon,
+                Center(
+                  child: Column(children: [
+                    Text(
+                      symbol,
+                      style: profilePageStyle,
+                    ),
+                    Text(
+                      title,
+                      style: profilePageStyle,
+                    ),
+                  ]),
+                ),
+              ]),
+            ),
             Text(
               stockPrice.toString(),
               style: TextStyle(

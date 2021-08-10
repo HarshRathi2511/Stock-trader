@@ -22,7 +22,7 @@ class _TabsScreenState extends State<TabsScreen> {
     ProfileScreen(),
   ];
 
-  var _page = 1; //shows current page number
+  var _page = 0; //shows current page number
 
   @override
   Widget build(BuildContext context) {

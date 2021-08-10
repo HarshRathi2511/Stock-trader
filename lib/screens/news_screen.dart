@@ -1,8 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stock_trader/constants.dart';
+// import 'package:stock_trader/constants.dart';
+import 'package:stock_trader/provider/news_provider.dart';
 
-class NewsScreen extends StatelessWidget {
-  const NewsScreen({Key? key}) : super(key: key);
+class NewsScreen extends StatefulWidget {
+  @override
+  _NewsScreenState createState() => _NewsScreenState();
+}
+
+class _NewsScreenState extends State<NewsScreen> {
+  @override
+  void didChangeDependencies() async {
+    final newsProvider = Provider.of<NewsProvider>(context);
+    await newsProvider.getData();
+    setState(() {
+      isNewsLoading = false;
+    });
+    print(newsProvider.latestHeadlines);
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +44,7 @@ class NewsScreen extends StatelessWidget {
               ),
             ),
           ),
+          // CircularProgressIndicator()
         ],
       ),
     );

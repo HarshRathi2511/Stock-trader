@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:stock_trader/provider/watchlist_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:stock_trader/widgets/watchlist_card.dart';
 
 class WatchlistScreen extends StatelessWidget {
   final inputStockController = TextEditingController();
@@ -9,7 +10,13 @@ class WatchlistScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final watchListProvider = Provider.of<WatchListProvider>(context);
+    var _watchList = [];
     // watchListProvider.watchList.
+
+    for (int i = 0; i < watchListProvider.numOfStocks; i++) {
+      _watchList.add(watchListProvider.watchList[i].values.toList()[0]);
+    }
+    print(1);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -113,8 +120,18 @@ class WatchlistScreen extends StatelessWidget {
                 )
               : Expanded(
                   child: ListView(
-                      // children: watchListProvider.watchList.forEach((element) {Tex})
-                      ),
+                    children: _watchList
+                        .map(
+                          (e) => WatchListStockCard(
+                              title: e.title,
+                              symbol: e.symbol,
+                              percentageChange: e.percentageChange,
+                              didPriceIncrease: e.didPriceIncrease,
+                              stockPrice: e.stockPrice,
+                              stockIcon: e.stockIcon),
+                        )
+                        .toList(),
+                  ),
                 ),
         ],
       ),

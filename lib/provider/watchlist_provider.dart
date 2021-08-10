@@ -24,34 +24,46 @@ class WatchListProvider with ChangeNotifier {
       't1': WatchListStock(
           didPriceIncrease: true,
           percentageChange: 3,
-          stockIcon: Icon(Icons.apps_outlined),
+          stockIcon: Icon(
+            Icons.apps_outlined,
+            color: Colors.white,
+          ),
           stockPrice: 34.46,
           symbol: 'AAPL',
           title: 'Apple Inc.')
     },
     {
-      't1': WatchListStock(
+      't2': WatchListStock(
           didPriceIncrease: true,
           percentageChange: 3,
-          stockIcon: Icon(Icons.apps_outlined),
+          stockIcon: Icon(
+            Icons.apps_outlined,
+            color: Colors.white,
+          ),
           stockPrice: 34.46,
           symbol: 'AAPL',
           title: 'Apple Inc.')
     },
     {
-      't1': WatchListStock(
+      't3': WatchListStock(
           didPriceIncrease: true,
           percentageChange: 3,
-          stockIcon: Icon(Icons.apps_outlined),
+          stockIcon: Icon(
+            Icons.apps_outlined,
+            color: Colors.white,
+          ),
           stockPrice: 34.46,
           symbol: 'AAPL',
           title: 'Apple Inc.')
     },
     {
-      't1': WatchListStock(
+      't4': WatchListStock(
           didPriceIncrease: true,
           percentageChange: 3,
-          stockIcon: Icon(Icons.apps_outlined),
+          stockIcon: Icon(
+            Icons.apps_outlined,
+            color: Colors.white,
+          ),
           stockPrice: 34.46,
           symbol: 'AAPL',
           title: 'Apple Inc.')

@@ -1,4 +1,5 @@
 import 'package:provider/provider.dart';
+import 'package:stock_trader/provider/news_provider.dart';
 import 'package:stock_trader/provider/watchlist_provider.dart';
 import 'package:stock_trader/screens/tabs_screen.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(
             create: (_) => WatchListProvider(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => NewsProvider(),
           ),
         ],
         child: TabsScreen(),
