@@ -19,11 +19,13 @@ class _CompanyNewsState extends State<CompanyNews> {
 
   @override
   void initState() {
+    print(widget.loadedStocktitle);
     Future.delayed(Duration.zero).then((value) =>
         Provider.of<NewsProvider>(context, listen: false)
             .getStockNewsByQuery(widget.loadedStocktitle).then((_){
               setState(() {
                 isLoading=false;
+                print(widget.loadedStocktitle);
               });
             }));
     super.initState();
@@ -56,19 +58,19 @@ class _CompanyNewsState extends State<CompanyNews> {
               widget.loadedStocktitle,
               style: profilePageStyle,
             ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: newsProvider.companyWiseNews.length,
-                itemBuilder: (_, index) {
-                  return NewsCard(
-                    title: newsProvider.companyWiseNews[index].title,
-                    description: newsProvider.companyWiseNews[index].description,
-                    urlToImage: newsProvider.companyWiseNews[index].urlToImage,
-                    index: index,
-                  );
-                },
-              ),
-            ),
+            // Expanded(
+            //   child: ListView.builder(
+            //     itemCount: newsProvider.companyWiseNews.length,
+            //     itemBuilder: (_, index) {
+            //       return NewsCard(
+            //         title: newsProvider.companyWiseNews[index].title,
+            //         description: newsProvider.companyWiseNews[index].description,
+            //         urlToImage: newsProvider.companyWiseNews[index].urlToImage,
+            //         index: index,
+            //       );
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ),

@@ -99,44 +99,44 @@ class WatchlistScreen extends StatelessWidget {
                 fontSize: deviceSize.width * 0.05,
               ),
             ),
-            stockProvider.watchListStockCount == 0
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: deviceSize.height * 0.1,
-                      ),
-                      Text(
-                        "Your watchlist is empty!",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: deviceSize.width / 26,
-                        ),
-                      ),
-                      Text(
-                        "Add stocks to track them here.",
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: deviceSize.width / 26,
-                        ),
-                      ),
-                    ],
-                  )
-                : Expanded(
-                    child: ListView(
-                      children: stockProvider.watchListStocks.values.toList()
-                          .map(
-                            (e) => WatchListStockCard(
-                                title: e.title,
-                                symbol: e.symbol,
-                                priceChange: e.priceChange,
-                                didPriceIncrease: e.didPriceIncrease,
-                                stockPrice: e.stockPrice,
-                                stockIcon: e.stockIcon),
-                          )
-                          .toList(),
-                    ),
-                  ),
+            // stockProvider.watchListStockCount == 0
+            //     ? Column(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           SizedBox(
+            //             height: deviceSize.height * 0.1,
+            //           ),
+            //           Text(
+            //             "Your watchlist is empty!",
+            //             style: TextStyle(
+            //               color: Colors.grey,
+            //               fontSize: deviceSize.width / 26,
+            //             ),
+            //           ),
+            //           Text(
+            //             "Add stocks to track them here.",
+            //             style: TextStyle(
+            //               color: Colors.grey,
+            //               fontSize: deviceSize.width / 26,
+            //             ),
+            //           ),
+            //         ],
+            //       )
+            //     : Expanded(
+            //         child: ListView(
+            //           children: stockProvider.watchListStocks.values.toList()
+            //               .map(
+            //                 (e) => WatchListStockCard(
+            //                     title: e.title,
+            //                     symbol: e.symbol,
+            //                     priceChange: e.priceChange,
+            //                     didPriceIncrease: e.didPriceIncrease,
+            //                     stockPrice: e.stockPrice,
+            //                     stockIcon: e.stockIcon),
+            //               )
+            //               .toList(),
+            //         ),
+            //       ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
