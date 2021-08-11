@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_trader/constants.dart';
 // import 'package:stock_trader/constants.dart';
-import 'package:stock_trader/provider/news_provider.dart';
+import 'package:stock_trader/providers/news_provider.dart';
 import 'package:stock_trader/widgets/news_card.dart';
 
 class NewsScreen extends StatefulWidget {
@@ -93,23 +93,11 @@ class _NewsScreenState extends State<NewsScreen> {
                                 newsProvider.latestHeadlines[index].description,
                             urlToImage:
                                 newsProvider.latestHeadlines[index].urlToImage,
+                            index: index,
                           );
                         },
                       ),
                     ),
-          // Expanded(
-          //   child: ListView.builder(
-          //     itemCount: 1,
-          //     itemBuilder: (_, index) {
-          //       return NewsCard(
-          //           title: 'Mumbai havoc',
-          //           description:
-          //               'A havoc occurred in Mumbai yesterday,A havoc occurred in Mumbai yesterday,A havoc occurred in Mumbai yesterday',
-          //           urlToImage:
-          //               "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT91AeV4UF1XdtfCalQLygCgSYFXnB11uKyBg&usqp=CAU");
-          //     },
-          //   ),
-          // ),
         ],
       ),
     );

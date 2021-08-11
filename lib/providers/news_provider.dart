@@ -25,10 +25,14 @@ class News {
 class NewsProvider with ChangeNotifier {
   // API KEY: 9417487a30c2456e90da08fd903d5487
   List<News> _latestHeadlines = [];
+  List<News> _companyWiseNews=[];
   int _length = 0;
 
   List<News> get latestHeadlines {
     return _latestHeadlines;
+  }
+  List<News> get companyWiseNews {
+    return _companyWiseNews;
   }
 
   int get length {
@@ -56,6 +60,44 @@ class NewsProvider with ChangeNotifier {
           news["source"]["name"] != null) {
         _length++;
         _latestHeadlines.add(
+          News(
+            title: news["title"],
+            description: news["description"],
+            url: news["url"],
+            urlToImage: news["urlToImage"],
+            publishedAt: news["publishedAt"],
+            content: news["content"],
+            sourceName: news["source"]["name"],
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> getStockNewsByQuery(query) async {
+    final link = Uri.parse(
+        "https://newsapi.org/v2/everything?q={query}&sortBy=popularity&apiKey=9417487a30c2456e90da08fd903d5487");
+
+    final response = await http.get(link);
+    final res = json.decode(response.body);
+
+    print(res);
+
+    print("Desc ${res["articles"][0]["description"]}");
+
+    for (var news in res["articles"]) {
+      if (news["title"] != null &&
+          news["description"] != null &&
+          news["url"] != null &&
+          news["urlToImage"] != null &&
+          news["publishedAt"] != null &&
+          news["content"] != null &&
+          news["source"]["name"] != null) {
+        if (_length >= 20) {
+          break;
+        }
+        _length++;
+        _companyWiseNews.add(
           News(
             title: news["title"],
             description: news["description"],

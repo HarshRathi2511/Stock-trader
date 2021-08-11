@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
+import 'package:stock_trader/screens/news_detail_screen.dart';
 
 class NewsCard extends StatelessWidget {
   late final String title;
   late final String description;
   late final String urlToImage;
+  late final int index;
 
   NewsCard({
     required this.title,
     required this.description,
     required this.urlToImage,
+    required this.index,
   });
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    print("News Card");
     return ClipRRect(
       borderRadius: BorderRadius.circular(15),
       child: InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context, NewsDetailScreen.routeName, arguments: index);
+        },
         child: Container(
             margin: EdgeInsets.symmetric(
               horizontal: 4,
@@ -62,6 +66,7 @@ class NewsCard extends StatelessWidget {
                         child: Text(
                           title,
                           overflow: TextOverflow.ellipsis,
+                          maxLines: 6,
                           style: TextStyle(
                             color: Colors.white,
                             // fontWeight: FontWeight.bold,
@@ -69,22 +74,6 @@ class NewsCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // SizedBox(
-                      //   height: 5,
-                      // ),
-                      // LimitedBox(
-                      //   // flex: 4,
-                      //   maxWidth: deviceSize.width * 0.55,
-                      //   maxHeight: deviceSize.height * 0.125 * 0.9,
-                      //   child: Text(
-                      //     description,
-                      //     overflow: TextOverflow.ellipsis,
-                      //     maxLines: 3,
-                      //     style: TextStyle(
-                      //       color: Colors.white,
-                      //     ),
-                      //   ),
-                      // )
                     ],
                   ),
                 )

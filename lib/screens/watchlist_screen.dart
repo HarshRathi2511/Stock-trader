@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
-import 'package:stock_trader/provider/watchlist_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_trader/widgets/watchlist_card.dart';
-import 'stock_detail_screen.dart';
-import 'package:stock_trader/providers/stocks.dart';
 
+import 'stock_detail_screen.dart';
+
+
+import 'package:stock_trader/providers/stock.dart';
 
 
 class WatchlistScreen extends StatelessWidget {
@@ -15,14 +16,10 @@ class WatchlistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final watchListProvider = Provider.of<WatchListProvider>(context);
+    final stockProvider = Provider.of<StockProvider>(context,listen: false);
     var _watchList = [];
     // watchListProvider.watchList.
 
-    for (int i = 0; i < watchListProvider.numOfStocks; i++) {
-      _watchList.add(watchListProvider.watchList[i].values.toList()[0]);
-    }
-    final stocksData = Provider.of<Stocks>(context,listen: false);
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -101,7 +98,7 @@ class WatchlistScreen extends StatelessWidget {
               fontSize: deviceSize.width * 0.05,
             ),
           ),
-          watchListProvider.numOfStocks == 0
+          stockProvider.watchListStockCount == 0
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -126,12 +123,12 @@ class WatchlistScreen extends StatelessWidget {
                 )
               : Expanded(
                   child: ListView(
-                    children: _watchList
+                    children: stockProvider.watchListStocks.values.toList()
                         .map(
                           (e) => WatchListStockCard(
                               title: e.title,
                               symbol: e.symbol,
-                              percentageChange: e.percentageChange,
+                              priceChange: e.priceChange,
                               didPriceIncrease: e.didPriceIncrease,
                               stockPrice: e.stockPrice,
                               stockIcon: e.stockIcon),
@@ -165,13 +162,13 @@ class WatchlistScreen extends StatelessWidget {
           Container(
             height: deviceSize.height*0.5,
             child: ListView.builder(
-              itemCount: stocksData.stocks.length,
+              itemCount: stockProvider.stocks.length,
               itemBuilder: (c,i){
                 return ListTile(
-                  title: Text(stocksData.stocks[i].title,style:profilePageStyle),
-                  trailing: Text(stocksData.stocks[i].price,style:profilePageStyle),
+                  title: Text(stockProvider.stocks[i].title,style:profilePageStyle),
+                  trailing: Text(stockProvider.stocks[i].stockPrice.toString(),style:profilePageStyle),
                   onTap: (){
-                    Navigator.of(context).pushNamed(StockDetailScreen.routeName,arguments:stocksData.stocks[i].id);
+                    Navigator.of(context).pushNamed(StockDetailScreen.routeName,arguments: stockProvider.stocks[i].symbol);
                   },
  
                 );

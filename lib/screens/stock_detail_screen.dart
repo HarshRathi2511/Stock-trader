@@ -5,9 +5,12 @@ import 'package:pie_chart/pie_chart.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_trader/providers/orders.dart';
-import 'package:stock_trader/providers/stocks.dart';
+import 'package:stock_trader/providers/stock.dart';
+// import 'package:stock_trader/providers/stocks.dart';
 import 'package:stock_trader/screens/stock_detail_screen.dart';
-import 'package:stock_trader/providers/share.dart';
+import 'package:stock_trader/widgets/detail_screen_chart_widget.dart';
+import 'package:stock_trader/widgets/pie_chart_detail.dart';
+// import 'package:stock_trader/providers/share.dart';
 
 class StockDetailScreen extends StatelessWidget {
   const StockDetailScreen({Key? key}) : super(key: key);
@@ -18,24 +21,28 @@ class StockDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final deviceHeight = deviceSize.height;
-    final stocksData = Provider.of<Stocks>(context, listen: false);
-    final quantityController = TextEditingController();
+    final stocksData = Provider.of<StockProvider>(context, listen: false);
+ 
     String quantity = '0';
     final marketSentimentMap = {'Market Sentiment': 78.8, '': 100 - 78.8};
+
     final List<Color> colorList = [
       Colors.green,
       blackgrey,
     ];
 
-    final ordersData = Provider.of<Orders>(context, listen: false);
+    // final ordersData = Provider.of<Orders>(context, listen: false);
 
     final route = ModalRoute.of(context);
     // This will NEVER fail
     if (route == null) return SizedBox.shrink();
-    final String routeArgId = route.settings.arguments as String;
+    final String loadedStockSymbol = route.settings.arguments as String;
+    print(loadedStockSymbol);
 
     final loadedStock =
-        stocksData.stocks.firstWhere((share) => share.id == routeArgId);
+        stocksData.stocks.firstWhere((share) => share.symbol == loadedStockSymbol);
+
+     print(loadedStock.symbol)   ;
 
     void _showModalSheet(BuildContext ctx) {
       showModalBottomSheet(
@@ -124,7 +131,7 @@ class StockDetailScreen extends StatelessWidget {
                       ),
                       Chip(
                         label: Text(
-                          '\$' + loadedStock.price.toString(),
+                          '\$' + loadedStock.stockPrice.toString(),
                           style: TextStyle(
                               fontSize: deviceSize.height * 0.03,
                               color: Colors.white,
@@ -144,18 +151,6 @@ class StockDetailScreen extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () {
                       //buy order
-                      ordersData.buyOrder(
-                          id: loadedStock.id,
-                          title: loadedStock.title,
-                          totalAmount: (double.parse(loadedStock.price) *
-                                  int.parse(quantity))
-                              .toString(),
-                          price: loadedStock.price,
-                          quantity: quantity);
-
-                      print((double.parse(loadedStock.price) *
-                              int.parse(quantity))
-                          .toString());
 
                       //implement changes in portfolio,net balance , and the transactions screen
                     },
@@ -167,19 +162,7 @@ class StockDetailScreen extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () {
                       //sell order
-                      ordersData.sellOrder(
-                          id: loadedStock.id,
-                          title: loadedStock.title,
-                          totalAmount: (double.parse(loadedStock.price) *
-                                  int.parse(quantity))
-                              .toString(),
-                          price: loadedStock.price,
-                          quantity: quantity);
-
-                      print((double.parse(loadedStock.price) *
-                              int.parse(quantity))
-                          .toString());
-
+                     
                       //implement changes in portfolio,net balance , and the transactions screen
                     },
                     child: Text(
@@ -234,17 +217,7 @@ class StockDetailScreen extends StatelessWidget {
               SizedBox(
                 height: deviceSize.height * 0.03,
               ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(70),
-                child: Container(
-                  margin: EdgeInsets.all(deviceHeight * 0.02),
-                  padding: EdgeInsets.all(deviceHeight * 0.02),
-                  height: deviceSize.height * 0.6,
-                  width: double.infinity,
-                  color: blackgrey,
-                  child: Text('chart here', style: profilePageStyle),
-                ),
-              ),
+             ChartWidgetDetail(),
               ClipRRect(
                 borderRadius: BorderRadius.circular(70),
                 child: Container(
@@ -304,53 +277,7 @@ class StockDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(70),
-                child: Container(
-                  margin: EdgeInsets.all(deviceHeight * 0.02),
-                  padding: EdgeInsets.all(deviceHeight * 0.02),
-                  height: deviceSize.height * 0.3,
-                  width: double.infinity,
-                  color: blackgrey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Market Sentiment',
-                          style: TextStyle(
-                              color: Colors.blueGrey,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold)),
-                      Center(
-                        child: PieChart(
-                          dataMap: marketSentimentMap,
-                          chartType: ChartType.ring,
-                          chartRadius: deviceSize.width / 3.2,
-                          colorList: colorList,
-                          initialAngleInDegree: 0,
-                          legendOptions: LegendOptions(
-                            showLegendsInRow: false,
-                            legendPosition: LegendPosition.right,
-                            showLegends: true,
-                            legendShape: BoxShape.circle,
-                            legendTextStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      //display different text like bullish bearish depending on %
-                      Text(
-                        'Bullish',
-                        style: TextStyle(
-                            fontSize: deviceSize.height * 0.03,
-                            color: Colors.lightBlue[200]),
-                      )
-                    ],
-                  ),
-                ),
-              ),
+              PieChartDetail(colorList, marketSentimentMap),
               ClipRRect(
                 borderRadius: BorderRadius.circular(70),
                 child: Container(
@@ -385,3 +312,5 @@ class StockDetailScreen extends StatelessWidget {
     );
   }
 }
+
+
