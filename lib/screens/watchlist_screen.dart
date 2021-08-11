@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_trader/widgets/stock_card.dart';
-import './stock_detail_screen.dart';
 import '../providers/stock.dart';
 
 class WatchlistScreen extends StatelessWidget {

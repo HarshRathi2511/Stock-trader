@@ -11,13 +11,17 @@ class TitleScreen extends StatefulWidget {
 
 class _TitleScreenState extends State<TitleScreen> {
   @override
-  void didChangeDependencies() async {
-    final stockProvider = Provider.of<StockProvider>(context);
-    await stockProvider.getUserData();
-    setState(() {
-      Navigator.pushNamed(context, TabsScreen.routeName);
-      firstTimeLoading = false;
-    });
+  void didChangeDependencies() {
+    Future<void> data() async {
+      final stockProvider = Provider.of<StockProvider>(context);
+      await stockProvider.getUserData();
+      setState(() {
+        firstTimeLoading = false;
+        Navigator.pushNamed(context, TabsScreen.routeName);
+      });
+    }
+
+    data();
     super.didChangeDependencies();
   }
 
