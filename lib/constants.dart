@@ -21,3 +21,5 @@ const TextStyle kmodalSheet =TextStyle(fontSize: 21,color: Colors.black);
 
 
 var isNewsLoading = true;
+
+

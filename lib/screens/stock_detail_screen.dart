@@ -4,18 +4,43 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:stock_trader/providers/news_provider.dart';
 import 'package:stock_trader/providers/orders.dart';
 import 'package:stock_trader/providers/stock.dart';
 // import 'package:stock_trader/providers/stocks.dart';
 import 'package:stock_trader/screens/stock_detail_screen.dart';
+import 'package:stock_trader/widgets/company_wise_news.dart';
 import 'package:stock_trader/widgets/detail_screen_chart_widget.dart';
 import 'package:stock_trader/widgets/pie_chart_detail.dart';
 // import 'package:stock_trader/providers/share.dart';
 
-class StockDetailScreen extends StatelessWidget {
+class StockDetailScreen extends StatefulWidget {
   const StockDetailScreen({Key? key}) : super(key: key);
 
   static const routeName = '/stock-detail';
+
+  @override
+  _StockDetailScreenState createState() => _StockDetailScreenState();
+}
+
+class _StockDetailScreenState extends State<StockDetailScreen> {
+
+  // void initState() {
+  //   Future.delayed(Duration.zero).then((value) =>
+  //       Provider.of<NewsProvider>(context, listen: false)
+  //           .getStockNewsByQuery(loadedStocktitle).then((_){
+  //             setState(() {
+  //               isLoading=false;
+  //             });
+  //           }));
+  //   super.initState();
+  // }
+
+  @override
+  void didChangeDependencies() {
+    
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +67,7 @@ class StockDetailScreen extends StatelessWidget {
     final loadedStock =
         stocksData.stocks.firstWhere((share) => share.symbol == loadedStockSymbol);
 
-     print(loadedStock.symbol)   ;
+     print(loadedStock.symbol);
 
     void _showModalSheet(BuildContext ctx) {
       showModalBottomSheet(
@@ -278,20 +303,7 @@ class StockDetailScreen extends StatelessWidget {
                 ),
               ),
               PieChartDetail(colorList, marketSentimentMap),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(70),
-                child: Container(
-                  margin: EdgeInsets.all(deviceHeight * 0.02),
-                  padding: EdgeInsets.all(deviceHeight * 0.02),
-                  height: deviceSize.height * 0.9,
-                  width: double.infinity,
-                  color: blackgrey,
-                  child: Text(
-                    'company wise news api here',
-                    style: profilePageStyle,
-                  ),
-                ),
-              ),
+              CompanyNews(loadedStock.title),
             ],
           ),
         ),

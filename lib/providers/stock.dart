@@ -64,7 +64,8 @@ class PortfolioStock {
 
 class StockProvider with ChangeNotifier {
   //id will be the symbol
- 
+  
+ final inputController = TextEditingController();
  
   List <Stock> _stocks =[
      Stock(
@@ -101,7 +102,7 @@ class StockProvider with ChangeNotifier {
         size: 30,
       ),
       stockPrice: 3244,
-      symbol: '2738.26',
+      symbol: 'GOOGL',
     )
   ];
 
