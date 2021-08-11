@@ -8,7 +8,6 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 
 class TabsScreen extends StatefulWidget {
   static const routeName = '/tabScreen';
-
   @override
   _TabsScreenState createState() => _TabsScreenState();
 }
@@ -95,8 +94,12 @@ class _TabsScreenState extends State<TabsScreen> {
             ],
             onTabChange: (value) {
               setState(() {
-                _page = value;
+
+                _page= value;
               });
+              
+
+
             },
           ),
         ),

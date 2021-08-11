@@ -15,6 +15,10 @@ const TextStyle profilePageDataStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+const TextStyle kmodalSheet =TextStyle(fontSize: 21,color: Colors.black);
+
+
+
 var isNewsLoading = true;
 var firstTimeLoading = true;
 const Color kGreen = Color(0xFF3C997F);

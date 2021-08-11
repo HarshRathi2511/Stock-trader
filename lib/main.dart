@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
           // StockDetailScreen.routeName :(ctx) => StockDetailScreen(),
           NewsDetailScreen.routeName: (ctx) => NewsDetailScreen(),
           TabsScreen.routeName: (ctx) => TabsScreen(),
+          StockDetailScreen.routeName :(ctx) => StockDetailScreen(),
         },
       ),
     );

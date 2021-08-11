@@ -1,6 +1,8 @@
+import 'package:draw_graph/models/feature.dart';
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:draw_graph/draw_graph.dart';
 
 class PortfolioScreen extends StatelessWidget {
   @override
@@ -183,12 +185,19 @@ class PortfolioScreen extends StatelessWidget {
                 child: Container(
                   margin: EdgeInsets.all(deviceHeight * 0.02),
                   padding: EdgeInsets.all(deviceHeight * 0.02),
-                  height: deviceHeight * 0.3,
+                  height: deviceHeight * 0.5,
                   width: deviceWidth * 0.9,
                   color: blackgrey,
-                  child: Center(
-                      child: Text('line graph here of portfolio wealth vs time',
-                          style: TextStyle(color: Colors.white))),
+                  child: LineGraph(
+                    features: [
+                     Feature(data: [0.3,0.6,0.8,0.9,1.2],color: Colors.lightGreen,title: 'Portfolio wealth'),
+                    ],
+                    size: Size(deviceWidth*0.7, deviceHeight*0.4),
+                    labelX: ['MON','TUE','WED','TH','FRI'],
+                    labelY: ['\$3456','\$4456','\$5456','\$1456','\$8456',],
+                    showDescription: true,
+                    graphColor: Colors.white,
+                  ),
                 ),
               ),
               Text(

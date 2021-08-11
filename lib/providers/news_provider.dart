@@ -25,10 +25,14 @@ class News {
 class NewsProvider with ChangeNotifier {
   // API KEY: 9417487a30c2456e90da08fd903d5487
   List<News> _latestHeadlines = [];
+  List<News> _companyWiseNews=[];
   int _length = 0;
 
   List<News> get latestHeadlines {
     return _latestHeadlines;
+  }
+  List<News> get companyWiseNews {
+    return _companyWiseNews;
   }
 
   int get length {
@@ -89,7 +93,7 @@ class NewsProvider with ChangeNotifier {
           break;
         }
         _length++;
-        _latestHeadlines.add(
+        _companyWiseNews.add(
           News(
             title: news["title"],
             description: news["description"],
