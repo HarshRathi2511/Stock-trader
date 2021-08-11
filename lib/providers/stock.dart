@@ -64,7 +64,50 @@ class PortfolioStock {
 
 class StockProvider with ChangeNotifier {
   //id will be the symbol
-  Map<String, PortfolioStock> _portfolioStocks = {};
+  
+ final inputController = TextEditingController();
+ 
+  List <Stock> _stocks =[
+     Stock(
+      title: 'Amazon',
+      didPriceIncrease: true,
+      priceChange: 2.09,
+      stockIcon: Icon(
+        Icons.access_alarm_outlined,
+        color: Colors.white,
+        size: 30,
+      ),
+      stockPrice: 3341.87,
+      symbol: 'AMZN',
+    ),
+     Stock(
+      title: 'Tesla',
+      didPriceIncrease: true,
+      priceChange: 2.89,
+      stockIcon: Icon(
+        Icons.access_alarm_outlined,
+        color: Colors.white,
+        size: 30,
+      ),
+      stockPrice: 713.76,
+      symbol: 'TSLA',
+    ),
+     Stock(
+      title: 'Google',
+      didPriceIncrease: true,
+      priceChange: 2,
+      stockIcon: Icon(
+        Icons.access_alarm_outlined,
+        color: Colors.white,
+        size: 30,
+      ),
+      stockPrice: 3244,
+      symbol: 'GOOGL',
+    )
+  ];
+
+
+
   Map<String, Stock> _watchListStocks = {
     't1': Stock(
       title: 'Apple Inc',
@@ -103,12 +146,18 @@ class StockProvider with ChangeNotifier {
       symbol: 'AAPL',
     )
   };
+  
+  Map<String, PortfolioStock> _portfolioStocks = {};
   Map<String, TransactedStock> _transactedListStocks = {};
   Map<String, TransactedStock> _transactionsWithProfit = {};
   Map<String, TransactedStock> _transactionsWithLoss = {};
   // Map<String, Stock> _orderedStocks = {};
   double _totalProfit = 0;
   double _totalLoss = 0;
+
+  List<Stock> get stocks {
+    return [..._stocks];
+  }
 
   Map<String, PortfolioStock> get portfolioStocks {
     return _portfolioStocks;

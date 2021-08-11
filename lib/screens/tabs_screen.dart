@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class TabsScreen extends StatefulWidget {
-  // const TabsScreen({ Key? key }) : super(key: key);
+  // const TabsScreen({ Key? key }) : super(key: key);      
 
   @override
   _TabsScreenState createState() => _TabsScreenState();
@@ -96,8 +96,12 @@ class _TabsScreenState extends State<TabsScreen> {
             ],
             onTabChange: (value) {
               setState(() {
-                _page = value;
+
+                _page= value;
               });
+              
+
+
             },
           ),
         ),
