@@ -17,7 +17,6 @@ class _NewsScreenState extends State<NewsScreen> {
     final newsProvider = Provider.of<NewsProvider>(context);
     try {
       await newsProvider.getData();
-      await newsProvider.getStockNewsByQuery('bitcoin');
       setState(() {
         isNewsLoading = false;
       });

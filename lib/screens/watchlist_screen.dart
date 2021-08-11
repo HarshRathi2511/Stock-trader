@@ -17,9 +17,6 @@ class WatchlistScreen extends StatelessWidget {
     var _watchList = [];
     // watchListProvider.watchList.
 
-    for (int i = 0; i < stockProvider.watchListStockCount; i++) {
-      _watchList.add(stockProvider.watchListStocks[i].values.toList()[0]);
-    }
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -123,12 +120,12 @@ class WatchlistScreen extends StatelessWidget {
                 )
               : Expanded(
                   child: ListView(
-                    children: _watchList
+                    children: stockProvider.watchListStocks.values.toList()
                         .map(
                           (e) => WatchListStockCard(
                               title: e.title,
                               symbol: e.symbol,
-                              percentageChange: e.percentageChange,
+                              priceChange: e.priceChange,
                               didPriceIncrease: e.didPriceIncrease,
                               stockPrice: e.stockPrice,
                               stockIcon: e.stockIcon),

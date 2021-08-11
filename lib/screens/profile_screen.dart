@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
+import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/widgets/profile_screen_card.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final stockProvider = Provider.of<StockProvider>(context);
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -25,19 +28,6 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Container(
-          //   width: double.infinity,
-          //   margin: EdgeInsets.all(10),
-          //   height: deviceSize.height * 0.4,
-          //   decoration: BoxDecoration(
-          //     color: kBlackGrey,
-          //     borderRadius: BorderRadius.circular(15),
-          //   ),
-          // )
-          // CircleAvatar(
-          //   child: Image.asset('assets/images/default profile.jpg', fit: BoxFit.fill,),
-          //   radius: 30,
-          // )
           SizedBox(
             height: deviceSize.height * 0.025,
           ),
