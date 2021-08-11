@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:stock_trader/widgets/stock_card.dart';
+import './stock_detail_screen.dart';
 import 'package:stock_trader/widgets/watchlist_card.dart';
-
-import 'stock_detail_screen.dart';
-
-
 import 'package:stock_trader/providers/stock.dart';
 
-
 class WatchlistScreen extends StatelessWidget {
-
-  // final inputStockController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
@@ -92,19 +86,22 @@ class WatchlistScreen extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Text(
-              'Your watchlist',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: deviceSize.width * 0.05,
-              ),
-            ),
-            stockProvider.watchListStockCount == 0
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: deviceSize.height * 0.1,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          stockProvider.watchListStockCount == 0
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: deviceSize.height * 0.1,
+                    ),
+                    Text(
+                      "Your watchlist is empty!",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: deviceSize.width / 26,
                       ),
                       Text(
                         "Your watchlist is empty!",
@@ -136,6 +133,22 @@ class WatchlistScreen extends StatelessWidget {
                           )
                           .toList(),
                     ),
+                  ],
+                )
+              : Expanded(
+                  child: ListView(
+                    children: stockProvider.watchListStocks.values
+                        .toList()
+                        .map(
+                          (e) => StockCard(
+                              title: e.title,
+                              symbol: e.symbol,
+                              priceChange: e.priceChange,
+                              didPriceIncrease: e.didPriceIncrease,
+                              stockPrice: e.stockPrice,
+                              stockIcon: e.stockIcon),
+                        )
+                        .toList(),
                   ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -143,41 +156,7 @@ class WatchlistScreen extends StatelessWidget {
                 SizedBox(
                   height: deviceSize.height * 0.1,
                 ),
-                // Text(
-                //   "Your watchlist is empty!",
-                //   style: TextStyle(
-                //     color: Colors.grey,
-                //     fontSize: deviceSize.width / 26,
-                //   ),
-                // ),
-                // Text(
-                //   "Add stocks to track them here.",
-                //   style: TextStyle(
-                //     color: Colors.grey,
-                //     fontSize: deviceSize.width / 26,
-                //   ),
-                // ),
-                
-              ],
-            ),
-            Container(
-              height: deviceSize.height*0.5,
-              child: ListView.builder(
-                itemCount: stockProvider.stocks.length,
-                itemBuilder: (c,i){
-                  return ListTile(
-                    title: Text(stockProvider.stocks[i].title,style:profilePageStyle),
-                    trailing: Text(stockProvider.stocks[i].stockPrice.toString(),style:profilePageStyle),
-                    onTap: (){
-                      Navigator.of(context).pushNamed(StockDetailScreen.routeName,arguments: stockProvider.stocks[i].symbol);
-                    },
-       
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }

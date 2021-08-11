@@ -28,7 +28,10 @@ class NewsDetailScreen extends StatelessWidget {
             Container(
               width: double.infinity,
               height: deviceSize.height * 0.4,
-              child: Image.network(headlines[args].urlToImage),
+              child: Image.network(
+                headlines[args].urlToImage,
+                fit: BoxFit.fill,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),

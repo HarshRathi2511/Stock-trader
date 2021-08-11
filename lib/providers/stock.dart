@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 enum TransactionType { sold, bought }
+enum StockType { transacted, portfolio, watchlist }
 
 class Stock {
   String symbol;
@@ -116,7 +119,7 @@ class StockProvider with ChangeNotifier {
       stockIcon: Icon(
         Icons.access_alarm_outlined,
         color: Colors.white,
-        size: 30,
+        size: 40,
       ),
       stockPrice: 3244,
       symbol: 'AAPL',
@@ -128,7 +131,7 @@ class StockProvider with ChangeNotifier {
       stockIcon: Icon(
         Icons.access_alarm_outlined,
         color: Colors.white,
-        size: 30,
+        size: 40,
       ),
       stockPrice: 3244,
       symbol: 'AAPL',
@@ -140,7 +143,43 @@ class StockProvider with ChangeNotifier {
       stockIcon: Icon(
         Icons.access_alarm_outlined,
         color: Colors.white,
-        size: 30,
+        size: 40,
+      ),
+      stockPrice: 3244,
+      symbol: 'AAPL',
+    ),
+    't4': Stock(
+      title: 'Apple Inc',
+      didPriceIncrease: true,
+      priceChange: 2.09,
+      stockIcon: Icon(
+        Icons.access_alarm_outlined,
+        color: Colors.white,
+        size: 35,
+      ),
+      stockPrice: 3244,
+      symbol: 'AAPL',
+    ),
+    't5': Stock(
+      title: 'Apple Inc',
+      didPriceIncrease: true,
+      priceChange: 2.89,
+      stockIcon: Icon(
+        Icons.access_alarm_outlined,
+        color: Colors.white,
+        size: 35,
+      ),
+      stockPrice: 3244,
+      symbol: 'AAPL',
+    ),
+    't6': Stock(
+      title: 'Apple Inc',
+      didPriceIncrease: true,
+      priceChange: 2,
+      stockIcon: Icon(
+        Icons.access_alarm_outlined,
+        color: Colors.white,
+        size: 35,
       ),
       stockPrice: 3244,
       symbol: 'AAPL',
@@ -195,6 +234,14 @@ class StockProvider with ChangeNotifier {
     return _transactedListStocks.length;
   }
 
+  double get totalProfit {
+    return _totalProfit;
+  }
+
+  double get totalLoss {
+    return _totalLoss;
+  }
+
   // int get ordersListStockCount {
   //   return _orderedStocks.length;
   // }
@@ -243,8 +290,8 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addNewTransaction(stock, type) {
-    if (type == 'TransactedStock') {
+  void addNewStock(stock, type) {
+    if (type == StockType.transacted) {
       _transactedListStocks.putIfAbsent(
           stock.dateOfransaction.toString(),
           () => TransactedStock(
@@ -256,7 +303,7 @@ class StockProvider with ChangeNotifier {
                 quantityOfStocks: stock.quantityOfStocks,
                 transactionType: stock.transactionType,
               ));
-    } else if (type == 'PortfolioStock') {
+    } else if (type == StockType.portfolio) {
       _portfolioStocks.putIfAbsent(
           stock.dateOfransaction.toString(),
           () => PortfolioStock(
@@ -280,23 +327,73 @@ class StockProvider with ChangeNotifier {
                 priceChange: stock.priceChange,
               ));
     }
+
+    notifyListeners();
   }
 
-  double get totalProfit {
+  void calculatetotalProfit() {
     _totalProfit = 0;
     _transactionsWithProfit.forEach((key, value) {
       _totalProfit += value.quantityOfStocks *
           (value.stockPriceWhenSold! - value.stockPriceWhenBought);
     });
-    return _totalProfit;
+    notifyListeners();
   }
 
-  double get totalLoss {
+  void calculatetotalLoss() {
     _totalLoss = 0;
     _transactionsWithProfit.forEach((key, value) {
       _totalLoss += value.quantityOfStocks *
           (value.stockPriceWhenBought - value.stockPriceWhenSold!);
     });
-    return _totalLoss;
+    notifyListeners();
+  }
+
+  Future<void> newUserData() async {
+    var url = Uri.parse(
+        "https://stock-trader-3e6f6-default-rtdb.firebaseio.com/admin.json");
+    var res = await http.post(url,
+        body: json.encode({
+          watchListStocks: _watchListStocks,
+          portfolioStocks: _portfolioStocks,
+          transactedListStocks: _transactedListStocks,
+        }));
+    print(res);
+  }
+
+  Future<void> updateUserData(type) async {
+    if (type == StockType.watchlist) {
+      var url = Uri.parse(
+          "https://stock-trader-3e6f6-default-rtdb.firebaseio.com/admin.json");
+      var res = await http.patch(url,
+          body: json.encode({
+            watchListStocks: _watchListStocks,
+          }));
+      print(json.decode(res.body));
+    } else if (type == StockType.portfolio) {
+      var url = Uri.parse(
+          "https://stock-trader-3e6f6-default-rtdb.firebaseio.com/admin.json");
+      var res = await http.patch(url,
+          body: json.encode({
+            portfolioStocks: _portfolioStocks,
+          }));
+      print(json.decode(res.body));
+    } else {
+      var url = Uri.parse(
+          "https://stock-trader-3e6f6-default-rtdb.firebaseio.com/admin.json");
+      var res = await http.patch(url,
+          body: json.encode({
+            transactedListStocks: _transactedListStocks,
+          }));
+      print(json.decode(res.body));
+    }
+  }
+
+  Future<void> getUserData() async {
+    var url = Uri.parse(
+        "https://stock-trader-3e6f6-default-rtdb.firebaseio.com/admin.json");
+    var res = await http.get(url);
+    print(json.decode(res.body));
+    notifyListeners();
   }
 }

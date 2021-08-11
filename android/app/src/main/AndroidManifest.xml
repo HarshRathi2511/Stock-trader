@@ -7,6 +7,7 @@
         <data android:scheme="https" />
     </intent>
     </queries>
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="stock_trader"
         android:icon="@mipmap/ic_launcher">
