@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+enum TransactionType { sold, bought }
+
 class Stock {
   String symbol;
   String title;
@@ -21,20 +23,22 @@ class Stock {
 class TransactedStock {
   String symbol;
   String title;
-  double stockPrice;
+  double stockPriceWhenBought;
   Icon stockIcon;
   DateTime dateOfransaction;
   int quantityOfStocks;
-  bool didProfitOccur;
+  TransactionType transactionType;
+  double? stockPriceWhenSold;
 
   TransactedStock({
     required this.title,
     required this.symbol,
-    required this.stockPrice,
+    required this.stockPriceWhenBought,
     required this.stockIcon,
     required this.dateOfransaction,
     required this.quantityOfStocks,
-    required this.didProfitOccur,
+    required this.transactionType,
+    this.stockPriceWhenSold,
   });
 }
 
@@ -103,6 +107,8 @@ class StockProvider with ChangeNotifier {
   Map<String, TransactedStock> _transactionsWithProfit = {};
   Map<String, TransactedStock> _transactionsWithLoss = {};
   // Map<String, Stock> _orderedStocks = {};
+  double _totalProfit = 0;
+  double _totalLoss = 0;
 
   Map<String, PortfolioStock> get portfolioStocks {
     return _portfolioStocks;
@@ -114,6 +120,14 @@ class StockProvider with ChangeNotifier {
 
   Map<String, TransactedStock> get transactedListStocks {
     return {..._transactedListStocks};
+  }
+
+  Map<String, TransactedStock> get getTransactionsWithProfit {
+    return {..._transactionsWithProfit};
+  }
+
+  Map<String, TransactedStock> get getTransactionsWithLoss {
+    return {..._transactionsWithLoss};
   }
 
   // Map<String, Stock> get orderedStocks {
@@ -138,19 +152,21 @@ class StockProvider with ChangeNotifier {
 
   void transactionsWithProfit() {
     _transactedListStocks.forEach((key, value) {
-      if (value.didProfitOccur) {
-        _transactionsWithProfit.putIfAbsent(
-          value.dateOfransaction.toString(),
-          () => TransactedStock(
-            title: value.title,
-            symbol: value.symbol,
-            stockPrice: value.stockPrice,
-            stockIcon: value.stockIcon,
-            dateOfransaction: value.dateOfransaction,
-            quantityOfStocks: value.quantityOfStocks,
-            didProfitOccur: value.didProfitOccur,
-          ),
-        );
+      if (value.transactionType == TransactionType.sold) {
+        if (value.stockPriceWhenBought - value.stockPriceWhenSold! < 0) {
+          _transactionsWithProfit.putIfAbsent(
+            value.dateOfransaction.toString(),
+            () => TransactedStock(
+              title: value.title,
+              symbol: value.symbol,
+              stockPriceWhenBought: value.stockPriceWhenBought,
+              stockIcon: value.stockIcon,
+              dateOfransaction: value.dateOfransaction,
+              quantityOfStocks: value.quantityOfStocks,
+              transactionType: value.transactionType,
+            ),
+          );
+        }
       }
     });
     notifyListeners();
@@ -158,19 +174,21 @@ class StockProvider with ChangeNotifier {
 
   void transactionsWithLoss() {
     _transactedListStocks.forEach((key, value) {
-      if (!value.didProfitOccur) {
-        _transactionsWithLoss.putIfAbsent(
-          value.dateOfransaction.toString(),
-          () => TransactedStock(
-            title: value.title,
-            symbol: value.symbol,
-            stockPrice: value.stockPrice,
-            stockIcon: value.stockIcon,
-            dateOfransaction: value.dateOfransaction,
-            quantityOfStocks: value.quantityOfStocks,
-            didProfitOccur: value.didProfitOccur,
-          ),
-        );
+      if (value.transactionType == TransactionType.sold) {
+        if (value.stockPriceWhenBought - value.stockPriceWhenSold! > 0) {
+          _transactionsWithLoss.putIfAbsent(
+            value.dateOfransaction.toString(),
+            () => TransactedStock(
+              title: value.title,
+              symbol: value.symbol,
+              stockPriceWhenBought: value.stockPriceWhenBought,
+              stockIcon: value.stockIcon,
+              dateOfransaction: value.dateOfransaction,
+              quantityOfStocks: value.quantityOfStocks,
+              transactionType: value.transactionType,
+            ),
+          );
+        }
       }
     });
     notifyListeners();
@@ -181,13 +199,14 @@ class StockProvider with ChangeNotifier {
       _transactedListStocks.putIfAbsent(
           stock.dateOfransaction.toString(),
           () => TransactedStock(
-              title: stock.title,
-              symbol: stock.symbol,
-              stockPrice: stock.stockPrice,
-              stockIcon: stock.stockIcon,
-              dateOfransaction: stock.dateOfransaction,
-              quantityOfStocks: stock.quantityOfStocks,
-              didProfitOccur: stock.didProfitOccur));
+                title: stock.title,
+                symbol: stock.symbol,
+                stockPriceWhenBought: stock.stockPriceWhenBought,
+                stockIcon: stock.stockIcon,
+                dateOfransaction: stock.dateOfransaction,
+                quantityOfStocks: stock.quantityOfStocks,
+                transactionType: stock.transactionType,
+              ));
     } else if (type == 'PortfolioStock') {
       _portfolioStocks.putIfAbsent(
           stock.dateOfransaction.toString(),
@@ -212,5 +231,23 @@ class StockProvider with ChangeNotifier {
                 priceChange: stock.priceChange,
               ));
     }
+  }
+
+  double get totalProfit {
+    _totalProfit = 0;
+    _transactionsWithProfit.forEach((key, value) {
+      _totalProfit += value.quantityOfStocks *
+          (value.stockPriceWhenSold! - value.stockPriceWhenBought);
+    });
+    return _totalProfit;
+  }
+
+  double get totalLoss {
+    _totalLoss = 0;
+    _transactionsWithProfit.forEach((key, value) {
+      _totalLoss += value.quantityOfStocks *
+          (value.stockPriceWhenBought - value.stockPriceWhenSold!);
+    });
+    return _totalLoss;
   }
 }

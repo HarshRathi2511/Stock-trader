@@ -69,7 +69,7 @@ class ProfileScreen extends StatelessWidget {
                     style: profilePageStyle,
                   ),
                   otherMessage: Text(
-                    '32.99 \$',
+                    '${stockProvider.totalProfit} \$',
                     style: profilePageDataStyle,
                   ),
                 ),
@@ -79,7 +79,7 @@ class ProfileScreen extends StatelessWidget {
                     style: profilePageStyle,
                   ),
                   otherMessage: Text(
-                    '22.99 \$',
+                    '${stockProvider.totalLoss} \$',
                     style: profilePageDataStyle,
                   ),
                 ),
@@ -90,7 +90,7 @@ class ProfileScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   otherMessage: Text(
-                    '5',
+                    stockProvider.getTransactionsWithProfit.length.toString(),
                     style: profilePageDataStyle,
                   ),
                 ),
@@ -101,7 +101,7 @@ class ProfileScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   otherMessage: Text(
-                    '2',
+                    stockProvider.getTransactionsWithLoss.length.toString(),
                     style: profilePageDataStyle,
                   ),
                 ),
