@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:provider/provider.dart';
-import 'package:stock_trader/widgets/watchlist_card.dart';
+import 'package:stock_trader/widgets/stock_card.dart';
 import './stock_detail_screen.dart';
 import '../providers/stock.dart';
 
-
 class WatchlistScreen extends StatelessWidget {
-
   final inputStockController = TextEditingController();
 
   @override
@@ -95,6 +93,9 @@ class WatchlistScreen extends StatelessWidget {
               fontSize: deviceSize.width * 0.05,
             ),
           ),
+          SizedBox(
+            height: 10,
+          ),
           stockProvider.watchListStockCount == 0
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -120,9 +121,10 @@ class WatchlistScreen extends StatelessWidget {
                 )
               : Expanded(
                   child: ListView(
-                    children: stockProvider.watchListStocks.values.toList()
+                    children: stockProvider.watchListStocks.values
+                        .toList()
                         .map(
-                          (e) => WatchListStockCard(
+                          (e) => StockCard(
                               title: e.title,
                               symbol: e.symbol,
                               priceChange: e.priceChange,
@@ -133,45 +135,6 @@ class WatchlistScreen extends StatelessWidget {
                         .toList(),
                   ),
                 ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: deviceSize.height * 0.1,
-              ),
-              // Text(
-              //   "Your watchlist is empty!",
-              //   style: TextStyle(
-              //     color: Colors.grey,
-              //     fontSize: deviceSize.width / 26,
-              //   ),
-              // ),
-              // Text(
-              //   "Add stocks to track them here.",
-              //   style: TextStyle(
-              //     color: Colors.grey,
-              //     fontSize: deviceSize.width / 26,
-              //   ),
-              // ),
-              
-            ],
-          ),
-          // Container(
-          //   height: deviceSize.height*0.5,
-          //   child: ListView.builder(
-          //     itemCount: stocksData.stocks.length,
-          //     itemBuilder: (c,i){
-          //       return ListTile(
-          //         title: Text(stocksData.stocks[i].title,style:profilePageStyle),
-          //         trailing: Text(stocksData.stocks[i].price,style:profilePageStyle),
-          //         onTap: (){
-          //           Navigator.of(context).pushNamed(StockDetailScreen.routeName,arguments:stocksData.stocks[i].id);
-          //         },
- 
-          //       );
-          //     },
-          //   ),
-          // ),
         ],
       ),
     );

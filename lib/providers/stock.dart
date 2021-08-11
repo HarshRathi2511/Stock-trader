@@ -73,7 +73,7 @@ class StockProvider with ChangeNotifier {
       stockIcon: Icon(
         Icons.access_alarm_outlined,
         color: Colors.white,
-        size: 30,
+        size: 40,
       ),
       stockPrice: 3244,
       symbol: 'AAPL',
@@ -85,7 +85,7 @@ class StockProvider with ChangeNotifier {
       stockIcon: Icon(
         Icons.access_alarm_outlined,
         color: Colors.white,
-        size: 30,
+        size: 40,
       ),
       stockPrice: 3244,
       symbol: 'AAPL',
@@ -97,7 +97,43 @@ class StockProvider with ChangeNotifier {
       stockIcon: Icon(
         Icons.access_alarm_outlined,
         color: Colors.white,
-        size: 30,
+        size: 40,
+      ),
+      stockPrice: 3244,
+      symbol: 'AAPL',
+    ),
+    't4': Stock(
+      title: 'Apple Inc',
+      didPriceIncrease: true,
+      priceChange: 2.09,
+      stockIcon: Icon(
+        Icons.access_alarm_outlined,
+        color: Colors.white,
+        size: 35,
+      ),
+      stockPrice: 3244,
+      symbol: 'AAPL',
+    ),
+    't5': Stock(
+      title: 'Apple Inc',
+      didPriceIncrease: true,
+      priceChange: 2.89,
+      stockIcon: Icon(
+        Icons.access_alarm_outlined,
+        color: Colors.white,
+        size: 35,
+      ),
+      stockPrice: 3244,
+      symbol: 'AAPL',
+    ),
+    't6': Stock(
+      title: 'Apple Inc',
+      didPriceIncrease: true,
+      priceChange: 2,
+      stockIcon: Icon(
+        Icons.access_alarm_outlined,
+        color: Colors.white,
+        size: 35,
       ),
       stockPrice: 3244,
       symbol: 'AAPL',

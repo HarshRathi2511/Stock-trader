@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 const Color blackgrey = Color(0xFF22262B);
 
 const Color kBlackGrey = Color(0xFF22262B);
@@ -17,3 +16,5 @@ const TextStyle profilePageDataStyle = TextStyle(
 );
 
 var isNewsLoading = true;
+const Color kGreen = Color(0xFF3C997F);
+const Color kRed = Color(0xFFc9184a);

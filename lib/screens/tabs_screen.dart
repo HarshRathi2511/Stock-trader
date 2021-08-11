@@ -47,7 +47,7 @@ class _TabsScreenState extends State<TabsScreen> {
             color: Colors.white, // tab button border
             duration: Duration(milliseconds: 400), // tab animation duration
             gap: 1, // the tab button gap between icon and text
-            iconSize: deviceSize.width / 20, // tab button icon size
+            iconSize: deviceSize.width / 16, // tab button icon size
             padding: EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 5,

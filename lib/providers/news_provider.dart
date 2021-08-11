@@ -42,8 +42,6 @@ class NewsProvider with ChangeNotifier {
     final response = await http.get(link);
     final res = json.decode(response.body);
 
-    print(res);
-
     print("Desc ${res["articles"][0]["description"]}");
 
     for (var news in res["articles"]) {
@@ -76,8 +74,6 @@ class NewsProvider with ChangeNotifier {
 
     final response = await http.get(link);
     final res = json.decode(response.body);
-
-    print(res);
 
     print("Desc ${res["articles"][0]["description"]}");
 
