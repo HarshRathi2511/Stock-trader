@@ -16,5 +16,6 @@ const TextStyle profilePageDataStyle = TextStyle(
 );
 
 var isNewsLoading = true;
+var firstTimeLoading = true;
 const Color kGreen = Color(0xFF3C997F);
 const Color kRed = Color(0xFFc9184a);

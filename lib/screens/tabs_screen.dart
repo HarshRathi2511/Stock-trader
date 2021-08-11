@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class TabsScreen extends StatefulWidget {
-  // const TabsScreen({ Key? key }) : super(key: key);
+  static const routeName = '/tabScreen';
 
   @override
   _TabsScreenState createState() => _TabsScreenState();
@@ -16,7 +16,6 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   var changeTabScreen = [
     WatchlistScreen(),
-    // MoversScreen(),
     PortfolioScreen(),
     TransactionScreen(),
     ProfileScreen(),
