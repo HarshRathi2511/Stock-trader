@@ -6,13 +6,15 @@ class NewsCard extends StatelessWidget {
   late final String title;
   late final String description;
   late final String urlToImage;
-  late final int index;
+  late final String url;
+  late final String use;
 
   NewsCard({
     required this.title,
     required this.description,
     required this.urlToImage,
-    required this.index,
+    required this.url,
+    required this.use,
   });
 
   @override
@@ -22,7 +24,8 @@ class NewsCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(15),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, NewsDetailScreen.routeName, arguments: index);
+          Navigator.pushNamed(context, NewsDetailScreen.routeName,
+              arguments: [url, use]);
         },
         child: Container(
             margin: EdgeInsets.symmetric(

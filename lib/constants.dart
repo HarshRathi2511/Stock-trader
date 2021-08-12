@@ -11,9 +11,11 @@ const TextStyle profilePageStyle = TextStyle(
 
 const TextStyle profilePageDataStyle = TextStyle(
   color: Colors.white,
-  fontSize: 28,
+  fontSize: 32,
   fontWeight: FontWeight.bold,
 );
+
+const TextStyle kmodalSheet = TextStyle(fontSize: 21, color: Colors.black);
 
 var isNewsLoading = true;
 var firstTimeLoading = true;

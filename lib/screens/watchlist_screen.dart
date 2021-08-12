@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_trader/widgets/stock_card.dart';
-import '../providers/stock.dart';
+import 'package:stock_trader/providers/stock.dart';
 
 class WatchlistScreen extends StatelessWidget {
-  final inputStockController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final stockProvider = Provider.of<StockProvider>(context);
-    var _watchList = [];
-    // watchListProvider.watchList.
+    final stockProvider = Provider.of<StockProvider>(context, listen: false);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      // body: Text(
+      //   'Hey',
+      //   style: profilePageDataStyle,
+      // ),
       body: Column(
         children: [
           SizedBox(
@@ -63,7 +63,7 @@ class WatchlistScreen extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                     ),
-                    controller: inputStockController,
+                    controller: stockProvider.inputController,
                     onSubmitted: (_) {},
                     decoration: InputDecoration(
                       hintText: 'Search Stock',
@@ -84,13 +84,6 @@ class WatchlistScreen extends StatelessWidget {
           ),
           SizedBox(
             height: 10,
-          ),
-          Text(
-            'Your watchlist',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: deviceSize.width * 0.05,
-            ),
           ),
           SizedBox(
             height: 10,
@@ -124,12 +117,13 @@ class WatchlistScreen extends StatelessWidget {
                         .toList()
                         .map(
                           (e) => StockCard(
-                              title: e.title,
-                              symbol: e.symbol,
-                              priceChange: e.priceChange,
-                              didPriceIncrease: e.didPriceIncrease,
-                              stockPrice: e.stockPrice,
-                              stockIcon: e.stockIcon),
+                            title: e.title,
+                            symbol: e.symbol,
+                            priceChange: e.priceChange,
+                            didPriceIncrease: e.didPriceIncrease,
+                            stockPrice: e.stockPrice,
+                            stockIcon: e.stockIcon,
+                          ),
                         )
                         .toList(),
                   ),
