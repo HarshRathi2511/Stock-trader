@@ -1,4 +1,5 @@
 import 'package:provider/provider.dart';
+import 'package:stock_trader/providers/detail_screen_provider.dart';
 import 'package:stock_trader/providers/news_provider.dart';
 import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/screens/news_detail_screen.dart';
@@ -21,6 +22,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => NewsProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DetailProvider(),
         ),
       ],
       child: MaterialApp(
