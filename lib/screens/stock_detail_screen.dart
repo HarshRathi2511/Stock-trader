@@ -6,12 +6,8 @@ import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/widgets/company_wise_news.dart';
 import 'package:stock_trader/widgets/detail_screen_chart_widget.dart';
 import 'package:stock_trader/widgets/pie_chart_detail.dart';
-// import 'package:stock_trader/providers/share.dart';
-// import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class StockDetailScreen extends StatefulWidget {
-  const StockDetailScreen({Key? key}) : super(key: key);
-
   static const routeName = '/stock-detail';
 
   @override
@@ -32,10 +28,10 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final stocksData = Provider.of<StockProvider>(context, listen: false);
-
+    final quantityController = TextEditingController();
     final detailDataProvider = Provider.of<DetailProvider>(context);
 
-    String quantity = '0';
+    late final int quantityOfStocks;
     final marketSentimentMap = {'Market Sentiment': 78.8, '': 100 - 78.8};
 
     final List<Color> colorList = [
@@ -49,12 +45,14 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
     // This will NEVER fail
     if (route == null) return SizedBox.shrink();
     final String loadedStockSymbol = route.settings.arguments as String;
-    print(loadedStockSymbol);
 
     final loadedStock = stocksData.stocks
         .firstWhere((share) => share.symbol == loadedStockSymbol);
 
-    print(loadedStock.symbol);
+    final title = loadedStock.title;
+    final symbol = loadedStock.symbol;
+    final stockPrice = loadedStock.stockPrice;
+    final stockIcon = loadedStock.stockIcon;
 
     void _showModalSheet(BuildContext ctx) {
       showModalBottomSheet(
@@ -118,8 +116,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                           style: TextStyle(
                             color: Colors.black,
                           ),
-                          // controller: quantityController,
-
+                          controller: quantityController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             hintText: '    quantity',
@@ -134,11 +131,12 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                               fontSize: deviceSize.width / 26,
                             ),
                           ),
-                          onChanged: (value) {
-                            quantity = value;
-                            print(quantity);
+                          onSubmitted: (_) {
+                            setState(() {
+                              quantityOfStocks =
+                                  int.parse(quantityController.text);
+                            });
                           },
-                          onSubmitted: (_) {},
                         ),
                       ),
                       Chip(
@@ -161,26 +159,63 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                 //Find a null safe package to implement slide to buy and slide to sell feature
 
                 ElevatedButton(
-                    onPressed: () {
-                      //buy order
-
-                      //implement changes in portfolio,net balance , and the transactions screen
-                    },
-                    child: Text(
-                      'BUY',
-                      style: profilePageDataStyle,
-                    )),
+                  onPressed: () {
+                    stocksData.addNewTransaction(
+                      title,
+                      symbol,
+                      stockPrice,
+                      stockIcon,
+                      DateTime.now(),
+                      quantityOfStocks,
+                      TransactionType.sold,
+                    );
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Stocks bought',
+                        ),
+                        duration: Duration(
+                          milliseconds: 800,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'BUY',
+                    style: profilePageDataStyle,
+                  ),
+                ),
 
                 ElevatedButton(
-                    onPressed: () {
-                      //sell order
-
-                      //implement changes in portfolio,net balance , and the transactions screen
-                    },
-                    child: Text(
-                      'SELL',
-                      style: profilePageDataStyle,
-                    )),
+                  onPressed: () {
+                    stocksData.addNewTransaction(
+                      title,
+                      symbol,
+                      stockPrice,
+                      stockIcon,
+                      DateTime.now(),
+                      quantityOfStocks,
+                      TransactionType.sold,
+                    );
+                    print("sold 1");
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Stocks sold',
+                        ),
+                        duration: Duration(
+                          milliseconds: 800,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'SELL',
+                    style: profilePageDataStyle,
+                  ),
+                ),
               ],
             ),
           ),
@@ -213,6 +248,23 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
     }
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          _showModalSheet(context);
+        },
+        label: const Text(
+          'Trade',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        icon: const Icon(
+          Icons.thumb_up,
+          color: Colors.black,
+        ),
+        backgroundColor: Colors.white,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -341,106 +393,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                 style: profilePageStyle,
               ),
               CompanyNews(loadedStock.title),
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      child: Center(
-                        child: Text(
-                          loadedStock.title,
-                          style: profilePageDataStyle,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: deviceSize.height * 0.03,
-                    ),
-                    ChartWidgetDetail(),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(70),
-                      child: Container(
-                        margin: EdgeInsets.all(deviceSize.height * 0.02),
-                        padding: EdgeInsets.all(deviceSize.height * 0.02),
-                        height: deviceSize.height * 0.3,
-                        width: double.infinity,
-                        color: blackgrey,
-                        child: Column(
-                          children: [
-                            Text(
-                              'Stats',
-                              style: TextStyle(
-                                  color: Colors.blueGrey,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                _buildTextRow('OPEN', '1323.05'),
-                                _buildTextRow('PREV CLOSE', '1323.05'),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                _buildTextRow('HIGH', '1323.05'),
-                                _buildTextRow('LOW', '1323.05'),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                _buildTextRow(
-                                    '52 WK HIGH', detailDataProvider.weekHigh),
-                                _buildTextRow(
-                                    '52 WK LOW', detailDataProvider.weekLow),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                _buildTextRow('MKT CAP', '1323.05'),
-                                _buildTextRow('VOL', '1323.05'),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                _buildTextRow('CAP TYPE', '1323.05'),
-                                _buildTextRow('P/E', '1323.05'),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    PieChartDetail(colorList, marketSentimentMap),
-                    CompanyNews(loadedStock.title),
-                  ],
-                ),
-              ),
             ],
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Container(
-          height: deviceSize.height * 0.1,
-          width: deviceSize.width * 0.3,
-          child: FloatingActionButton(
-            onPressed: () {
-              _showModalSheet(context);
-            },
-            child: Text('Trade'),
-            elevation: 5,
-            focusColor: Colors.lightGreenAccent,
-            shape:
-                BeveledRectangleBorder(borderRadius: BorderRadius.circular(6)),
           ),
         ),
       ),

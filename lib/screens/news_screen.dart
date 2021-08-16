@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_trader/constants.dart';
-// import 'package:stock_trader/constants.dart';
 import 'package:stock_trader/providers/news_provider.dart';
 import 'package:stock_trader/widgets/news_card.dart';
 

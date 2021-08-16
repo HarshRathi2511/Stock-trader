@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/providers/stock.dart';
 import 'package:provider/provider.dart';
-import 'package:stock_trader/widgets/stock_card.dart';
+import '../widgets/transaction_card.dart';
 
 class TransactionScreen extends StatelessWidget {
   const TransactionScreen({Key? key}) : super(key: key);
@@ -11,26 +11,6 @@ class TransactionScreen extends StatelessWidget {
     final stockProvider = Provider.of<StockProvider>(context);
     // final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
-    // Widget _buildStockListTile() {
-    //   return ListTile(
-    //     leading: Text(
-    //       'icon here',
-    //       style: TextStyle(color: Colors.white),
-    //     ),
-    //     title:
-    //         Text('AAPL', style: TextStyle(fontSize: 15, color: Colors.white)),
-    //     isThreeLine: true,
-    //     subtitle: Text(
-    //       'Apple Inc.',
-    //       style: TextStyle(
-    //         color: Colors.grey[400],
-    //         fontSize: 15,
-    //       ),
-    //     ),
-    //     trailing: Text('+ \$31.87',
-    //         style: TextStyle(fontSize: 15, color: Colors.white)),
-    //   );
-    // }
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -49,20 +29,21 @@ class TransactionScreen extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           Expanded(
-                  child: ListView(
-                    children: stockProvider.watchListStocks.values.toList()
-                        .map(
-                          (e) => StockCard(
-                              title: e.title,
-                              symbol: e.symbol,
-                              priceChange: e.priceChange,
-                              didPriceIncrease: e.didPriceIncrease,
-                              stockPrice: e.stockPrice,
-                              stockIcon: e.stockIcon),
-                        )
-                        .toList(),
-                  ),
-                ),
+            child: ListView(
+              children: stockProvider.transactedListStocks.values
+                  .toList()
+                  .map(
+                    (e) => TransactionCard(
+                      title: e.title,
+                      symbol: e.symbol,
+                      stockIcon: e.stockIcon,
+                      type: e.transactionType,
+                      quantity: e.quantityOfStocks,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
         ],
       ),
     );
