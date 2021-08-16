@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class TabsScreen extends StatefulWidget {
-  // const TabsScreen({ Key? key }) : super(key: key);      
-
+  static const routeName = '/tabScreen';
   @override
   _TabsScreenState createState() => _TabsScreenState();
 }
@@ -16,7 +15,6 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   var changeTabScreen = [
     WatchlistScreen(),
-    // MoversScreen(),
     PortfolioScreen(),
     TransactionScreen(),
     ProfileScreen(),
@@ -47,7 +45,7 @@ class _TabsScreenState extends State<TabsScreen> {
             color: Colors.white, // tab button border
             duration: Duration(milliseconds: 400), // tab animation duration
             gap: 1, // the tab button gap between icon and text
-            iconSize: deviceSize.width / 20, // tab button icon size
+            iconSize: deviceSize.width / 16, // tab button icon size
             padding: EdgeInsets.symmetric(
               horizontal: 20,
               vertical: 5,
