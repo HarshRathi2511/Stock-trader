@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:stock_trader/providers/detail_screen_provider.dart';
 import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/widgets/company_wise_news.dart';
 import 'package:stock_trader/widgets/detail_screen_chart_widget.dart';
 import 'package:stock_trader/widgets/pie_chart_detail.dart';
 // import 'package:stock_trader/providers/share.dart';
+// import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class StockDetailScreen extends StatefulWidget {
   const StockDetailScreen({Key? key}) : super(key: key);
@@ -18,9 +20,20 @@ class StockDetailScreen extends StatefulWidget {
 
 class _StockDetailScreenState extends State<StockDetailScreen> {
   @override
+  void initState() {
+    Future.delayed(Duration.zero).then((_) {
+      Provider.of<DetailProvider>(context, listen: false)
+          .getCompanyOverviewData('AMZN');
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final stocksData = Provider.of<StockProvider>(context, listen: false);
+
+    final detailDataProvider = Provider.of<DetailProvider>(context);
 
     String quantity = '0';
     final marketSentimentMap = {'Market Sentiment': 78.8, '': 100 - 78.8};
@@ -328,21 +341,107 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                 style: profilePageStyle,
               ),
               CompanyNews(loadedStock.title),
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      child: Center(
+                        child: Text(
+                          loadedStock.title,
+                          style: profilePageDataStyle,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: deviceSize.height * 0.03,
+                    ),
+                    ChartWidgetDetail(),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(70),
+                      child: Container(
+                        margin: EdgeInsets.all(deviceSize.height * 0.02),
+                        padding: EdgeInsets.all(deviceSize.height * 0.02),
+                        height: deviceSize.height * 0.3,
+                        width: double.infinity,
+                        color: blackgrey,
+                        child: Column(
+                          children: [
+                            Text(
+                              'Stats',
+                              style: TextStyle(
+                                  color: Colors.blueGrey,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                _buildTextRow('OPEN', '1323.05'),
+                                _buildTextRow('PREV CLOSE', '1323.05'),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                _buildTextRow('HIGH', '1323.05'),
+                                _buildTextRow('LOW', '1323.05'),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                _buildTextRow(
+                                    '52 WK HIGH', detailDataProvider.weekHigh),
+                                _buildTextRow(
+                                    '52 WK LOW', detailDataProvider.weekLow),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                _buildTextRow('MKT CAP', '1323.05'),
+                                _buildTextRow('VOL', '1323.05'),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                _buildTextRow('CAP TYPE', '1323.05'),
+                                _buildTextRow('P/E', '1323.05'),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    PieChartDetail(colorList, marketSentimentMap),
+                    CompanyNews(loadedStock.title),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
-      floatingActionButton: Container(
-        height: deviceSize.height * 0.1,
-        width: deviceSize.width * 0.3,
-        child: FloatingActionButton(
-          onPressed: () {
-            _showModalSheet(context);
-          },
-          child: Text('Trade'),
-          elevation: 5,
-          focusColor: Colors.lightGreenAccent,
-          shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Container(
+          height: deviceSize.height * 0.1,
+          width: deviceSize.width * 0.3,
+          child: FloatingActionButton(
+            onPressed: () {
+              _showModalSheet(context);
+            },
+            child: Text('Trade'),
+            elevation: 5,
+            focusColor: Colors.lightGreenAccent,
+            shape:
+                BeveledRectangleBorder(borderRadius: BorderRadius.circular(6)),
+          ),
         ),
       ),
     );
