@@ -167,7 +167,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       stockIcon,
                       DateTime.now(),
                       quantityOfStocks,
-                      TransactionType.sold,
+                      TransactionType.bought,
                     );
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -198,7 +198,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       quantityOfStocks,
                       TransactionType.sold,
                     );
-                    print("sold 1");
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
