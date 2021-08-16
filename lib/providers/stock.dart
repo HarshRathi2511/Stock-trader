@@ -48,7 +48,7 @@ class TransactedStock {
 class PortfolioStock {
   String symbol;
   String title;
-  double stockPrice;
+  double stockPriceWhenBought;
   Icon stockIcon;
   int quantity;
   double priceChange;
@@ -59,7 +59,7 @@ class PortfolioStock {
     required this.symbol,
     required this.quantity,
     required this.priceChange,
-    required this.stockPrice,
+    required this.stockPriceWhenBought,
     required this.stockIcon,
     required this.didPriceIncrease,
   });
@@ -67,11 +67,11 @@ class PortfolioStock {
 
 class StockProvider with ChangeNotifier {
   //id will be the symbol
-  
- final inputController = TextEditingController();
- 
-  List <Stock> _stocks =[
-     Stock(
+
+  final inputController = TextEditingController();
+
+  List<Stock> _stocks = [
+    Stock(
       title: 'Amazon',
       didPriceIncrease: true,
       priceChange: 2.09,
@@ -83,7 +83,7 @@ class StockProvider with ChangeNotifier {
       stockPrice: 3341.87,
       symbol: 'AMZN',
     ),
-     Stock(
+    Stock(
       title: 'Tesla',
       didPriceIncrease: true,
       priceChange: 2.89,
@@ -95,7 +95,7 @@ class StockProvider with ChangeNotifier {
       stockPrice: 713.76,
       symbol: 'TSLA',
     ),
-     Stock(
+    Stock(
       title: 'Google',
       didPriceIncrease: true,
       priceChange: 2,
@@ -108,8 +108,6 @@ class StockProvider with ChangeNotifier {
       symbol: 'GOOGL',
     )
   ];
-
-
 
   Map<String, Stock> _watchListStocks = {
     't1': Stock(
@@ -136,56 +134,8 @@ class StockProvider with ChangeNotifier {
       stockPrice: 3244,
       symbol: 'AAPL',
     ),
-    't3': Stock(
-      title: 'Apple Inc',
-      didPriceIncrease: true,
-      priceChange: 2,
-      stockIcon: Icon(
-        Icons.access_alarm_outlined,
-        color: Colors.white,
-        size: 40,
-      ),
-      stockPrice: 3244,
-      symbol: 'AAPL',
-    ),
-    't4': Stock(
-      title: 'Apple Inc',
-      didPriceIncrease: true,
-      priceChange: 2.09,
-      stockIcon: Icon(
-        Icons.access_alarm_outlined,
-        color: Colors.white,
-        size: 35,
-      ),
-      stockPrice: 3244,
-      symbol: 'AAPL',
-    ),
-    't5': Stock(
-      title: 'Apple Inc',
-      didPriceIncrease: true,
-      priceChange: 2.89,
-      stockIcon: Icon(
-        Icons.access_alarm_outlined,
-        color: Colors.white,
-        size: 35,
-      ),
-      stockPrice: 3244,
-      symbol: 'AAPL',
-    ),
-    't6': Stock(
-      title: 'Apple Inc',
-      didPriceIncrease: true,
-      priceChange: 2,
-      stockIcon: Icon(
-        Icons.access_alarm_outlined,
-        color: Colors.white,
-        size: 35,
-      ),
-      stockPrice: 3244,
-      symbol: 'AAPL',
-    )
   };
-  
+
   Map<String, PortfolioStock> _portfolioStocks = {};
   Map<String, TransactedStock> _transactedListStocks = {};
   Map<String, TransactedStock> _transactionsWithProfit = {};
@@ -290,6 +240,31 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void addNewTransaction(
+    title,
+    symbol,
+    price,
+    icon,
+    dateOfTransaction,
+    quantityOfStocks,
+    transactionType,
+  ) {
+    _transactedListStocks.putIfAbsent(
+      dateOfTransaction.toString(),
+      () => TransactedStock(
+        title: title,
+        symbol: symbol,
+        stockPriceWhenBought: price,
+        stockIcon: icon,
+        dateOfransaction: dateOfTransaction,
+        quantityOfStocks: quantityOfStocks,
+        transactionType: transactionType,
+      ),
+    );
+    print("transacts $_transactedListStocks");
+    notifyListeners();
+  }
+
   void addNewStock(stock, type) {
     if (type == StockType.transacted) {
       _transactedListStocks.putIfAbsent(
@@ -297,7 +272,7 @@ class StockProvider with ChangeNotifier {
           () => TransactedStock(
                 title: stock.title,
                 symbol: stock.symbol,
-                stockPriceWhenBought: stock.stockPriceWhenBought,
+                stockPriceWhenBought: stock.stockPrice,
                 stockIcon: stock.stockIcon,
                 dateOfransaction: stock.dateOfransaction,
                 quantityOfStocks: stock.quantityOfStocks,
@@ -309,7 +284,7 @@ class StockProvider with ChangeNotifier {
           () => PortfolioStock(
                 title: stock.title,
                 symbol: stock.symbol,
-                stockPrice: stock.stockPrice,
+                stockPriceWhenBought: stock.stockPrice,
                 stockIcon: stock.stockIcon,
                 quantity: stock.quantityOfStocks,
                 didPriceIncrease: stock.didPriceIncrease,

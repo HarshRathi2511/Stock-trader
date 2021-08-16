@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
+import 'package:stock_trader/screens/stock_detail_screen.dart';
 
 class StockCard extends StatelessWidget {
   late final String symbol;
@@ -22,7 +23,10 @@ class StockCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, StockDetailScreen.routeName,
+            arguments: 'AMZN');
+      },
       child: Container(
         height: 80,
         width: double.infinity,
