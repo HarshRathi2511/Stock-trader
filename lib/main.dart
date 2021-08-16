@@ -6,6 +6,7 @@ import 'package:stock_trader/screens/news_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:stock_trader/screens/tabs_screen.dart';
 import 'package:stock_trader/screens/title_screen.dart';
+import 'package:stock_trader/screens/stock_detail_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -39,11 +40,11 @@ class MyApp extends StatelessWidget {
             backgroundColor: Colors.red,
           ),
         ),
-        home: TitleScreen(),
+        home: TabsScreen(),
         routes: {
           // StockDetailScreen.routeName :(ctx) => StockDetailScreen(),
           NewsDetailScreen.routeName: (ctx) => NewsDetailScreen(),
-          TabsScreen.routeName: (ctx) => TabsScreen(),
+          // TabsScreen.routeName: (ctx) => TabsScreen(),
           StockDetailScreen.routeName :(ctx) => StockDetailScreen(),
         },
       ),

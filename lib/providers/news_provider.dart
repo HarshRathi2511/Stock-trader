@@ -25,12 +25,13 @@ class News {
 class NewsProvider with ChangeNotifier {
   // API KEY: 9417487a30c2456e90da08fd903d5487
   List<News> _latestHeadlines = [];
-  List<News> _companyWiseNews=[];
+  List<News> _companyWiseNews = [];
   int _length = 0;
 
   List<News> get latestHeadlines {
     return _latestHeadlines;
   }
+
   List<News> get companyWiseNews {
     return _companyWiseNews;
   }
@@ -79,7 +80,7 @@ class NewsProvider with ChangeNotifier {
     final response = await http.get(link);
     final res = json.decode(response.body);
 
-    print("Desc ${res["articles"][0]["description"]}");
+    // print("Desc ${res["articles"][0]["description"]}");
 
     for (var news in res["articles"]) {
       if (news["title"] != null &&
@@ -104,6 +105,22 @@ class NewsProvider with ChangeNotifier {
             sourceName: news["source"]["name"],
           ),
         );
+      }
+    }
+  }
+
+  News? getNewsByUrl(url, type) {
+    if (type == 'everything') {
+      for (var news in _latestHeadlines) {
+        if (news.url == url) {
+          return news;
+        }
+      }
+    } else {
+      for (var news in _companyWiseNews) {
+        if (news.url == url) {
+          return news;
+        }
       }
     }
   }
