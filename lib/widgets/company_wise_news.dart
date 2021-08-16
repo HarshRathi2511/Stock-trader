@@ -14,66 +14,62 @@ class CompanyNews extends StatefulWidget {
 }
 
 class _CompanyNewsState extends State<CompanyNews> {
-
- var isLoading =true;
+  var isLoading = true;
 
   @override
   void initState() {
-    print(widget.loadedStocktitle);
-    Future.delayed(Duration.zero).then((value) =>
-        Provider.of<NewsProvider>(context, listen: false)
-            .getStockNewsByQuery(widget.loadedStocktitle).then((_){
-              setState(() {
-                isLoading=false;
-                print(widget.loadedStocktitle);
-              });
-            }));
+    Future<void> newsData() async {
+      await Provider.of<NewsProvider>(context, listen: false)
+          .getStockNewsByQuery(widget.loadedStocktitle);
+      setState(() {
+        isLoading = false;
+      });
+    }
+
+    newsData();
     super.initState();
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   // TODO: implement didChangeDependencies
-  //   super.didChangeDependencies();
-  // }
-
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
-    final deviceHeight = deviceSize.height;
-
     final newsProvider = Provider.of<NewsProvider>(context, listen: false);
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(70),
-      child: Container(
-        margin: EdgeInsets.all(deviceHeight * 0.02),
-        padding: EdgeInsets.all(deviceHeight * 0.02),
-        height: deviceSize.height * 0.9,
-        width: double.infinity,
-        color: blackgrey,
-        child: Column(
-          children: [
-            Text(
-              widget.loadedStocktitle,
-              style: profilePageStyle,
+    // return ClipRRect(
+    //   borderRadius: BorderRadius.circular(20),
+    //   child: Container(
+    //     // margin: EdgeInsets.all(deviceHeight * 0.02),
+    //     // padding: EdgeInsets.all(deviceHeight * 0.02),
+    //     height: deviceSize.height * 0.9,
+    //     width: double.infinity,
+    //     // color: blackgrey,
+    //     child: Expanded(
+    //       child: ListView.builder(
+    //         itemCount: newsProvider.companyWiseNews.length,
+    //         itemBuilder: (_, index) {
+    //           return NewsCard(
+    //             title: newsProvider.companyWiseNews[index].title,
+    //             description:
+    //                 newsProvider.companyWiseNews[index].description,
+    //             urlToImage: newsProvider.companyWiseNews[index].urlToImage,
+    //             index: index,
+    //           );
+    //         },
+    //       ),
+    //     ),
+    //   ),
+    // );
+    return Column(
+      children: newsProvider.companyWiseNews
+          .map(
+            (e) => NewsCard(
+              title: e.title,
+              description: e.description,
+              urlToImage: e.urlToImage,
+              url: e.url,
+              use: 'companyWise',
             ),
-            // Expanded(
-            //   child: ListView.builder(
-            //     itemCount: newsProvider.companyWiseNews.length,
-            //     itemBuilder: (_, index) {
-            //       return NewsCard(
-            //         title: newsProvider.companyWiseNews[index].title,
-            //         description: newsProvider.companyWiseNews[index].description,
-            //         urlToImage: newsProvider.companyWiseNews[index].urlToImage,
-            //         index: index,
-            //       );
-            //     },
-            //   ),
-            // ),
-          ],
-        ),
-      ),
+          )
+          .toList(),
     );
   }
 }

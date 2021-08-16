@@ -18,8 +18,8 @@ class NewsDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as int;
-    final headlines = Provider.of<NewsProvider>(context).latestHeadlines;
+    final args = ModalRoute.of(context)!.settings.arguments as List<String>;
+    final headline = Provider.of<NewsProvider>(context).getNewsByUrl(args[0], args[1]);
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -28,12 +28,15 @@ class NewsDetailScreen extends StatelessWidget {
             Container(
               width: double.infinity,
               height: deviceSize.height * 0.4,
-              child: Image.network(headlines[args].urlToImage),
+              child: Image.network(
+                headline!.urlToImage,
+                fit: BoxFit.fill,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                headlines[args].title,
+                headline.title,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -44,7 +47,7 @@ class NewsDetailScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                headlines[args].content,
+                headline.content,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -67,7 +70,7 @@ class NewsDetailScreen extends StatelessWidget {
               ),
             ),
             LinkText(
-              headlines[args].url,
+              headline.url,
               linkStyle: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
@@ -75,13 +78,13 @@ class NewsDetailScreen extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
               // You can optionally handle link tap event by yourself
-              onLinkTap: (url) => launchURLApp(headlines[args].url),
+              onLinkTap: (url) => launchURLApp(headline.url),
             ),
             SizedBox(
               height: 10,
             ),
             Text(
-              headlines[args].sourceName,
+              headline.sourceName,
               style: TextStyle(
                 color: Colors.grey,
                 fontSize: 20,

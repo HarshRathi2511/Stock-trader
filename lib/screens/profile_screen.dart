@@ -4,7 +4,12 @@ import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/widgets/profile_screen_card.dart';
 import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final stockProvider = Provider.of<StockProvider>(context);
