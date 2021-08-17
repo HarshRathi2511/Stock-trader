@@ -47,10 +47,10 @@ class _NewsScreenState extends State<NewsScreen> {
     final newsProvider = Provider.of<NewsProvider>(context);
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: SingleChildScrollView(
-        child: Expanded(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 height: 20,
@@ -58,7 +58,7 @@ class _NewsScreenState extends State<NewsScreen> {
               Container(
                 child: Center(
                   child: Text(
-                    'News',
+                    'Latest News',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: deviceSize.width / 18,
@@ -68,39 +68,19 @@ class _NewsScreenState extends State<NewsScreen> {
                   ),
                 ),
               ),
-              isNewsLoading
-                  ? Expanded(
-                      child: Center(child: CircularProgressIndicator()),
-                    )
-                  : didErrorOccur
-                      ? Expanded(
-                          child: Center(
-                            child: Text(
-                              'Error faced while getting your news!',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: deviceSize.width / 26,
-                              ),
-                            ),
-                          ),
-                        )
-                      : Column(
-                        children: newsProvider.latestHeadlines
-                            .map(
-                              (e) => NewsCard(
-                                title: e.title,
-                                description: e.description,
-                                urlToImage: e.urlToImage,
-                                url: e.url,
-                                use: 'everything',
-                              ),
-                            )
-                            .toList(),
-                      )
+              ...newsProvider.latestHeadlines
+                  .map(
+                    (e) => NewsCard(
+                      title: e.title,
+                      description: e.description,
+                      urlToImage: e.urlToImage,
+                      url: e.url,
+                      use: 'everything',
+                    ),
+                  )
+                  .toList()
             ],
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

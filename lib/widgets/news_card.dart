@@ -29,11 +29,11 @@ class NewsCard extends StatelessWidget {
         },
         child: Container(
             margin: EdgeInsets.symmetric(
-              horizontal: 4,
+              horizontal: 8,
               vertical: 8,
             ),
             width: double.infinity,
-            height: deviceSize.height * 0.2,
+            height: deviceSize.height * 0.15,
             decoration: BoxDecoration(
               color: kBlackGrey,
               borderRadius: BorderRadius.circular(15),
@@ -69,7 +69,7 @@ class NewsCard extends StatelessWidget {
                         child: Text(
                           title,
                           overflow: TextOverflow.ellipsis,
-                          maxLines: 6,
+                          maxLines: 5,
                           style: TextStyle(
                             color: Colors.white,
                             // fontWeight: FontWeight.bold,

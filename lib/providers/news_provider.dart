@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 
 class News {
   String title;
@@ -52,6 +52,8 @@ class NewsProvider with ChangeNotifier {
     // print(res);
 
     for (var news in res) {
+      print(length);
+      print(news);
       if (news['headline'] != null &&
           news['related'] != null &&
           news['url'] != null &&
@@ -66,13 +68,18 @@ class NewsProvider with ChangeNotifier {
             description: news['related'],
             url: news['url'],
             urlToImage: news['image'],
-            publishedAt: news['datetime'],
+            publishedAt: news['datetime'].toString(),
             content: news['summary'],
             sourceName: news['source'],
           ),
         );
+        print("$_length $news");
+        if (_length >= 30) {
+          break;
+        }
       }
     }
+    print("Latest headlines $_latestHeadlines");
   }
 
   //https://finnhub.io/api/v1/company-news?symbol=AMZN&from=2021-03-01&to=2021-03-09&token=c4dlgpqad3icnt8rkag0
@@ -81,34 +88,39 @@ class NewsProvider with ChangeNotifier {
     final link = Uri.parse(
         "https://finnhub.io/api/v1/company-news?symbol=AMZN&from=2021-03-01&to=2021-03-09&token=c4dlgpqad3icnt8rkag0");
 
-   //format and put the current date and previous date in the url using intl package    
-   final currentDate = DateFormat.yMd(DateTime.now());
-   final someDaysBehind = DateFormat.yMd(DateTime.now().subtract(Duration(days: 2)));
+    //format and put the current date and previous date in the url using intl package
+    //  final currentDate = DateFormat.yMd(DateTime.now());
+    //  final someDaysBehind = DateFormat.yMd(DateTime.now().subtract(Duration(days: 2)));
     final response = await http.get(link);
     final res = json.decode(response.body);
     print(res);
 
+    var newsCount = 0;
+
     for (var news in res) {
-      if ( news['headline'] != null &&
+      if (news['headline'] != null &&
           news['related'] != null &&
           news['url'] != null &&
           news['image'] != null &&
           news['datetime'] != null &&
           news['summary'] != null &&
           news['source'] != null) {
-
-        _companyWiseNews.add(News(
-          title: news['headline'],
-          description: news['related'],
-          url: news['url'],
-          urlToImage: news['image'],
-          publishedAt: news['datetime'],
-          content: news['summary'],
-          sourceName: news['source'],
-        )
+        _companyWiseNews.add(
+          News(
+            title: news['headline'],
+            description: news['related'],
+            url: news['url'],
+            urlToImage: news['image'],
+            publishedAt: news['datetime'].toString(),
+            content: news['summary'],
+            sourceName: news['source'],
+          ),
         );
-        print('.........................................');
-        print(news['headline'].toString());
+        newsCount++;
+        if (newsCount >= 15) {
+          break;
+        }
+        print(_companyWiseNews);
       }
     }
   }
@@ -129,64 +141,3 @@ class NewsProvider with ChangeNotifier {
     }
   }
 }
-
-//https://finnhub.io/api/v1/news?category=general&token=c4dlgpqad3icnt8rkag0
-//api key finhub -   c4dlgpqad3icnt8rkag0
-
-
-//old functions 
-//in overview news
-// for (var news in res["articles"]) {
-//   if (news["title"] != null &&
-//       news["description"] != null &&
-//       news["url"] != null &&
-//       news["urlToImage"] != null &&
-//       news["publishedAt"] != null &&
-//       news["content"] != null &&
-//       news["source"]["name"] != null) {
-//     _length++;
-//     _latestHeadlines.add(
-//       News(
-//         title: news["title"],
-//         description: news["description"],
-//         url: news["url"],
-//         urlToImage: news["urlToImage"],
-//         publishedAt: news["publishedAt"],
-//         content: news["content"],
-//         sourceName: news["source"]["name"],
-//       ),
-//     );
-//   }
-// }
-
-//comapany wise news
-// Future<void> getStockNewsByQuery(query) async {
-//   final link = Uri.parse(
-//       "https://newsapi.org/v2/everything?q={query}&sortBy=popularity&apiKey=9417487a30c2456e90da08fd903d5487");
-
-//   final response = await http.get(link);
-//   final res = json.decode(response.body);
-
-//   for (var news in res["articles"]) {
-//     if (news["title"] != null &&
-//         news["description"] != null &&
-//         news["url"] != null &&
-//         news["urlToImage"] != null &&
-//         news["publishedAt"] != null &&
-//         news["content"] != null &&
-//         news["source"]["name"] != null) {
-//       _length++;
-//       _latestHeadlines.add(
-//         News(
-//           title: news["title"],
-//           description: news["description"],
-//           url: news["url"],
-//           urlToImage: news["urlToImage"],
-//           publishedAt: news["publishedAt"],
-//           content: news["content"],
-//           sourceName: news["source"]["name"],
-//         ),
-//       );
-//     }
-//   }
-// }
