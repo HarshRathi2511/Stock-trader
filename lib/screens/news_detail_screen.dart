@@ -19,7 +19,8 @@ class NewsDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as List<String>;
-    final headline = Provider.of<NewsProvider>(context).getNewsByUrl(args[0], args[1]);
+    final headline =
+        Provider.of<NewsProvider>(context).getNewsByUrl(args[0], args[1]);
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
