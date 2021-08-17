@@ -171,16 +171,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       quantityOfStocks,
                       TransactionType.bought,
                     );
-                    stocksData.addPortfolioStock(
-                      title,
-                      symbol,
-                      stockPrice,
-                      stockIcon,
-                      quantityOfStocks,
-                      true,
-                      3.2,
-                      TransactionType.bought,
-                    );
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -210,16 +200,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       quantityOfStocks,
                       TransactionType.sold,
                     );
-                    stocksData.addPortfolioStock(
-                      title,
-                      symbol,
-                      stockPrice,
-                      stockIcon,
-                      quantityOfStocks,
-                      true,
-                      3.2,
-                      TransactionType.sold,
-                    );  
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -281,7 +261,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
           ),
         ),
         icon: const Icon(
-          Icons.compare_arrows_rounded,
+          Icons.thumb_up,
           color: Colors.black,
         ),
         backgroundColor: Colors.white,
@@ -404,6 +384,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
+                          //yet to be done 
                           _buildTextRow('HIGH', '1323.05'),
                           _buildTextRow('LOW', '1323.05'),
                         ],
