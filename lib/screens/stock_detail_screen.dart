@@ -29,7 +29,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
     final deviceSize = MediaQuery.of(context).size;
     final stocksData = Provider.of<StockProvider>(context, listen: false);
     final quantityController = TextEditingController();
-    final detailDataProvider = Provider.of<DetailProvider>(context);
+    // final detailDataProvider = Provider.of<DetailProvider>(context);
 
     late final int quantityOfStocks;
     final marketSentimentMap = {'Market Sentiment': 78.8, '': 100 - 78.8};
@@ -217,7 +217,8 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       true,
                       3.2,
                       TransactionType.sold,
-                    );  
+                    );
+                    
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
