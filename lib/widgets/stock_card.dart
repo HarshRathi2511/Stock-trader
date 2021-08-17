@@ -27,6 +27,7 @@ class StockCard extends StatelessWidget {
         Navigator.pushNamed(context, StockDetailScreen.routeName,
             arguments: 'AMZN');
       },
+      
       child: Container(
         height: 80,
         width: double.infinity,
