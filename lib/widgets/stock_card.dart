@@ -27,7 +27,6 @@ class StockCard extends StatelessWidget {
         Navigator.pushNamed(context, StockDetailScreen.routeName,
             arguments: 'AMZN');
       },
-      
       child: Container(
         height: 80,
         width: double.infinity,
@@ -37,15 +36,23 @@ class StockCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Container(
-              // margin: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: kBlackGrey,
-                borderRadius: BorderRadius.circular(20),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Container(
+                // margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: kBlackGrey,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                width: deviceSize.width / 7.5,
+                height: deviceSize.width / 7.5,
+                child: Container(
+                  child: Image.network(
+                    "https://logo.clearbit.com/flipkart.com",
+                    fit: BoxFit.fill,
+                  ),
+                ),
               ),
-              width: deviceSize.width / 6.5,
-              height: deviceSize.width / 6.5,
-              child: stockIcon,
             ),
             SizedBox(
               width: 15,

@@ -171,6 +171,16 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       quantityOfStocks,
                       TransactionType.bought,
                     );
+                    stocksData.addPortfolioStock(
+                      title,
+                      symbol,
+                      stockPrice,
+                      stockIcon,
+                      quantityOfStocks,
+                      true,
+                      3.2,
+                      TransactionType.bought,
+                    );
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -198,6 +208,16 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       stockIcon,
                       DateTime.now(),
                       quantityOfStocks,
+                      TransactionType.sold,
+                    );
+                    stocksData.addPortfolioStock(
+                      title,
+                      symbol,
+                      stockPrice,
+                      stockIcon,
+                      quantityOfStocks,
+                      true,
+                      3.2,
                       TransactionType.sold,
                     );
                     Navigator.of(context).pop();
@@ -278,7 +298,9 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       child: loadedStock.stockIcon,
                     ),
                   ),
-                  SizedBox(width: deviceSize.width*0.05,),
+                  SizedBox(
+                    width: deviceSize.width * 0.05,
+                  ),
                   Column(
                     children: [
                       Container(
@@ -384,7 +406,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          //yet to be done 
+                          //yet to be done
                           _buildTextRow('HIGH', '1323.05'),
                           _buildTextRow('LOW', '1323.05'),
                         ],
@@ -428,20 +450,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
           ),
         ),
       ),
-
-      // floatingActionButton: Container(
-      //   height: deviceSize.height * 0.1,
-      //   width: deviceSize.width * 0.3,
-      //   child: FloatingActionButton(
-      //     onPressed: () {
-      //       _showModalSheet(context);
-      //     },
-      //     child: Text('Trade'),
-      //     elevation: 5,
-      //     focusColor: Colors.lightGreenAccent,
-      //     shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(6)),
-      //   ),
-      // ),
     );
   }
 }

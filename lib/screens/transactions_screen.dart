@@ -9,7 +9,7 @@ class TransactionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final stockProvider = Provider.of<StockProvider>(context);
-    // final deviceHeight = MediaQuery.of(context).size.height;
+    final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -19,15 +19,43 @@ class TransactionScreen extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          Text(
-            'Transactions',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: deviceWidth / 18,
-              fontWeight: FontWeight.bold,
+          Container(
+            child: Center(
+              child: Text(
+                'Transactions',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: deviceWidth / 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
-            textAlign: TextAlign.center,
           ),
+          stockProvider.transactedListStockCount == 0
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: deviceHeight * 0.05,
+                        ),
+                        Text(
+                          "Your portfolio list is empty!",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: deviceWidth / 26,
+                          ),
+                        ),
+                        Text(
+                          "Buy stocks to track them here.",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: deviceWidth / 26,
+                          ),
+                        ),
+                      ],
+                    )
+                  :
           Expanded(
             child: ListView(
               children: stockProvider.transactedListStocks.values
