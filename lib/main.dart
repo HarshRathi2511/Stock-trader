@@ -2,6 +2,7 @@ import 'package:provider/provider.dart';
 import 'package:stock_trader/providers/detail_screen_provider.dart';
 import 'package:stock_trader/providers/news_provider.dart';
 import 'package:stock_trader/providers/stock.dart';
+import 'package:stock_trader/screens/auth_screen.dart';
 import 'package:stock_trader/screens/news_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:stock_trader/screens/tabs_screen.dart';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
             backgroundColor: Colors.red,
           ),
         ),
-        home: TabsScreen(),
+        home: TabsScreen(), //show diff screens on the basis whether user is authenticated or not 
         routes: {
           // StockDetailScreen.routeName :(ctx) => StockDetailScreen(),
           NewsDetailScreen.routeName: (ctx) => NewsDetailScreen(),

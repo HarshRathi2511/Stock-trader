@@ -29,7 +29,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
     final deviceSize = MediaQuery.of(context).size;
     final stocksData = Provider.of<StockProvider>(context, listen: false);
     final quantityController = TextEditingController();
-    // final detailDataProvider = Provider.of<DetailProvider>(context);
+    final detailDataProvider = Provider.of<DetailProvider>(context);
 
     late final int quantityOfStocks;
     final marketSentimentMap = {'Market Sentiment': 78.8, '': 100 - 78.8};
@@ -48,6 +48,8 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
 
     final loadedStock = stocksData.stocks
         .firstWhere((share) => share.symbol == loadedStockSymbol);
+
+    print(loadedStock.symbol);
 
     final title = loadedStock.title;
     final symbol = loadedStock.symbol;
@@ -169,16 +171,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       quantityOfStocks,
                       TransactionType.bought,
                     );
-                    stocksData.addPortfolioStock(
-                      title,
-                      symbol,
-                      stockPrice,
-                      stockIcon,
-                      quantityOfStocks,
-                      true,
-                      3.2,
-                      TransactionType.bought,
-                    );
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -280,7 +272,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
           ),
         ),
         icon: const Icon(
-          Icons.compare_arrows_rounded,
+          Icons.thumb_up,
           color: Colors.black,
         ),
         backgroundColor: Colors.white,
@@ -289,39 +281,55 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                child: Center(
-                  child: Text(
-                    loadedStock.symbol,
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Center(
+                      child: loadedStock.stockIcon,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                ),
-              ),
-              Container(
-                child: Center(
-                  child: Text(
-                    loadedStock.title,
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: deviceSize.width / 22.22,
-                    ),
-                    textAlign: TextAlign.center,
+                  SizedBox(width: deviceSize.width*0.05,),
+                  Column(
+                    children: [
+                      Container(
+                        child: Center(
+                          child: Text(
+                            loadedStock.symbol,
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: Center(
+                          child: Text(
+                            loadedStock.title,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: deviceSize.width / 22.22,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                ],
               ),
+
               SizedBox(
                 height: deviceSize.height * 0.05,
               ),
-              Container(
-                child: Center(
-                  child: loadedStock.stockIcon,
-                ),
-              ),
+              // Container(
+              //   child: Center(
+              //     child: loadedStock.stockIcon,
+              //   ),
+              // ),
               Container(
                 child: Center(
                   child: Text(
@@ -346,6 +354,15 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
               ),
               SizedBox(
                 height: deviceSize.height * 0.03,
+              ),
+              Container(
+                child: Text(
+                  detailDataProvider.description,
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: deviceSize.width / 22.22,
+                  ),
+                ),
               ),
               ChartWidgetDetail(),
               ClipRRect(
@@ -378,6 +395,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
+                          //yet to be done 
                           _buildTextRow('HIGH', '1323.05'),
                           _buildTextRow('LOW', '1323.05'),
                         ],
@@ -385,22 +403,26 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          _buildTextRow('52 WK HIGH', '1323.05'),
-                          _buildTextRow('52 WK LOW', '1323.05'),
+                          _buildTextRow(
+                              '52 WK HIGH', detailDataProvider.weekHigh),
+                          _buildTextRow(
+                              '52 WK LOW', detailDataProvider.weekLow),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          _buildTextRow('MKT CAP', '1323.05'),
-                          _buildTextRow('VOL', '1323.05'),
+                          _buildTextRow(
+                              'MKT CAP', detailDataProvider.marketCap),
+                          _buildTextRow('CUR', detailDataProvider.currency),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          _buildTextRow('CAP TYPE', '1323.05'),
-                          _buildTextRow('P/E', '1323.05'),
+                          _buildTextRow(
+                              'ASSET TYPE', detailDataProvider.assetType),
+                          _buildTextRow('P/E', detailDataProvider.PEratio),
                         ],
                       ),
                     ],
