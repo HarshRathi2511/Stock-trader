@@ -171,6 +171,16 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       quantityOfStocks,
                       TransactionType.bought,
                     );
+                    stocksData.addPortfolioStock(
+                      title,
+                      symbol,
+                      stockPrice,
+                      stockIcon,
+                      quantityOfStocks,
+                      true,
+                      3.2,
+                      TransactionType.bought,
+                    );
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -200,6 +210,16 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       quantityOfStocks,
                       TransactionType.sold,
                     );
+                    stocksData.addPortfolioStock(
+                      title,
+                      symbol,
+                      stockPrice,
+                      stockIcon,
+                      quantityOfStocks,
+                      true,
+                      3.2,
+                      TransactionType.sold,
+                    );  
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -261,7 +281,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
           ),
         ),
         icon: const Icon(
-          Icons.thumb_up,
+          Icons.compare_arrows_rounded,
           color: Colors.black,
         ),
         backgroundColor: Colors.white,

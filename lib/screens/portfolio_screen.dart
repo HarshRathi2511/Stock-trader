@@ -3,53 +3,31 @@ import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:draw_graph/draw_graph.dart';
+import 'package:stock_trader/providers/stock.dart';
+import 'package:provider/provider.dart';
+import 'package:stock_trader/widgets/portfolio_card.dart';
 
 class PortfolioScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final stockProvider = Provider.of<StockProvider>(context);
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
 
     Map<String, double> dataMap = {
-
       "Reliance": 5,
       "Amazon": 3,
       "Siemens": 2,
       "Blue Origin": 2,
     };
-    List<Color> colorList =[
-
+    List<Color> colorList = [
       Colors.red,
       Colors.green,
       Colors.blue,
       Colors.yellow,
     ];
 
-    Widget _buildStockListTile() {
-      return ListTile(
-        leading: Text(
-          'icon here',
-          style: TextStyle(color: Colors.white),
-        ),
-        title:
-            Text('AAPL', style: TextStyle(fontSize: 15, color: Colors.white)),
-        isThreeLine: true,
-        subtitle: Text(
-          'Apple Inc.',
-          style: TextStyle(
-            color: Colors.grey[400],
-            fontSize: 15,
-          ),
-        ),
-        trailing: Text('+ \$31.87',
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            )),
-      );
-    }
-
+    var deviceSize;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
@@ -153,10 +131,7 @@ class PortfolioScreen extends StatelessWidget {
                     chartRadius: MediaQuery.of(context).size.width / 3.2,
                     colorList: colorList,
                     initialAngleInDegree: 0,
-
                     chartType: ChartType.disc,
-
-
                     ringStrokeWidth: 32,
                     centerText: "HYBRID",
                     legendOptions: LegendOptions(
@@ -172,12 +147,10 @@ class PortfolioScreen extends StatelessWidget {
                       showChartValueBackground: true,
                       showChartValues: true,
                       showChartValuesInPercentage: false,
-
                       showChartValuesOutside: false,
                       decimalPlaces: 1,
                     ),
                   ),
-
                 ),
               ),
               ClipRRect(
@@ -190,11 +163,20 @@ class PortfolioScreen extends StatelessWidget {
                   color: blackgrey,
                   child: LineGraph(
                     features: [
-                     Feature(data: [0.3,0.6,0.8,0.9,1.2],color: Colors.lightGreen,title: 'Portfolio wealth'),
+                      Feature(
+                          data: [0.3, 0.6, 0.8, 0.9, 1.2],
+                          color: Colors.lightGreen,
+                          title: 'Portfolio wealth'),
                     ],
-                    size: Size(deviceWidth*0.7, deviceHeight*0.4),
-                    labelX: ['MON','TUE','WED','TH','FRI'],
-                    labelY: ['\$3456','\$4456','\$5456','\$1456','\$8456',],
+                    size: Size(deviceWidth * 0.7, deviceHeight * 0.4),
+                    labelX: ['MON', 'TUE', 'WED', 'TH', 'FRI'],
+                    labelY: [
+                      '\$3456',
+                      '\$4456',
+                      '\$5456',
+                      '\$1456',
+                      '\$8456',
+                    ],
                     showDescription: true,
                     graphColor: Colors.white,
                   ),
@@ -209,9 +191,43 @@ class PortfolioScreen extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              _buildStockListTile(),
-              _buildStockListTile(),
-              _buildStockListTile(),
+              stockProvider.portfolioStockCount == 0
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: deviceHeight * 0.05,
+                        ),
+                        Text(
+                          "Your portfolio list is empty!",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: deviceWidth / 26,
+                          ),
+                        ),
+                        Text(
+                          "Buy stocks to track them here.",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: deviceWidth / 26,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: stockProvider.portfolioStocks.values
+                          .toList()
+                          .map((e) => PortfolioCard(
+                                title: e.title,
+                                symbol: e.symbol,
+                                quantity: e.quantity,
+                                priceChange: e.priceChange,
+                                stockPriceAtTheMoment: e.stockPriceAtTheMoment,
+                                stockIcon: e.stockIcon,
+                                didPriceIncrease: e.didPriceIncrease,
+                              ))
+                          .toList(),
+                    ),
             ],
           ),
         ),
