@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class News {
   String title;
@@ -40,71 +41,74 @@ class NewsProvider with ChangeNotifier {
     return _length;
   }
 
+  //general market news
   Future<void> getData() async {
     final link = Uri.parse(
-        "https://newsapi.org/v2/top-headlines?country=in&apiKey=9417487a30c2456e90da08fd903d5487");
+        "https://finnhub.io/api/v1/news?category=general&token=c4dlgpqad3icnt8rkag0");
 
     final response = await http.get(link);
     final res = json.decode(response.body);
 
-    print("Desc ${res["articles"][0]["description"]}");
+    // print(res);
 
-    for (var news in res["articles"]) {
-      if (news["title"] != null &&
-          news["description"] != null &&
-          news["url"] != null &&
-          news["urlToImage"] != null &&
-          news["publishedAt"] != null &&
-          news["content"] != null &&
-          news["source"]["name"] != null) {
+    for (var news in res) {
+      if (news['headline'] != null &&
+          news['related'] != null &&
+          news['url'] != null &&
+          news['image'] != null &&
+          news['datetime'] != null &&
+          news['summary'] != null &&
+          news['source'] != null) {
         _length++;
         _latestHeadlines.add(
           News(
-            title: news["title"],
-            description: news["description"],
-            url: news["url"],
-            urlToImage: news["urlToImage"],
-            publishedAt: news["publishedAt"],
-            content: news["content"],
-            sourceName: news["source"]["name"],
+            title: news['headline'],
+            description: news['related'],
+            url: news['url'],
+            urlToImage: news['image'],
+            publishedAt: news['datetime'],
+            content: news['summary'],
+            sourceName: news['source'],
           ),
         );
       }
     }
   }
 
+  //https://finnhub.io/api/v1/company-news?symbol=AMZN&from=2021-03-01&to=2021-03-09&token=c4dlgpqad3icnt8rkag0
   Future<void> getStockNewsByQuery(query) async {
+    //query will contain the symbol of the company
     final link = Uri.parse(
-        "https://newsapi.org/v2/everything?q={query}&sortBy=popularity&apiKey=9417487a30c2456e90da08fd903d5487");
+        "https://finnhub.io/api/v1/company-news?symbol=AMZN&from=2021-03-01&to=2021-03-09&token=c4dlgpqad3icnt8rkag0");
 
+   //format and put the current date and previous date in the url using intl package    
+   final currentDate = DateFormat.yMd(DateTime.now());
+   final someDaysBehind = DateFormat.yMd(DateTime.now().subtract(Duration(days: 2)));
     final response = await http.get(link);
     final res = json.decode(response.body);
+    print(res);
 
-    // print("Desc ${res["articles"][0]["description"]}");
+    for (var news in res) {
+      if ( news['headline'] != null &&
+          news['related'] != null &&
+          news['url'] != null &&
+          news['image'] != null &&
+          news['datetime'] != null &&
+          news['summary'] != null &&
+          news['source'] != null) {
 
-    for (var news in res["articles"]) {
-      if (news["title"] != null &&
-          news["description"] != null &&
-          news["url"] != null &&
-          news["urlToImage"] != null &&
-          news["publishedAt"] != null &&
-          news["content"] != null &&
-          news["source"]["name"] != null) {
-        if (_length >= 20) {
-          break;
-        }
-        _length++;
-        _companyWiseNews.add(
-          News(
-            title: news["title"],
-            description: news["description"],
-            url: news["url"],
-            urlToImage: news["urlToImage"],
-            publishedAt: news["publishedAt"],
-            content: news["content"],
-            sourceName: news["source"]["name"],
-          ),
+        _companyWiseNews.add(News(
+          title: news['headline'],
+          description: news['related'],
+          url: news['url'],
+          urlToImage: news['image'],
+          publishedAt: news['datetime'],
+          content: news['summary'],
+          sourceName: news['source'],
+        )
         );
+        print('.........................................');
+        print(news['headline'].toString());
       }
     }
   }
@@ -125,3 +129,64 @@ class NewsProvider with ChangeNotifier {
     }
   }
 }
+
+//https://finnhub.io/api/v1/news?category=general&token=c4dlgpqad3icnt8rkag0
+//api key finhub -   c4dlgpqad3icnt8rkag0
+
+
+//old functions 
+//in overview news
+// for (var news in res["articles"]) {
+//   if (news["title"] != null &&
+//       news["description"] != null &&
+//       news["url"] != null &&
+//       news["urlToImage"] != null &&
+//       news["publishedAt"] != null &&
+//       news["content"] != null &&
+//       news["source"]["name"] != null) {
+//     _length++;
+//     _latestHeadlines.add(
+//       News(
+//         title: news["title"],
+//         description: news["description"],
+//         url: news["url"],
+//         urlToImage: news["urlToImage"],
+//         publishedAt: news["publishedAt"],
+//         content: news["content"],
+//         sourceName: news["source"]["name"],
+//       ),
+//     );
+//   }
+// }
+
+//comapany wise news
+// Future<void> getStockNewsByQuery(query) async {
+//   final link = Uri.parse(
+//       "https://newsapi.org/v2/everything?q={query}&sortBy=popularity&apiKey=9417487a30c2456e90da08fd903d5487");
+
+//   final response = await http.get(link);
+//   final res = json.decode(response.body);
+
+//   for (var news in res["articles"]) {
+//     if (news["title"] != null &&
+//         news["description"] != null &&
+//         news["url"] != null &&
+//         news["urlToImage"] != null &&
+//         news["publishedAt"] != null &&
+//         news["content"] != null &&
+//         news["source"]["name"] != null) {
+//       _length++;
+//       _latestHeadlines.add(
+//         News(
+//           title: news["title"],
+//           description: news["description"],
+//           url: news["url"],
+//           urlToImage: news["urlToImage"],
+//           publishedAt: news["publishedAt"],
+//           content: news["content"],
+//           sourceName: news["source"]["name"],
+//         ),
+//       );
+//     }
+//   }
+// }
