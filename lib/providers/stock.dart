@@ -48,7 +48,7 @@ class TransactedStock {
 class PortfolioStock {
   String symbol;
   String title;
-  double stockPriceWhenBought;
+  double stockPriceAtTheMoment;
   Icon stockIcon;
   int quantity;
   double priceChange;
@@ -59,7 +59,7 @@ class PortfolioStock {
     required this.symbol,
     required this.quantity,
     required this.priceChange,
-    required this.stockPriceWhenBought,
+    required this.stockPriceAtTheMoment,
     required this.stockIcon,
     required this.didPriceIncrease,
   });
@@ -149,7 +149,7 @@ class StockProvider with ChangeNotifier {
   }
 
   Map<String, PortfolioStock> get portfolioStocks {
-    return _portfolioStocks;
+    return {..._portfolioStocks};
   }
 
   Map<String, Stock> get watchListStocks {
@@ -261,48 +261,77 @@ class StockProvider with ChangeNotifier {
         transactionType: transactionType,
       ),
     );
-    print("transacts $_transactedListStocks");
     notifyListeners();
   }
 
-  void addNewStock(stock, type) {
-    if (type == StockType.transacted) {
-      _transactedListStocks.putIfAbsent(
-          stock.dateOfransaction.toString(),
-          () => TransactedStock(
-                title: stock.title,
-                symbol: stock.symbol,
-                stockPriceWhenBought: stock.stockPrice,
-                stockIcon: stock.stockIcon,
-                dateOfransaction: stock.dateOfransaction,
-                quantityOfStocks: stock.quantityOfStocks,
-                transactionType: stock.transactionType,
-              ));
-    } else if (type == StockType.portfolio) {
-      _portfolioStocks.putIfAbsent(
-          stock.dateOfransaction.toString(),
-          () => PortfolioStock(
-                title: stock.title,
-                symbol: stock.symbol,
-                stockPriceWhenBought: stock.stockPrice,
-                stockIcon: stock.stockIcon,
-                quantity: stock.quantityOfStocks,
-                didPriceIncrease: stock.didPriceIncrease,
-                priceChange: stock.priceChange,
-              ));
+  void addPortfolioStock(String title, String symbol, double stockPriceAtTheMoment, stockIcon,
+      int quantity, bool didPriceIncrease,double priceChange,TransactionType transactionType) {
+    if (_portfolioStocks.containsKey(symbol)) {
+      if (transactionType == TransactionType.bought) {
+        _portfolioStocks.update(
+          symbol,
+          (value) => PortfolioStock(
+            title: value.title,
+            symbol: value.symbol,
+            quantity: value.quantity + quantity,
+            priceChange: value.priceChange,
+            stockPriceAtTheMoment: value.stockPriceAtTheMoment,
+            stockIcon: value.stockIcon,
+            didPriceIncrease: value.didPriceIncrease,
+          ),
+        );
+      } else {
+        _portfolioStocks.update(
+          symbol,
+          (value) => PortfolioStock(
+            title: value.title,
+            symbol: value.symbol,
+            quantity: value.quantity - quantity,
+            priceChange: value.priceChange,
+            stockPriceAtTheMoment: value.stockPriceAtTheMoment,
+            stockIcon: value.stockIcon,
+            didPriceIncrease: value.didPriceIncrease,
+          ),
+        );
+      }
     } else {
-      _watchListStocks.putIfAbsent(
-          stock.dateOfransaction.toString(),
-          () => Stock(
-                title: stock.title,
-                symbol: stock.symbol,
-                stockPrice: stock.stockPrice,
-                stockIcon: stock.stockIcon,
-                didPriceIncrease: stock.didPriceIncrease,
-                priceChange: stock.priceChange,
-              ));
+      _portfolioStocks.putIfAbsent(
+        symbol,
+        () => PortfolioStock(
+          title: title,
+          symbol: symbol,
+          stockPriceAtTheMoment: stockPriceAtTheMoment,
+          stockIcon: stockIcon,
+          quantity: quantity,
+          didPriceIncrease: didPriceIncrease,
+          priceChange: priceChange,
+        ),
+      );
     }
 
+    print("portfolio $_portfolioStocks");
+    notifyListeners();
+  }
+
+  void addWatchListStock(
+    title,
+    symbol,
+    price,
+    icon,
+    didPriceIncrease,
+    priceChange,
+  ) {
+    _watchListStocks.putIfAbsent(
+      symbol,
+      () => Stock(
+        title: title,
+        symbol: symbol,
+        stockPrice: price,
+        stockIcon: icon,
+        didPriceIncrease: didPriceIncrease,
+        priceChange: priceChange,
+      ),
+    );
     notifyListeners();
   }
 

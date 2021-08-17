@@ -85,18 +85,18 @@ class _NewsScreenState extends State<NewsScreen> {
                           ),
                         )
                       : Column(
-                          children: newsProvider.latestHeadlines
-                              .map(
-                                (e) => NewsCard(
-                                  title: e.title,
-                                  description: e.description,
-                                  urlToImage: e.urlToImage,
-                                  url: e.url,
-                                  use: 'everything',
-                                ),
-                              )
-                              .toList(),
-                        )
+                        children: newsProvider.latestHeadlines
+                            .map(
+                              (e) => NewsCard(
+                                title: e.title,
+                                description: e.description,
+                                urlToImage: e.urlToImage,
+                                url: e.url,
+                                use: 'everything',
+                              ),
+                            )
+                            .toList(),
+                      )
             ],
           ),
         ),
