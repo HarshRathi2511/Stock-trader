@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:stock_trader/providers/detail_screen_provider.dart';
 import 'package:stock_trader/widgets/stock_card.dart';
 import 'package:stock_trader/providers/stock.dart';
+import './search_screen.dart';
 
 class WatchlistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final stockProvider = Provider.of<StockProvider>(context, listen: false);
+    final stockProvider = Provider.of<StockProvider>(context);
+    final detailedDataProvider = Provider.of<DetailProvider>(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      // body: Text(
-      //   'Hey',
-      //   style: profilePageDataStyle,
-      // ),
       body: Column(
         children: [
           SizedBox(
@@ -58,23 +57,29 @@ class WatchlistScreen extends StatelessWidget {
                   width: 10,
                 ),
                 Expanded(
-                  child: TextField(
-                    cursorColor: Colors.white,
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                    controller: stockProvider.inputController,
-                    onSubmitted: (_) {},
-                    decoration: InputDecoration(
-                      hintText: 'Search Stock',
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: deviceSize.width / 26,
+                  child: GestureDetector(
+                    onTap: () {
+                        Navigator.pushNamed(context, SearchScreen.routeName);
+                      },
+                    child: TextField(
+                      // focusNode: FocusNode(),
+                      // enableInteractiveSelection: false,
+                      enabled: false,
+                      cursorColor: Colors.white,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Search Stock',
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: deviceSize.width / 26,
+                        ),
                       ),
                     ),
                   ),
@@ -122,7 +127,6 @@ class WatchlistScreen extends StatelessWidget {
                             priceChange: e.priceChange,
                             didPriceIncrease: e.didPriceIncrease,
                             stockPrice: e.stockPrice,
-                            stockIcon: e.stockIcon,
                           ),
                         )
                         .toList(),

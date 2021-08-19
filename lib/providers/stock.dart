@@ -11,7 +11,6 @@ class Stock {
   double stockPrice;
   double priceChange;
   bool didPriceIncrease;
-  Icon stockIcon;
 
   Stock({
     required this.title,
@@ -19,7 +18,6 @@ class Stock {
     required this.priceChange,
     required this.didPriceIncrease,
     required this.stockPrice,
-    required this.stockIcon,
   });
 }
 
@@ -27,7 +25,6 @@ class TransactedStock {
   String symbol;
   String title;
   double stockPriceWhenBought;
-  Icon stockIcon;
   DateTime dateOfransaction;
   int quantityOfStocks;
   TransactionType transactionType;
@@ -37,7 +34,6 @@ class TransactedStock {
     required this.title,
     required this.symbol,
     required this.stockPriceWhenBought,
-    required this.stockIcon,
     required this.dateOfransaction,
     required this.quantityOfStocks,
     required this.transactionType,
@@ -49,7 +45,6 @@ class PortfolioStock {
   String symbol;
   String title;
   double stockPriceAtTheMoment;
-  Icon stockIcon;
   int quantity;
   double priceChange;
   bool didPriceIncrease;
@@ -60,7 +55,6 @@ class PortfolioStock {
     required this.quantity,
     required this.priceChange,
     required this.stockPriceAtTheMoment,
-    required this.stockIcon,
     required this.didPriceIncrease,
   });
 }
@@ -71,69 +65,44 @@ class StockProvider with ChangeNotifier {
   final inputController = TextEditingController();
 
   List<Stock> _stocks = [
-    Stock(
-      title: 'Amazon',
-      didPriceIncrease: true,
-      priceChange: 2.09,
-      stockIcon: Icon(
-        Icons.access_alarm_outlined,
-        color: Colors.white,
-        size: 30,
-      ),
-      stockPrice: 3341.87,
-      symbol: 'AMZN',
-    ),
-    Stock(
-      title: 'Tesla',
-      didPriceIncrease: true,
-      priceChange: 2.89,
-      stockIcon: Icon(
-        Icons.access_alarm_outlined,
-        color: Colors.white,
-        size: 30,
-      ),
-      stockPrice: 713.76,
-      symbol: 'TSLA',
-    ),
-    Stock(
-      title: 'Google',
-      didPriceIncrease: true,
-      priceChange: 2,
-      stockIcon: Icon(
-        Icons.access_alarm_outlined,
-        color: Colors.white,
-        size: 30,
-      ),
-      stockPrice: 3244,
-      symbol: 'GOOGL',
-    )
+    // Stock(
+    //   title: 'Amazon',
+    //   didPriceIncrease: true,
+    //   priceChange: 2.09,
+    //   stockPrice: 3341.87,
+    //   symbol: 'AMZN',
+    // ),
+    // Stock(
+    //   title: 'Tesla',
+    //   didPriceIncrease: true,
+    //   priceChange: 2.89,
+    //   stockPrice: 713.76,
+    //   symbol: 'TSLA',
+    // ),
+    // Stock(
+    //   title: 'Google',
+    //   didPriceIncrease: true,
+    //   priceChange: 2,
+    //   stockPrice: 3244,
+    //   symbol: 'GOOGL',
+    // )
   ];
 
   Map<String, Stock> _watchListStocks = {
-    't1': Stock(
-      title: 'Apple Inc',
-      didPriceIncrease: true,
-      priceChange: 2.09,
-      stockIcon: Icon(
-        Icons.access_alarm_outlined,
-        color: Colors.white,
-        size: 40,
-      ),
-      stockPrice: 3244,
-      symbol: 'AAPL',
-    ),
-    't2': Stock(
-      title: 'Apple Inc',
-      didPriceIncrease: true,
-      priceChange: 2.89,
-      stockIcon: Icon(
-        Icons.access_alarm_outlined,
-        color: Colors.white,
-        size: 40,
-      ),
-      stockPrice: 3244,
-      symbol: 'AAPL',
-    ),
+    // 't1': Stock(
+    //   title: 'Apple',
+    //   didPriceIncrease: true,
+    //   priceChange: 2.09,
+    //   stockPrice: 3244,
+    //   symbol: 'AAPL',
+    // ),
+    // 't2': Stock(
+    //   title: 'Apple',
+    //   didPriceIncrease: true,
+    //   priceChange: 2.89,
+    //   stockPrice: 3244,
+    //   symbol: 'AAPL',
+    // ),
   };
 
   Map<String, PortfolioStock> _portfolioStocks = {};
@@ -206,7 +175,6 @@ class StockProvider with ChangeNotifier {
               title: value.title,
               symbol: value.symbol,
               stockPriceWhenBought: value.stockPriceWhenBought,
-              stockIcon: value.stockIcon,
               dateOfransaction: value.dateOfransaction,
               quantityOfStocks: value.quantityOfStocks,
               transactionType: value.transactionType,
@@ -228,7 +196,6 @@ class StockProvider with ChangeNotifier {
               title: value.title,
               symbol: value.symbol,
               stockPriceWhenBought: value.stockPriceWhenBought,
-              stockIcon: value.stockIcon,
               dateOfransaction: value.dateOfransaction,
               quantityOfStocks: value.quantityOfStocks,
               transactionType: value.transactionType,
@@ -244,7 +211,6 @@ class StockProvider with ChangeNotifier {
     title,
     symbol,
     price,
-    icon,
     dateOfTransaction,
     quantityOfStocks,
     transactionType,
@@ -255,7 +221,6 @@ class StockProvider with ChangeNotifier {
         title: title,
         symbol: symbol,
         stockPriceWhenBought: price,
-        stockIcon: icon,
         dateOfransaction: dateOfTransaction,
         quantityOfStocks: quantityOfStocks,
         transactionType: transactionType,
@@ -264,7 +229,7 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addPortfolioStock(String title, String symbol, double stockPriceAtTheMoment, stockIcon,
+  void addPortfolioStock(String title, String symbol, double stockPriceAtTheMoment,
       int quantity, bool didPriceIncrease,double priceChange,TransactionType transactionType) {
     if (_portfolioStocks.containsKey(symbol)) {
       if (transactionType == TransactionType.bought) {
@@ -276,7 +241,6 @@ class StockProvider with ChangeNotifier {
             quantity: value.quantity + quantity,
             priceChange: value.priceChange,
             stockPriceAtTheMoment: value.stockPriceAtTheMoment,
-            stockIcon: value.stockIcon,
             didPriceIncrease: value.didPriceIncrease,
           ),
         );
@@ -289,7 +253,6 @@ class StockProvider with ChangeNotifier {
             quantity: value.quantity - quantity,
             priceChange: value.priceChange,
             stockPriceAtTheMoment: value.stockPriceAtTheMoment,
-            stockIcon: value.stockIcon,
             didPriceIncrease: value.didPriceIncrease,
           ),
         );
@@ -301,7 +264,6 @@ class StockProvider with ChangeNotifier {
           title: title,
           symbol: symbol,
           stockPriceAtTheMoment: stockPriceAtTheMoment,
-          stockIcon: stockIcon,
           quantity: quantity,
           didPriceIncrease: didPriceIncrease,
           priceChange: priceChange,
@@ -327,7 +289,6 @@ class StockProvider with ChangeNotifier {
         title: title,
         symbol: symbol,
         stockPrice: price,
-        stockIcon: icon,
         didPriceIncrease: didPriceIncrease,
         priceChange: priceChange,
       ),

@@ -64,7 +64,6 @@ class TransactionScreen extends StatelessWidget {
                     (e) => TransactionCard(
                       title: e.title,
                       symbol: e.symbol,
-                      stockIcon: e.stockIcon,
                       type: e.transactionType,
                       quantity: e.quantityOfStocks,
                     ),

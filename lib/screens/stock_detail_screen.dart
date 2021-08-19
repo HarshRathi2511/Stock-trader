@@ -6,6 +6,7 @@ import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/widgets/company_wise_news.dart';
 import 'package:stock_trader/widgets/detail_screen_chart_widget.dart';
 import 'package:stock_trader/widgets/pie_chart_detail.dart';
+import 'package:stock_trader/widgets/text_row.dart';
 
 class StockDetailScreen extends StatefulWidget {
   static const routeName = '/stock-detail';
@@ -15,13 +16,39 @@ class StockDetailScreen extends StatefulWidget {
 }
 
 class _StockDetailScreenState extends State<StockDetailScreen> {
+  var isLoading = true;
+
   @override
-  void initState() {
-    Future.delayed(Duration.zero).then((_) {
-      Provider.of<DetailProvider>(context, listen: false)
+  void didChangeDependencies() async {
+    
+      await Provider.of<DetailProvider>(context, listen: false)
           .getCompanyOverviewData('AMZN');
-    });
-    super.initState();
+      await Provider.of<DetailProvider>(context, listen: false)
+          .getCurrentCompanyPrice('AMZN');
+      setState(() {
+        isLoading = false;
+      });
+    // } catch (_) {
+    //   print(_);
+    //   showDialog(
+    //       context: context,
+    //       builder: (_) {
+    //         return AlertDialog(
+    //           title: Text('An error occurred!'),
+    //           content: Text('Try again later'),
+    //           actions: [
+    //             TextButton(
+    //               onPressed: () => Navigator.pop(context, 'OK'),
+    //               child: const Text('OK'),
+    //             ),
+    //           ],
+    //         );
+    //       });
+      // setState(() {
+      //   isLoading = false;
+      // });
+  // }
+    super.didChangeDependencies();
   }
 
   @override
@@ -54,7 +81,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
     final title = loadedStock.title;
     final symbol = loadedStock.symbol;
     final stockPrice = loadedStock.stockPrice;
-    final stockIcon = loadedStock.stockIcon;
 
     void _showModalSheet(BuildContext ctx) {
       showModalBottomSheet(
@@ -166,7 +192,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       title,
                       symbol,
                       stockPrice,
-                      stockIcon,
                       DateTime.now(),
                       quantityOfStocks,
                       TransactionType.bought,
@@ -175,7 +200,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       title,
                       symbol,
                       stockPrice,
-                      stockIcon,
                       quantityOfStocks,
                       true,
                       3.2,
@@ -205,7 +229,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       title,
                       symbol,
                       stockPrice,
-                      stockIcon,
                       DateTime.now(),
                       quantityOfStocks,
                       TransactionType.sold,
@@ -214,7 +237,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       title,
                       symbol,
                       stockPrice,
-                      stockIcon,
                       quantityOfStocks,
                       true,
                       3.2,
@@ -244,212 +266,232 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
       );
     }
 
-    Widget _buildTextRow(String dataType, String value) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Text(
-              dataType,
-              style: TextStyle(fontSize: 18, color: Colors.white60),
-            ),
-            SizedBox(
-              width: deviceSize.width * 0.02,
-            ),
-            Text(
-              value,
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w300),
-            ),
-          ],
-        ),
-      );
-    }
-
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          _showModalSheet(context);
-        },
-        label: const Text(
-          'Trade',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        icon: const Icon(
-          Icons.thumb_up,
-          color: Colors.black,
-        ),
-        backgroundColor: Colors.white,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    child: Center(
-                      child: loadedStock.stockIcon,
-                    ),
-                  ),
-                  SizedBox(
-                    width: deviceSize.width * 0.05,
-                  ),
-                  Column(
-                    children: [
-                      Container(
-                        child: Center(
-                          child: Text(
-                            loadedStock.symbol,
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
+      floatingActionButton: isLoading
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: () {
+                _showModalSheet(context);
+              },
+              label: const Text(
+                'Trade',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              icon: const Icon(
+                Icons.compare_arrows_rounded,
+                color: Colors.black,
+              ),
+              backgroundColor: Colors.white,
+            ),
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(
+                color: kBlackGrey,
+              ),
+            )
+          : SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+                            Container(
+                              child: Center(
+                                child: Text(
+                                  loadedStock.symbol,
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
                             ),
-                            textAlign: TextAlign.center,
+                            Container(
+                              child: Center(
+                                child: Text(
+                                  loadedStock.title,
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: deviceSize.width / 22.22,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: deviceSize.height * 0.05,
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: Container(
+                        // margin: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: kBlackGrey,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        width: deviceSize.width / 6,
+                        height: deviceSize.width / 6,
+                        child: Container(
+                          child: Image.network(
+                            "https://logo.clearbit.com/${loadedStock.title}.com",
+                            fit: BoxFit.fill,
                           ),
                         ),
                       ),
-                      Container(
-                        child: Center(
-                          child: Text(
-                            loadedStock.title,
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: deviceSize.width / 22.22,
-                            ),
-                            textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: deviceSize.height * 0.05,
+                    ),
+                    Container(
+                      child: Center(
+                        child: Text(
+                          '${detailDataProvider.change}',
+                          style: TextStyle(
+                            color: kGreen,
+                            fontSize: deviceSize.width / 25,
+                            fontWeight: FontWeight.bold,
                           ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
-
-              SizedBox(
-                height: deviceSize.height * 0.05,
-              ),
-              // Container(
-              //   child: Center(
-              //     child: loadedStock.stockIcon,
-              //   ),
-              // ),
-              Container(
-                child: Center(
-                  child: Text(
-                    '+0.69 (0.3%)',
-                    style: TextStyle(
-                      color: kGreen,
-                      fontSize: deviceSize.width / 25,
-                      fontWeight: FontWeight.bold,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
+                    Container(
+                      child: Center(
+                        child: Text(
+                          '${detailDataProvider.currentPrice}',
+                          style: profilePageDataStyle,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: deviceSize.height * 0.03,
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(8),
+                      child: Center(
+                        child: Text(
+                          detailDataProvider.description,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: deviceSize.width / 22.22,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    ChartWidgetDetail(),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        // margin: EdgeInsets.all(deviceHeight * 0.02),
+                        // padding: EdgeInsets.all(deviceHeight * 0.02),
+                        height: deviceSize.height * 0.3,
+                        width: double.infinity,
+                        // color: blackgrey,
+                        child: Column(
+                          children: [
+                            Text(
+                              'Stats',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                TextRow(
+                                    dataType: 'OPEN',
+                                    value: detailDataProvider.openPrice
+                                        .toString()),
+                                TextRow(
+                                  dataType: 'PREV CLOSE',
+                                  value:
+                                      detailDataProvider.closePrice.toString(),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                //yet to be done
+                                TextRow(
+                                  dataType: 'HIGH',
+                                  value:
+                                      detailDataProvider.todaysHigh.toString(),
+                                ),
+                                TextRow(
+                                  dataType: 'LOW',
+                                  value:
+                                      detailDataProvider.todaysLow.toString(),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                TextRow(
+                                  dataType: '52 WK HIGH',
+                                  value: detailDataProvider.weekHigh,
+                                ),
+                                TextRow(
+                                  dataType: '52 WK LOW',
+                                  value: detailDataProvider.weekLow,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                TextRow(
+                                  dataType: 'MKT CAP',
+                                  value: detailDataProvider.marketCap,
+                                ),
+                                TextRow(
+                                  dataType: 'CUR',
+                                  value: detailDataProvider.currency,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                TextRow(
+                                  dataType: 'P/E',
+                                  value: detailDataProvider.PEratio,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    PieChartDetail(colorList, marketSentimentMap),
+                    Text(
+                      'Latest News',
+                      style: profilePageStyle,
+                    ),
+                    CompanyNews(loadedStock.title),
+                  ],
                 ),
               ),
-              Container(
-                child: Center(
-                  child: Text(
-                    loadedStock.stockPrice.toString(),
-                    style: profilePageDataStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: deviceSize.height * 0.03,
-              ),
-              Container(
-                child: Text(
-                  detailDataProvider.description,
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: deviceSize.width / 22.22,
-                  ),
-                ),
-              ),
-              ChartWidgetDetail(),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  // margin: EdgeInsets.all(deviceHeight * 0.02),
-                  // padding: EdgeInsets.all(deviceHeight * 0.02),
-                  height: deviceSize.height * 0.3,
-                  width: double.infinity,
-                  // color: blackgrey,
-                  child: Column(
-                    children: [
-                      Text(
-                        'Stats',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _buildTextRow('OPEN', '1323.05'),
-                          _buildTextRow('PREV CLOSE', '1323.05'),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          //yet to be done
-                          _buildTextRow('HIGH', '1323.05'),
-                          _buildTextRow('LOW', '1323.05'),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _buildTextRow(
-                              '52 WK HIGH', detailDataProvider.weekHigh),
-                          _buildTextRow(
-                              '52 WK LOW', detailDataProvider.weekLow),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _buildTextRow(
-                              'MKT CAP', detailDataProvider.marketCap),
-                          _buildTextRow('CUR', detailDataProvider.currency),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          _buildTextRow(
-                              'ASSET TYPE', detailDataProvider.assetType),
-                          _buildTextRow('P/E', detailDataProvider.PEratio),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              PieChartDetail(colorList, marketSentimentMap),
-              Text(
-                'Latest News',
-                style: profilePageStyle,
-              ),
-              CompanyNews(loadedStock.title),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

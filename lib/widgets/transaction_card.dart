@@ -3,14 +3,12 @@ import 'package:stock_trader/providers/stock.dart';
 import '../constants.dart';
 
 class TransactionCard extends StatelessWidget {
-  late final Icon stockIcon;
   late final String title;
   late final String symbol;
   late final TransactionType type;
   late final int quantity;
 
   TransactionCard({
-    required this.stockIcon,
     required this.symbol,
     required this.title,
     required this.type,
@@ -37,7 +35,24 @@ class TransactionCard extends StatelessWidget {
             ),
             width: deviceSize.width / 6.5,
             height: deviceSize.width / 6.5,
-            child: stockIcon,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Container(
+                // margin: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: kBlackGrey,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                width: deviceSize.width / 7.5,
+                height: deviceSize.width / 7.5,
+                child: Container(
+                  child: Image.network(
+                    "https://logo.clearbit.com/$title.com",
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+            ),
           ),
           SizedBox(
             width: 15,
