@@ -8,7 +8,6 @@ class StockCard extends StatelessWidget {
   late final double stockPrice;
   late final double priceChange;
   late final bool didPriceIncrease;
-  late final Icon stockIcon;
 
   StockCard({
     required this.title,
@@ -16,7 +15,6 @@ class StockCard extends StatelessWidget {
     required this.priceChange,
     required this.didPriceIncrease,
     required this.stockPrice,
-    required this.stockIcon,
   });
 
   @override
@@ -48,7 +46,7 @@ class StockCard extends StatelessWidget {
                 height: deviceSize.width / 7.5,
                 child: Container(
                   child: Image.network(
-                    "https://logo.clearbit.com/flipkart.com",
+                    "https://logo.clearbit.com/$title.com",
                     fit: BoxFit.fill,
                   ),
                 ),
