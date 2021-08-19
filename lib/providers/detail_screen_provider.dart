@@ -97,14 +97,11 @@ class DetailProvider with ChangeNotifier {
         'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=$keyword&apikey=E4X553Q21SLS8GVG');
     var response = await http.get(url);
     final result = json.decode(response.body);
+    _searchResults = [];
     for (var res in result["bestMatches"]) {
-      _searchResults.add(res); //list of maps 
-      print(res);
-      //{1. symbol: AM3D.FRK, 2. name: SLM Solutions Group AG, 3. type: Equity,
-      // 4. region: Frankfurt, 5. marketOpen: 08:00, 6. marketClose: 20:00, 7. timezone: UTC+02,
-      // 8. currency: EUR, 9. matchScore: 0.5000}
+      _searchResults.add({'symbol': res["1. symbol"], 'name': res["2. name"]});
+      print(_searchResults[0].values.toList());
     }
-    print(response);
     _searchResultsCount = _searchResults.length;
     notifyListeners();
   }
