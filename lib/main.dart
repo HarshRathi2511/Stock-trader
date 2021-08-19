@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         home:
-            TabsScreen(), //show diff screens on the basis whether user is authenticated or not
+            AuthScreen(), //show diff screens on the basis whether user is authenticated or not
         routes: {
           // StockDetailScreen.routeName :(ctx) => StockDetailScreen(),
           NewsDetailScreen.routeName: (ctx) => NewsDetailScreen(),

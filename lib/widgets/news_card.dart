@@ -48,7 +48,7 @@ class NewsCard extends StatelessWidget {
                     bottomRight: Radius.zero,
                   ),
                   child: Container(
-                    width: deviceSize.width * 0.4,
+                    width: deviceSize.width * 0.3,
                     height: deviceSize.height * 0.2,
                     child: Image.network(
                       urlToImage,
@@ -73,7 +73,7 @@ class NewsCard extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.white,
                             // fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                            fontSize: deviceSize.height*0.02,
                           ),
                         ),
                       ),
