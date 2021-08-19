@@ -17,24 +17,21 @@ class StockDetailScreen extends StatefulWidget {
 
 class _StockDetailScreenState extends State<StockDetailScreen> {
   var isLoading = true;
-
-  @override
-  void didChangeDependencies() async {
-    
-      await Provider.of<DetailProvider>(context, listen: false)
-          .getCompanyOverviewData('AMZN');
-      await Provider.of<DetailProvider>(context, listen: false)
-          .getCurrentCompanyPrice('AMZN');
-      setState(() {
-        isLoading = false;
-      });
+  Future<void> getData() async {
+    await Provider.of<DetailProvider>(context, listen: false)
+        .getCompanyOverviewData('AMZN');
+    await Provider.of<DetailProvider>(context, listen: false)
+        .getCurrentCompanyPrice('AMZN');
+    setState(() {
+      isLoading = false;
+    });
     // } catch (_) {
     //   print(_);
     //   showDialog(
     //       context: context,
     //       builder: (_) {
     //         return AlertDialog(
-    //           title: Text('An error occurred!'),
+    //           detailDataProvider.name: Text('An error occurred!'),
     //           content: Text('Try again later'),
     //           actions: [
     //             TextButton(
@@ -44,10 +41,25 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
     //           ],
     //         );
     //       });
-      // setState(() {
-      //   isLoading = false;
-      // });
-  // }
+    // setState(() {
+    //   isLoading = false;
+    // });
+    // }
+  }
+
+  late final String stockSymbol;
+
+  @override
+  void didChangeDependencies() async{
+    stockSymbol =
+        ModalRoute.of(context)!.settings.arguments as String;
+    await Provider.of<DetailProvider>(context, listen: false)
+        .getCompanyOverviewData(stockSymbol);
+    await Provider.of<DetailProvider>(context, listen: false)
+        .getCurrentCompanyPrice(stockSymbol);
+    setState(() {
+      isLoading = false;
+    });
     super.didChangeDependencies();
   }
 
@@ -68,19 +80,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
 
     // final ordersData = Provider.of<Orders>(context, listen: false);
 
-    final route = ModalRoute.of(context);
     // This will NEVER fail
-    if (route == null) return SizedBox.shrink();
-    final String loadedStockSymbol = route.settings.arguments as String;
-
-    final loadedStock = stocksData.stocks
-        .firstWhere((share) => share.symbol == loadedStockSymbol);
-
-    print(loadedStock.symbol);
-
-    final title = loadedStock.title;
-    final symbol = loadedStock.symbol;
-    final stockPrice = loadedStock.stockPrice;
 
     void _showModalSheet(BuildContext ctx) {
       showModalBottomSheet(
@@ -104,7 +104,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        loadedStock.symbol,
+                        stockSymbol,
                         style: TextStyle(
                             fontSize: deviceSize.height * 0.04,
                             color: Colors.black),
@@ -169,7 +169,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       ),
                       Chip(
                         label: Text(
-                          '\$' + loadedStock.stockPrice.toString(),
+                          '\$' + detailDataProvider.currentPrice.toString(),
                           style: TextStyle(
                               fontSize: deviceSize.height * 0.03,
                               color: Colors.white,
@@ -189,17 +189,17 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                 ElevatedButton(
                   onPressed: () {
                     stocksData.addNewTransaction(
-                      title,
-                      symbol,
-                      stockPrice,
+                      detailDataProvider.name,
+                      stockSymbol,
+                      detailDataProvider.currentPrice,
                       DateTime.now(),
                       quantityOfStocks,
                       TransactionType.bought,
                     );
                     stocksData.addPortfolioStock(
-                      title,
-                      symbol,
-                      stockPrice,
+                      detailDataProvider.name,
+                      stockSymbol,
+                      detailDataProvider.currentPrice,
                       quantityOfStocks,
                       true,
                       3.2,
@@ -226,17 +226,17 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                 ElevatedButton(
                   onPressed: () {
                     stocksData.addNewTransaction(
-                      title,
-                      symbol,
-                      stockPrice,
+                      detailDataProvider.name,
+                      stockSymbol,
+                      detailDataProvider.currentPrice,
                       DateTime.now(),
                       quantityOfStocks,
                       TransactionType.sold,
                     );
                     stocksData.addPortfolioStock(
-                      title,
-                      symbol,
-                      stockPrice,
+                      detailDataProvider.name,
+                      stockSymbol,
+                      detailDataProvider.currentPrice,
                       quantityOfStocks,
                       true,
                       3.2,
@@ -304,7 +304,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                             Container(
                               child: Center(
                                 child: Text(
-                                  loadedStock.symbol,
+                                  stockSymbol,
                                   style: TextStyle(
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold,
@@ -317,7 +317,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                             Container(
                               child: Center(
                                 child: Text(
-                                  loadedStock.title,
+                                  detailDataProvider.name,
                                   style: TextStyle(
                                     color: Colors.grey,
                                     fontSize: deviceSize.width / 22.22,
@@ -345,7 +345,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                         height: deviceSize.width / 6,
                         child: Container(
                           child: Image.network(
-                            "https://logo.clearbit.com/${loadedStock.title}.com",
+                            "https://logo.clearbit.com/${detailDataProvider.name}.com",
                             fit: BoxFit.fill,
                           ),
                         ),
@@ -487,7 +487,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       'Latest News',
                       style: profilePageStyle,
                     ),
-                    CompanyNews(loadedStock.title),
+                    CompanyNews(detailDataProvider.name),
                   ],
                 ),
               ),

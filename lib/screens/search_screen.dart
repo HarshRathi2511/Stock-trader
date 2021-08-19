@@ -38,7 +38,7 @@ class SearchScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: TextField(
-                    focusNode: FocusNode(),
+                    autofocus: true,
                     cursorColor: Colors.white,
                     style: TextStyle(
                       color: Colors.white,

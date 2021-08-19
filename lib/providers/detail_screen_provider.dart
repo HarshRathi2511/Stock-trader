@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class DetailProvider with ChangeNotifier {
+  String _name = '';
   String _exchangePlatform = '';
   String _currency = '';
   String _weekHigh = ''; //52 wk high
@@ -26,6 +27,10 @@ class DetailProvider with ChangeNotifier {
 
   String get exchangePlatform {
     return _exchangePlatform;
+  }
+
+  String get name {
+    return _name;
   }
 
   String get currency {
@@ -133,15 +138,15 @@ class DetailProvider with ChangeNotifier {
     final detailData = json.decode(response.body);
 
     print(detailData);
-
-    // _assetType = detailData['AssetType'];
-    // _exchangePlatform = detailData['Exchange'];
-    // _weekLow = detailData['52WeekLow'];
-    // _weekHigh = detailData['52WeekHigh'];
-    // _PEratio = detailData['PERatio'];
-    // _currency = detailData['Currency'];
-    // _marketCap = detailData['MarketCapitalization'];
-    // _description = detailData['Description'];
+    _name = detailData["Name"];
+    _assetType = detailData['AssetType'];
+    _exchangePlatform = detailData['Exchange'];
+    _weekLow = detailData['52WeekLow'];
+    _weekHigh = detailData['52WeekHigh'];
+    _PEratio = detailData['PERatio'];
+    _currency = detailData['Currency'];
+    _marketCap = detailData['MarketCapitalization'];
+    _description = detailData['Description'];
 
     notifyListeners();
   }

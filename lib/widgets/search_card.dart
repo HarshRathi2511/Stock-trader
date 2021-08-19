@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stock_trader/screens/stock_detail_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../screens/stock_detail_screen.dart';
 
 class SearchCard extends StatelessWidget {
   late final String symbol;
@@ -10,20 +10,6 @@ class SearchCard extends StatelessWidget {
     required this.title,
     required this.symbol,
   });
-
-  // Widget image() {
-  //   try {
-  //     Image.network(
-  //       "https://logo.clearbit.com/$title.com",
-  //       fit: BoxFit.fill,
-  //     );
-  //   } catch (_) {
-  //     return Image.asset(
-  //       'assets/images/stock_icon.png',
-  //       fit: BoxFit.fill,
-  //     );
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
