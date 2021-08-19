@@ -5,17 +5,14 @@ import 'package:stock_trader/widgets/stock_card.dart';
 import 'package:stock_trader/providers/stock.dart';
 
 class WatchlistScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final stockProvider = Provider.of<StockProvider>(context, listen: false);
+    final stockProvider = Provider.of<StockProvider>(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      // body: Text(
-      //   'Hey',
-      //   style: profilePageDataStyle,
-      // ),
       body: Column(
         children: [
           SizedBox(

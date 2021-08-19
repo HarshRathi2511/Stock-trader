@@ -111,7 +111,7 @@ class StockProvider with ChangeNotifier {
 
   Map<String, Stock> _watchListStocks = {
     't1': Stock(
-      title: 'Apple Inc',
+      title: 'Apple',
       didPriceIncrease: true,
       priceChange: 2.09,
       stockIcon: Icon(
@@ -123,7 +123,7 @@ class StockProvider with ChangeNotifier {
       symbol: 'AAPL',
     ),
     't2': Stock(
-      title: 'Apple Inc',
+      title: 'Apple',
       didPriceIncrease: true,
       priceChange: 2.89,
       stockIcon: Icon(

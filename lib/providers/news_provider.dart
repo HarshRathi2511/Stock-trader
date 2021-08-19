@@ -49,8 +49,6 @@ class NewsProvider with ChangeNotifier {
     final response = await http.get(link);
     final res = json.decode(response.body);
 
-    // print(res);
-
     for (var news in res) {
       print(length);
       print(news);
@@ -73,7 +71,6 @@ class NewsProvider with ChangeNotifier {
             sourceName: news['source'],
           ),
         );
-        print("$_length $news");
         if (_length >= 30) {
           break;
         }
@@ -120,7 +117,6 @@ class NewsProvider with ChangeNotifier {
         if (newsCount >= 15) {
           break;
         }
-        print(_companyWiseNews);
       }
     }
   }

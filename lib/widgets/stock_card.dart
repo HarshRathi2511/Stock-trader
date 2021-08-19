@@ -48,7 +48,7 @@ class StockCard extends StatelessWidget {
                 height: deviceSize.width / 7.5,
                 child: Container(
                   child: Image.network(
-                    "https://logo.clearbit.com/flipkart.com",
+                    "https://logo.clearbit.com/$title.com",
                     fit: BoxFit.fill,
                   ),
                 ),
