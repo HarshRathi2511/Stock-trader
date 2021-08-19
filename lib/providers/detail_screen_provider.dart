@@ -97,10 +97,11 @@ class DetailProvider with ChangeNotifier {
         'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=$keyword&apikey=E4X553Q21SLS8GVG');
     var response = await http.get(url);
     final result = json.decode(response.body);
+    _searchResults = [];
     for (var res in result["bestMatches"]) {
-      _searchResults.add(res);
+      _searchResults.add({'symbol': res["1. symbol"], 'name': res["2. name"]});
+      print(_searchResults[0].values.toList());
     }
-    print(response);
     _searchResultsCount = _searchResults.length;
     notifyListeners();
   }

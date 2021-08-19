@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/providers/detail_screen_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:stock_trader/widgets/search_card.dart';
 import '../constants.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -37,6 +38,7 @@ class SearchScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: TextField(
+                    focusNode: FocusNode(),
                     cursorColor: Colors.white,
                     style: TextStyle(
                       color: Colors.white,
@@ -76,16 +78,17 @@ class SearchScreen extends StatelessWidget {
                   ),
                 )
               : Expanded(
-                  child: Center(
-                    child: Text(
-                      'list here',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: deviceSize.width / 26,
-                      ),
-                    ),
+                child: ListView(
+                    children: detailedDataProvider.searchResults
+                        .map(
+                          (e) => SearchCard(
+                            title: e.values.toList()[1],
+                            symbol: e.values.toList()[0],
+                          ),
+                        )
+                        .toList(),
                   ),
-                ),
+              )
         ],
       ),
     );
