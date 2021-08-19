@@ -5,6 +5,7 @@ import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/screens/auth_screen.dart';
 import 'package:stock_trader/screens/news_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:stock_trader/screens/search_screen.dart';
 import 'package:stock_trader/screens/tabs_screen.dart';
 import 'package:stock_trader/screens/title_screen.dart';
 import 'package:stock_trader/screens/stock_detail_screen.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
           NewsDetailScreen.routeName: (ctx) => NewsDetailScreen(),
           // TabsScreen.routeName: (ctx) => TabsScreen(),
           StockDetailScreen.routeName: (ctx) => StockDetailScreen(),
+          SearchScreen.routeName: (ctx) => SearchScreen(),
         },
       ),
     );

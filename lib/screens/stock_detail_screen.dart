@@ -6,6 +6,7 @@ import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/widgets/company_wise_news.dart';
 import 'package:stock_trader/widgets/detail_screen_chart_widget.dart';
 import 'package:stock_trader/widgets/pie_chart_detail.dart';
+import 'package:stock_trader/widgets/text_row.dart';
 
 class StockDetailScreen extends StatefulWidget {
   static const routeName = '/stock-detail';
@@ -19,13 +20,34 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
 
   @override
   void didChangeDependencies() async {
-    await Provider.of<DetailProvider>(context, listen: false)
-        .getCompanyOverviewData('AMZN');
-    await Provider.of<DetailProvider>(context, listen: false)
-        .getCurrentCompanyPrice('AMZN');
-    setState(() {
-      isLoading = false;
-    });
+    
+      await Provider.of<DetailProvider>(context, listen: false)
+          .getCompanyOverviewData('AMZN');
+      await Provider.of<DetailProvider>(context, listen: false)
+          .getCurrentCompanyPrice('AMZN');
+      setState(() {
+        isLoading = false;
+      });
+    // } catch (_) {
+    //   print(_);
+    //   showDialog(
+    //       context: context,
+    //       builder: (_) {
+    //         return AlertDialog(
+    //           title: Text('An error occurred!'),
+    //           content: Text('Try again later'),
+    //           actions: [
+    //             TextButton(
+    //               onPressed: () => Navigator.pop(context, 'OK'),
+    //               child: const Text('OK'),
+    //             ),
+    //           ],
+    //         );
+    //       });
+      // setState(() {
+      //   isLoading = false;
+      // });
+  // }
     super.didChangeDependencies();
   }
 
@@ -59,7 +81,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
     final title = loadedStock.title;
     final symbol = loadedStock.symbol;
     final stockPrice = loadedStock.stockPrice;
-    final stockIcon = loadedStock.stockIcon;
 
     void _showModalSheet(BuildContext ctx) {
       showModalBottomSheet(
@@ -171,7 +192,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       title,
                       symbol,
                       stockPrice,
-                      stockIcon,
                       DateTime.now(),
                       quantityOfStocks,
                       TransactionType.bought,
@@ -180,7 +200,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       title,
                       symbol,
                       stockPrice,
-                      stockIcon,
                       quantityOfStocks,
                       true,
                       3.2,
@@ -210,7 +229,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       title,
                       symbol,
                       stockPrice,
-                      stockIcon,
                       DateTime.now(),
                       quantityOfStocks,
                       TransactionType.sold,
@@ -219,7 +237,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       title,
                       symbol,
                       stockPrice,
-                      stockIcon,
                       quantityOfStocks,
                       true,
                       3.2,
@@ -245,30 +262,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
               ],
             ),
           ),
-        ),
-      );
-    }
-
-    Widget _buildTextRow(String dataType, String value) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Text(
-              dataType,
-              style: TextStyle(fontSize: 18, color: Colors.white60),
-            ),
-            SizedBox(
-              width: deviceSize.width * 0.02,
-            ),
-            Text(
-              value,
-              style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w300),
-            ),
-          ],
         ),
       );
     }
@@ -423,41 +416,66 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                _buildTextRow('OPEN', '1323.05'),
-                                _buildTextRow('PREV CLOSE', '1323.05'),
+                                TextRow(
+                                    dataType: 'OPEN',
+                                    value: detailDataProvider.openPrice
+                                        .toString()),
+                                TextRow(
+                                  dataType: 'PREV CLOSE',
+                                  value:
+                                      detailDataProvider.closePrice.toString(),
+                                ),
                               ],
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 //yet to be done
-                                _buildTextRow('HIGH', '1323.05'),
-                                _buildTextRow('LOW', '1323.05'),
+                                TextRow(
+                                  dataType: 'HIGH',
+                                  value:
+                                      detailDataProvider.todaysHigh.toString(),
+                                ),
+                                TextRow(
+                                  dataType: 'LOW',
+                                  value:
+                                      detailDataProvider.todaysLow.toString(),
+                                ),
                               ],
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                _buildTextRow(
-                                    '52 WK HIGH', detailDataProvider.weekHigh),
-                                _buildTextRow(
-                                    '52 WK LOW', detailDataProvider.weekLow),
+                                TextRow(
+                                  dataType: '52 WK HIGH',
+                                  value: detailDataProvider.weekHigh,
+                                ),
+                                TextRow(
+                                  dataType: '52 WK LOW',
+                                  value: detailDataProvider.weekLow,
+                                ),
                               ],
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                _buildTextRow(
-                                    'MKT CAP', detailDataProvider.marketCap),
-                                _buildTextRow(
-                                    'CUR', detailDataProvider.currency),
+                                TextRow(
+                                  dataType: 'MKT CAP',
+                                  value: detailDataProvider.marketCap,
+                                ),
+                                TextRow(
+                                  dataType: 'CUR',
+                                  value: detailDataProvider.currency,
+                                ),
                               ],
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                _buildTextRow(
-                                    'P/E', detailDataProvider.PEratio),
+                                TextRow(
+                                  dataType: 'P/E',
+                                  value: detailDataProvider.PEratio,
+                                ),
                               ],
                             ),
                           ],

@@ -20,6 +20,9 @@ class DetailProvider with ChangeNotifier {
   double _todaysLow = 0.0;
   double _openPrice = 0.0;
   double _closePrice = 0.0;
+  var inputController = TextEditingController();
+  var _searchResults = [];
+  var _searchResultsCount = 0;
 
   String get exchangePlatform {
     return _exchangePlatform;
@@ -81,6 +84,27 @@ class DetailProvider with ChangeNotifier {
     return _percentageChange;
   }
 
+  int get searchResultsCount {
+    return _searchResultsCount;
+  }
+
+  List get searchResults {
+    return _searchResults;
+  }
+
+  Future<void> getSearchSuggestions(keyword) async {
+    final url = Uri.parse(
+        'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=$keyword&apikey=E4X553Q21SLS8GVG');
+    var response = await http.get(url);
+    final result = json.decode(response.body);
+    for (var res in result["bestMatches"]) {
+      _searchResults.add(res);
+    }
+    print(response);
+    _searchResultsCount = _searchResults.length;
+    notifyListeners();
+  }
+
   Future<void> getCurrentCompanyPrice(symbol) async {
     final url = Uri.parse(
         'https://finnhub.io/api/v1/quote?symbol=$symbol&token=c4d3br2ad3icnt8r8g9g');
@@ -107,14 +131,16 @@ class DetailProvider with ChangeNotifier {
     // print(response.body);
     final detailData = json.decode(response.body);
 
-    _assetType = detailData['AssetType'];
-    _exchangePlatform = detailData['Exchange'];
-    _weekLow = detailData['52WeekLow'];
-    _weekHigh = detailData['52WeekHigh'];
-    _PEratio = detailData['PERatio'];
-    _currency = detailData['Currency'];
-    _marketCap = detailData['MarketCapitalization'];
-    _description = detailData['Description'];
+    print(detailData);
+
+    // _assetType = detailData['AssetType'];
+    // _exchangePlatform = detailData['Exchange'];
+    // _weekLow = detailData['52WeekLow'];
+    // _weekHigh = detailData['52WeekHigh'];
+    // _PEratio = detailData['PERatio'];
+    // _currency = detailData['Currency'];
+    // _marketCap = detailData['MarketCapitalization'];
+    // _description = detailData['Description'];
 
     notifyListeners();
   }

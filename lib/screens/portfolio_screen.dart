@@ -223,7 +223,6 @@ class PortfolioScreen extends StatelessWidget {
                                 quantity: e.quantity,
                                 priceChange: e.priceChange,
                                 stockPriceAtTheMoment: e.stockPriceAtTheMoment,
-                                stockIcon: e.stockIcon,
                                 didPriceIncrease: e.didPriceIncrease,
                               ))
                           .toList(),
