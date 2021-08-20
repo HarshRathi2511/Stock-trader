@@ -4,10 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:stock_trader/providers/detail_screen_provider.dart';
 import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/widgets/company_wise_news.dart';
-import 'package:stock_trader/widgets/detail_screen_chart_widget.dart';
-import 'package:stock_trader/widgets/pie_chart_detail.dart';
-import 'package:stock_trader/widgets/text_row.dart';
+import 'package:stock_trader/widgets/stats..dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../widgets/modal_sheet.dart';
 
 class StockDetailScreen extends StatefulWidget {
   static const routeName = '/stock-detail';
@@ -19,33 +18,34 @@ class StockDetailScreen extends StatefulWidget {
 class _StockDetailScreenState extends State<StockDetailScreen> {
   var isLoading = true;
   Future<void> getData() async {
-    await Provider.of<DetailProvider>(context, listen: false)
-        .getCompanyOverviewData('AMZN');
-    await Provider.of<DetailProvider>(context, listen: false)
-        .getCurrentCompanyPrice('AMZN');
-    setState(() {
-      isLoading = false;
-    });
-    // } catch (_) {
-    //   print(_);
-    //   showDialog(
-    //       context: context,
-    //       builder: (_) {
-    //         return AlertDialog(
-    //           detailDataProvider.name: Text('An error occurred!'),
-    //           content: Text('Try again later'),
-    //           actions: [
-    //             TextButton(
-    //               onPressed: () => Navigator.pop(context, 'OK'),
-    //               child: const Text('OK'),
-    //             ),
-    //           ],
-    //         );
-    //       });
-    // setState(() {
-    //   isLoading = false;
-    // });
-    // }
+    try {
+      await Provider.of<DetailProvider>(context, listen: false)
+          .getCompanyOverviewData('AMZN');
+      await Provider.of<DetailProvider>(context, listen: false)
+          .getCurrentCompanyPrice('AMZN');
+      setState(() {
+        isLoading = false;
+      });
+    } catch (_) {
+      print(_);
+      showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              title: Text('An error occurred!'),
+              content: Text('Try again later'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          });
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   var stockSymbol;
@@ -67,209 +67,16 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final stocksData = Provider.of<StockProvider>(context, listen: false);
-    final quantityController = TextEditingController();
     final detailDataProvider = Provider.of<DetailProvider>(context);
-
-    late final int quantityOfStocks;
-
-    final List<Color> colorList = [
-      Colors.green,
-      blackgrey,
-    ];
-
-    // final ordersData = Provider.of<Orders>(context, listen: false);
-
-    // This will NEVER fail
-
-    void _showModalSheet(BuildContext ctx) {
-      showModalBottomSheet(
-        context: ctx,
-        builder: (bctx) => SingleChildScrollView(
-          child: Container(
-            // height: deviceSize.height * 0.5,
-            padding: EdgeInsets.only(
-                top: 10,
-                left: 10,
-                right: 10,
-                bottom: MediaQuery.of(context).viewInsets.bottom + 50),
-            child: Column(
-              children: [
-                Container(
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        stockSymbol,
-                        style: TextStyle(
-                          fontSize: deviceSize.height * 0.04,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Expanded(child: Text(' ')),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                      vertical: deviceSize.height * 0.03, horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('Quantity', style: kmodalSheet),
-                      Text('Current Price', style: kmodalSheet),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                    vertical: deviceSize.height * 0.001,
-                    horizontal: deviceSize.width * 0.02,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        height: deviceSize.height * 0.05,
-                        width: deviceSize.width * 0.25,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                          width: 1,
-                        )),
-                        child: TextField(
-                          cursorColor: Colors.black87,
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                          controller: quantityController,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            hintText: '    quantity',
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            // enabledBorder: InputBorder.,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-
-                            hintStyle: TextStyle(
-                              color: Colors.grey,
-                              fontSize: deviceSize.width / 26,
-                            ),
-                          ),
-                          onSubmitted: (_) {
-                            setState(() {
-                              quantityOfStocks =
-                                  int.parse(quantityController.text);
-                            });
-                          },
-                        ),
-                      ),
-                      Chip(
-                        label: Text(
-                          '\$' + detailDataProvider.currentPrice.toString(),
-                          style: TextStyle(
-                              fontSize: deviceSize.height * 0.03,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        shadowColor: Colors.green[200],
-                        elevation: 7,
-                        padding: EdgeInsets.all(8),
-                        backgroundColor: Colors.blueGrey[900],
-                      ),
-                    ],
-                  ),
-                ),
-
-                //Find a null safe package to implement slide to buy and slide to sell feature
-
-                ElevatedButton(
-                  onPressed: () {
-                    stocksData.addNewTransaction(
-                      detailDataProvider.name,
-                      stockSymbol,
-                      detailDataProvider.currentPrice,
-                      DateTime.now(),
-                      quantityOfStocks,
-                      TransactionType.bought,
-                    );
-                    stocksData.addPortfolioStock(
-                      detailDataProvider.name,
-                      stockSymbol,
-                      detailDataProvider.currentPrice,
-                      quantityOfStocks,
-                      true,
-                      3.2,
-                      TransactionType.bought,
-                    );
-                    Navigator.of(context).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Stocks bought',
-                        ),
-                        duration: Duration(
-                          milliseconds: 800,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'BUY',
-                    style: profilePageDataStyle,
-                  ),
-                ),
-
-                ElevatedButton(
-                  onPressed: () {
-                    stocksData.addNewTransaction(
-                      detailDataProvider.name,
-                      stockSymbol,
-                      detailDataProvider.currentPrice,
-                      DateTime.now(),
-                      quantityOfStocks,
-                      TransactionType.sold,
-                    );
-                    stocksData.addPortfolioStock(
-                      detailDataProvider.name,
-                      stockSymbol,
-                      detailDataProvider.currentPrice,
-                      quantityOfStocks,
-                      true,
-                      3.2,
-                      TransactionType.sold,
-                    );
-                    Navigator.of(context).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Stocks sold',
-                        ),
-                        duration: Duration(
-                          milliseconds: 800,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    'SELL',
-                    style: profilePageDataStyle,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
 
     return Scaffold(
       floatingActionButton: isLoading
           ? null
           : FloatingActionButton.extended(
               onPressed: () {
-                _showModalSheet(context);
+                ModalSheet(
+                  stockSymbol: stockSymbol,
+                );
               },
               label: const Text(
                 'Trade',
@@ -342,19 +149,18 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                         width: deviceSize.width / 6,
                         height: deviceSize.width / 6,
                         child: Container(
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  detailDataProvider.logoUrl,
-                              placeholder: (context, url) => Image.asset(
-                                'assets/images/stock_icon.png',
-                                fit: BoxFit.fill,
-                              ),
-                              errorWidget: (context, url, error) => Image.asset(
-                                'assets/images/stock_icon.png',
-                                fit: BoxFit.fill,
-                              ),
+                          child: CachedNetworkImage(
+                            imageUrl: detailDataProvider.logoUrl,
+                            placeholder: (context, url) => Image.asset(
+                              'assets/images/stock_icon.png',
+                              fit: BoxFit.fill,
                             ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/images/stock_icon.png',
+                              fit: BoxFit.fill,
                             ),
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -363,9 +169,12 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                     Container(
                       child: Center(
                         child: Text(
-                          '${detailDataProvider.change.toString()[0] == '-'? detailDataProvider.change : '+${detailDataProvider.change}'}',
+                          '${detailDataProvider.change.toString()[0] == '-' ? detailDataProvider.change : '+${detailDataProvider.change}'}',
                           style: TextStyle(
-                            color: detailDataProvider.change.toString()[0] == "-"? kRed : kGreen,
+                            color:
+                                detailDataProvider.change.toString()[0] == "-"
+                                    ? kRed
+                                    : kGreen,
                             fontSize: deviceSize.width / 25,
                             fontWeight: FontWeight.bold,
                           ),
@@ -388,13 +197,25 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                     ElevatedButton(
                       onPressed: () {
                         stocksData.addWatchListStock(
-                            detailDataProvider.name,
-                            stockSymbol,
-                            detailDataProvider.currentPrice,
-                            detailDataProvider.logoUrl,
-                            detailDataProvider.change.toString()[0] == '-'? false : true,
-                            detailDataProvider.change,
-                          );
+                          detailDataProvider.name,
+                          stockSymbol,
+                          detailDataProvider.currentPrice,
+                          detailDataProvider.logoUrl,
+                          detailDataProvider.change.toString()[0] == '-'
+                              ? false
+                              : true,
+                          detailDataProvider.change,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Added to Watchlist',
+                            ),
+                            duration: Duration(
+                              milliseconds: 800,
+                            ),
+                          ),
+                        );
                       },
                       child: Container(
                         child: Text(
@@ -411,105 +232,8 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        // margin: EdgeInsets.all(deviceHeight * 0.02),
-                        // padding: EdgeInsets.all(deviceHeight * 0.02),
-                        height: deviceSize.height * 0.35,
-                        width: double.infinity,
-                        // color: blackgrey,
-                        child: Column(
-                          children: [
-                            Text(
-                              'Stats',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                TextRow(
-                                  dataType: 'OPEN',
-                                  value:
-                                      detailDataProvider.openPrice.toString(),
-                                ),
-                                Spacer(),
-                                TextRow(
-                                  dataType: 'PREV CLOSE',
-                                  value:
-                                      detailDataProvider.closePrice.toString(),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                //yet to be done
-                                TextRow(
-                                  dataType: 'HIGH',
-                                  value:
-                                      detailDataProvider.todaysHigh.toString(),
-                                ),
-                                Spacer(),
-                                TextRow(
-                                  dataType: 'LOW',
-                                  value:
-                                      detailDataProvider.todaysLow.toString(),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                TextRow(
-                                  dataType: '52 WK HIGH',
-                                  value: detailDataProvider.weekHigh,
-                                ),
-                                Spacer(),
-                                TextRow(
-                                  dataType: '52 WK LOW',
-                                  value: detailDataProvider.weekLow,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                TextRow(
-                                  dataType: 'MKT CAP',
-                                  value: detailDataProvider.marketCap,
-                                ),
-                                Spacer(),
-                                TextRow(
-                                  dataType: 'CUR',
-                                  value: detailDataProvider.currency,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                     // PieChartDetail(colorList, marketSentimentMap),
+                    StatsCard(),
                     Text(
                       'Latest News',
                       style: profilePageStyle,
