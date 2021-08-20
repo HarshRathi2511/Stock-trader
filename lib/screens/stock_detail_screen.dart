@@ -7,6 +7,7 @@ import 'package:stock_trader/widgets/company_wise_news.dart';
 import 'package:stock_trader/widgets/detail_screen_chart_widget.dart';
 import 'package:stock_trader/widgets/pie_chart_detail.dart';
 import 'package:stock_trader/widgets/text_row.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class StockDetailScreen extends StatefulWidget {
   static const routeName = '/stock-detail';
@@ -47,12 +48,11 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
     // }
   }
 
-  late final String stockSymbol;
+  var stockSymbol;
 
   @override
-  void didChangeDependencies() async{
-    stockSymbol =
-        ModalRoute.of(context)!.settings.arguments as String;
+  void didChangeDependencies() async {
+    stockSymbol = ModalRoute.of(context)!.settings.arguments as String;
     await Provider.of<DetailProvider>(context, listen: false)
         .getCompanyOverviewData(stockSymbol);
     await Provider.of<DetailProvider>(context, listen: false)
@@ -71,7 +71,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
     final detailDataProvider = Provider.of<DetailProvider>(context);
 
     late final int quantityOfStocks;
-    final marketSentimentMap = {'Market Sentiment': 78.8, '': 100 - 78.8};
 
     final List<Color> colorList = [
       Colors.green,
@@ -96,21 +95,19 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
             child: Column(
               children: [
                 Container(
-                  color: Colors.greenAccent[400],
                   width: double.infinity,
-                  // padding: EdgeInsets.only(
-                  //     right: deviceSize.width * 0.4, top: 20, bottom: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         stockSymbol,
                         style: TextStyle(
-                            fontSize: deviceSize.height * 0.04,
-                            color: Colors.black),
+                          fontSize: deviceSize.height * 0.04,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Expanded(child: Text(' ')),
-                      // Icon(Icons.signal_cellular_0_bar_rounded)
                     ],
                   ),
                 ),
@@ -127,8 +124,9 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(
-                      vertical: deviceSize.height * 0.001,
-                      horizontal: deviceSize.width * 0.02),
+                    vertical: deviceSize.height * 0.001,
+                    horizontal: deviceSize.width * 0.02,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -338,17 +336,25 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                       child: Container(
                         // margin: EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: kBlackGrey,
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         width: deviceSize.width / 6,
                         height: deviceSize.width / 6,
                         child: Container(
-                          child: Image.network(
-                            "https://logo.clearbit.com/${detailDataProvider.name}.com",
-                            fit: BoxFit.fill,
-                          ),
-                        ),
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  detailDataProvider.logoUrl,
+                              placeholder: (context, url) => Image.asset(
+                                'assets/images/stock_icon.png',
+                                fit: BoxFit.fill,
+                              ),
+                              errorWidget: (context, url, error) => Image.asset(
+                                'assets/images/stock_icon.png',
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            ),
                       ),
                     ),
                     SizedBox(
@@ -357,9 +363,9 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                     Container(
                       child: Center(
                         child: Text(
-                          '${detailDataProvider.change}',
+                          '${detailDataProvider.change.toString()[0] == '-'? detailDataProvider.change : '+${detailDataProvider.change}'}',
                           style: TextStyle(
-                            color: kGreen,
+                            color: detailDataProvider.change.toString()[0] == "-"? kRed : kGreen,
                             fontSize: deviceSize.width / 25,
                             fontWeight: FontWeight.bold,
                           ),
@@ -379,26 +385,38 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                     SizedBox(
                       height: deviceSize.height * 0.03,
                     ),
-                    Container(
-                      margin: EdgeInsets.all(8),
-                      child: Center(
+                    ElevatedButton(
+                      onPressed: () {
+                        stocksData.addWatchListStock(
+                            detailDataProvider.name,
+                            stockSymbol,
+                            detailDataProvider.currentPrice,
+                            detailDataProvider.logoUrl,
+                            detailDataProvider.change.toString()[0] == '-'? false : true,
+                            detailDataProvider.change,
+                          );
+                      },
+                      child: Container(
                         child: Text(
-                          detailDataProvider.description,
+                          'Add to WatchList',
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: Colors.black,
                             fontSize: deviceSize.width / 22.22,
                           ),
                           textAlign: TextAlign.center,
                         ),
                       ),
                     ),
-                    ChartWidgetDetail(),
+                    // ChartWidgetDetail(),
+                    SizedBox(
+                      height: 20,
+                    ),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Container(
                         // margin: EdgeInsets.all(deviceHeight * 0.02),
                         // padding: EdgeInsets.all(deviceHeight * 0.02),
-                        height: deviceSize.height * 0.3,
+                        height: deviceSize.height * 0.35,
                         width: double.infinity,
                         // color: blackgrey,
                         child: Column(
@@ -406,20 +424,23 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                             Text(
                               'Stats',
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold),
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             SizedBox(
                               height: 10,
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 TextRow(
-                                    dataType: 'OPEN',
-                                    value: detailDataProvider.openPrice
-                                        .toString()),
+                                  dataType: 'OPEN',
+                                  value:
+                                      detailDataProvider.openPrice.toString(),
+                                ),
+                                Spacer(),
                                 TextRow(
                                   dataType: 'PREV CLOSE',
                                   value:
@@ -427,8 +448,11 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                                 ),
                               ],
                             ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 //yet to be done
                                 TextRow(
@@ -436,6 +460,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                                   value:
                                       detailDataProvider.todaysHigh.toString(),
                                 ),
+                                Spacer(),
                                 TextRow(
                                   dataType: 'LOW',
                                   value:
@@ -443,46 +468,48 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                                 ),
                               ],
                             ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 TextRow(
                                   dataType: '52 WK HIGH',
                                   value: detailDataProvider.weekHigh,
                                 ),
+                                Spacer(),
                                 TextRow(
                                   dataType: '52 WK LOW',
                                   value: detailDataProvider.weekLow,
                                 ),
                               ],
                             ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 TextRow(
                                   dataType: 'MKT CAP',
                                   value: detailDataProvider.marketCap,
                                 ),
+                                Spacer(),
                                 TextRow(
                                   dataType: 'CUR',
                                   value: detailDataProvider.currency,
                                 ),
                               ],
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                TextRow(
-                                  dataType: 'P/E',
-                                  value: detailDataProvider.PEratio,
-                                ),
-                              ],
+                            SizedBox(
+                              height: 10,
                             ),
                           ],
                         ),
                       ),
                     ),
-                    PieChartDetail(colorList, marketSentimentMap),
+                    // PieChartDetail(colorList, marketSentimentMap),
                     Text(
                       'Latest News',
                       style: profilePageStyle,

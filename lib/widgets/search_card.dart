@@ -42,20 +42,13 @@ class SearchCard extends StatelessWidget {
                 width: deviceSize.width / 7.5,
                 height: deviceSize.width / 7.5,
                 child: Container(
-                  child: CachedNetworkImage(
-                    imageUrl: "https://logo.clearbit.com/$symbol.com",
-                    placeholder: (context, url) => Image.asset(
-                      'assets/images/stock_icon.png',
-                      fit: BoxFit.fill,
-                    ),
-                    errorWidget: (context, url, error) => Image.asset(
-                      'assets/images/stock_icon.png',
-                      fit: BoxFit.fill,
+                  child: Image.asset(
+                    'assets/images/stock_icon.png',
+                    fit: BoxFit.fill,
                     ),
                   ),
                 ),
               ),
-            ),
             SizedBox(
               width: 15,
             ),
@@ -76,12 +69,16 @@ class SearchCard extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    title,
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: deviceSize.width / 25,
+                  LimitedBox(
+                    maxWidth: deviceSize.width*0.75,
+                    child: Text(
+                      title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: deviceSize.width / 25,
+                      ),
                     ),
                   )
                 ],
