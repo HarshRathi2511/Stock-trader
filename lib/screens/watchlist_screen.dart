@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:provider/provider.dart';
-import 'package:stock_trader/providers/detail_screen_provider.dart';
 import 'package:stock_trader/widgets/stock_card.dart';
 import 'package:stock_trader/providers/stock.dart';
 import './search_screen.dart';
@@ -11,7 +10,6 @@ class WatchlistScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final stockProvider = Provider.of<StockProvider>(context);
-    final detailedDataProvider = Provider.of<DetailProvider>(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

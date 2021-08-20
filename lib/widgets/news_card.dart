@@ -73,7 +73,8 @@ class NewsCard extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.white,
                             // fontWeight: FontWeight.bold,
-                            fontSize: deviceSize.height*0.02,
+                            fontSize: deviceSize.width / 25,
+
                           ),
                         ),
                       ),

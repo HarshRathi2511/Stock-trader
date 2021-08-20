@@ -40,14 +40,14 @@ class TransactionCard extends StatelessWidget {
               child: Container(
                 // margin: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: kBlackGrey,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 width: deviceSize.width / 7.5,
                 height: deviceSize.width / 7.5,
                 child: Container(
-                  child: Image.network(
-                    "https://logo.clearbit.com/$title.com",
+                  child: Image.asset(
+                    'assets/images/stock_icon.png',
                     fit: BoxFit.fill,
                   ),
                 ),

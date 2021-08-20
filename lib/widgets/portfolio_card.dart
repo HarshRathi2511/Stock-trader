@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stock_trader/providers/stock.dart';
 import '../constants.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PortfolioCard extends StatelessWidget {
   late final String symbol;
@@ -44,15 +44,22 @@ class PortfolioCard extends StatelessWidget {
               child: Container(
                 // margin: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: kBlackGrey,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 width: deviceSize.width / 7.5,
                 height: deviceSize.width / 7.5,
                 child: Container(
-                  child: Image.network(
-                    "https://logo.clearbit.com/$title.com",
-                    fit: BoxFit.fill,
+                  child: CachedNetworkImage(
+                    imageUrl: "https://logo.clearbit.com/$symbol.com",
+                    placeholder: (context, url) => Image.asset(
+                      'assets/images/stock_icon.png',
+                      fit: BoxFit.fill,
+                    ),
+                    errorWidget: (context, url, error) => Image.asset(
+                      'assets/images/stock_icon.png',
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
               ),
