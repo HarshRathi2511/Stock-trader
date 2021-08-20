@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class DetailProvider with ChangeNotifier {
+  String _name = '';
   String _exchangePlatform = '';
   String _currency = '';
   String _weekHigh = ''; //52 wk high
@@ -12,7 +13,7 @@ class DetailProvider with ChangeNotifier {
   String _marketCap = '';
   String _description = '';
   String _assetType = '';
-  String _PEratio = '';
+  String _logoURL = '';
   double _currentPrice = 0.0;
   double _change = 0.0;
   double _percentageChange = 0.0;
@@ -26,6 +27,10 @@ class DetailProvider with ChangeNotifier {
 
   String get exchangePlatform {
     return _exchangePlatform;
+  }
+
+  String get name {
+    return _name;
   }
 
   String get currency {
@@ -48,12 +53,12 @@ class DetailProvider with ChangeNotifier {
     return _assetType;
   }
 
-  String get PEratio {
-    return _PEratio;
-  }
-
   String get description {
     return _description;
+  }
+
+  String get logoUrl {
+    return _logoURL;
   }
 
   double get currentPrice {
@@ -94,13 +99,16 @@ class DetailProvider with ChangeNotifier {
 
   Future<void> getSearchSuggestions(keyword) async {
     final url = Uri.parse(
-        'https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=$keyword&apikey=E4X553Q21SLS8GVG');
+        'https://finnhub.io/api/v1/search?q=$keyword&token=c4d3br2ad3icnt8r8g9g');
     var response = await http.get(url);
     final result = json.decode(response.body);
     _searchResults = [];
-    for (var res in result["bestMatches"]) {
-      _searchResults.add({'symbol': res["1. symbol"], 'name': res["2. name"]});
-      print(_searchResults[0].values.toList());
+    for (var res in result["result"]) {
+      if (res["symbol"].indexOf('.') == -1) {
+        _searchResults
+            .add({'symbol': res["symbol"], 'name': res["description"]});
+        print(_searchResults[0].values.toList());
+      }
     }
     _searchResultsCount = _searchResults.length;
     notifyListeners();
@@ -109,10 +117,24 @@ class DetailProvider with ChangeNotifier {
   Future<void> getCurrentCompanyPrice(symbol) async {
     final url = Uri.parse(
         'https://finnhub.io/api/v1/quote?symbol=$symbol&token=c4d3br2ad3icnt8r8g9g');
-    var response = await http.get(url);
-    Map<String, dynamic> data =
-        new Map<String, dynamic>.from(json.decode(response.body));
+    final response = await http.get(url);
+    Map<String, dynamic> data = new Map<String, dynamic>.from(
+      json.decode(response.body),
+    );
 
+    final profileUrl = Uri.parse(
+        'https://finnhub.io/api/v1/stock/profile2?symbol=$symbol&token=c4d3br2ad3icnt8r8g9g');
+    final profileResponse = await http.get(profileUrl);
+
+    final details = json.decode(profileResponse.body);
+
+    print("Change ${data["d"]}");
+
+    _logoURL = details["logo"];
+    _exchangePlatform = details['exchange'];
+    _currency = details['currency'];
+    _marketCap = details['marketCapitalization'].toString();
+    _name = details["name"];
     _currentPrice = double.parse(data["c"].toString());
     _change = double.parse(data["d"].toString());
     _todaysHigh = double.parse(data["h"].toString());
@@ -127,21 +149,13 @@ class DetailProvider with ChangeNotifier {
     //https://www.alphavantage.co/query?function=OVERVIEW&symbol=AMZN&apikey=E4X553Q21SLS8GVG
 
     final url = Uri.parse(
-        'https://www.alphavantage.co/query?function=OVERVIEW&symbol=$companySymbol&apikey=E4X553Q21SLS8GVG');
+        'https://finnhub.io/api/v1/stock/metric?symbol=$companySymbol&metric=all&token=c4d3br2ad3icnt8r8g9g');
     final response = await http.get(url);
     // print(response.body);
     final detailData = json.decode(response.body);
-
-    print(detailData);
-
-    // _assetType = detailData['AssetType'];
-    // _exchangePlatform = detailData['Exchange'];
-    // _weekLow = detailData['52WeekLow'];
-    // _weekHigh = detailData['52WeekHigh'];
-    // _PEratio = detailData['PERatio'];
-    // _currency = detailData['Currency'];
-    // _marketCap = detailData['MarketCapitalization'];
-    // _description = detailData['Description'];
+    print("detailed data $detailData");
+    _weekLow = detailData["metric"]['52WeekLow'].toString();
+    _weekHigh = detailData["metric"]['52WeekHigh'].toString();
 
     notifyListeners();
   }

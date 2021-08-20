@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stock_trader/screens/stock_detail_screen.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import '../screens/stock_detail_screen.dart';
 
 class SearchCard extends StatelessWidget {
   late final String symbol;
@@ -10,20 +9,6 @@ class SearchCard extends StatelessWidget {
     required this.title,
     required this.symbol,
   });
-
-  // Widget image() {
-  //   try {
-  //     Image.network(
-  //       "https://logo.clearbit.com/$title.com",
-  //       fit: BoxFit.fill,
-  //     );
-  //   } catch (_) {
-  //     return Image.asset(
-  //       'assets/images/stock_icon.png',
-  //       fit: BoxFit.fill,
-  //     );
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -56,20 +41,13 @@ class SearchCard extends StatelessWidget {
                 width: deviceSize.width / 7.5,
                 height: deviceSize.width / 7.5,
                 child: Container(
-                  child: CachedNetworkImage(
-                    imageUrl: "https://logo.clearbit.com/$symbol.com",
-                    placeholder: (context, url) => Image.asset(
-                      'assets/images/stock_icon.png',
-                      fit: BoxFit.fill,
-                    ),
-                    errorWidget: (context, url, error) => Image.asset(
-                      'assets/images/stock_icon.png',
-                      fit: BoxFit.fill,
+                  child: Image.asset(
+                    'assets/images/stock_icon.png',
+                    fit: BoxFit.fill,
                     ),
                   ),
                 ),
               ),
-            ),
             SizedBox(
               width: 15,
             ),
@@ -90,12 +68,16 @@ class SearchCard extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    title,
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: deviceSize.width / 25,
+                  LimitedBox(
+                    maxWidth: deviceSize.width*0.75,
+                    child: Text(
+                      title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: deviceSize.width / 25,
+                      ),
                     ),
                   )
                 ],

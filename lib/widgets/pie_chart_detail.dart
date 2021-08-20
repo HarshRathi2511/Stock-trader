@@ -13,7 +13,6 @@ class PieChartDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    final deviceHeight = deviceSize.height;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(50),
@@ -51,8 +50,6 @@ class PieChartDetail extends StatelessWidget {
                 ),
               ),
             ),
-
-            //display different text like bullish bearish depending on %
             Text(
               'Bullish',
               style: TextStyle(

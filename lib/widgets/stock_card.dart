@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:stock_trader/screens/stock_detail_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class StockCard extends StatelessWidget {
   late final String symbol;
@@ -22,8 +23,11 @@ class StockCard extends StatelessWidget {
     final deviceSize = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, StockDetailScreen.routeName,
-            arguments: 'AMZN');
+        Navigator.pushNamed(
+          context,
+          StockDetailScreen.routeName,
+          arguments: symbol,
+        );
       },
       child: Container(
         height: 80,
@@ -39,24 +43,25 @@ class StockCard extends StatelessWidget {
               child: Container(
                 // margin: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: kBlackGrey,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 width: deviceSize.width / 7.5,
                 height: deviceSize.width / 7.5,
                 child: Container(
-                  child: Image.network(
-                    "https://logo.clearbit.com/$title.com",
+                  child: Image.asset(
+                    'assets/images/stock_icon.png',
                     fit: BoxFit.fill,
                   ),
                 ),
               ),
             ),
             SizedBox(
-              width: 15,
+              width: 20,
             ),
             Container(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
