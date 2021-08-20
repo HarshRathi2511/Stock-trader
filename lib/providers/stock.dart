@@ -62,6 +62,10 @@ class PortfolioStock {
 class StockProvider with ChangeNotifier {
   //id will be the symbol
 
+  final String? authToken;
+  final String? userId;
+  StockProvider({this.authToken, this.userId});
+
   final inputController = TextEditingController();
 
   List<Stock> _stocks = [
@@ -207,7 +211,8 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addNewTransaction( //post request
+  void addNewTransaction(
+    //post request
     title,
     symbol,
     price,
@@ -229,11 +234,18 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addPortfolioStock(String title, String symbol, double stockPriceAtTheMoment,
-      int quantity, bool didPriceIncrease,double priceChange,TransactionType transactionType) {
+  void addPortfolioStock(
+      String title,
+      String symbol,
+      double stockPriceAtTheMoment,
+      int quantity,
+      bool didPriceIncrease,
+      double priceChange,
+      TransactionType transactionType) {
     if (_portfolioStocks.containsKey(symbol)) {
       if (transactionType == TransactionType.bought) {
-        _portfolioStocks.update( //  patch 
+        _portfolioStocks.update(
+          //  patch
           symbol,
           (value) => PortfolioStock(
             title: value.title,
@@ -245,7 +257,8 @@ class StockProvider with ChangeNotifier {
           ),
         );
       } else {
-        _portfolioStocks.update(  //patch 
+        _portfolioStocks.update(
+          //patch
           symbol,
           (value) => PortfolioStock(
             title: value.title,
@@ -258,7 +271,8 @@ class StockProvider with ChangeNotifier {
         );
       }
     } else {
-      _portfolioStocks.putIfAbsent( //post req
+      _portfolioStocks.putIfAbsent(
+        //post req
         symbol,
         () => PortfolioStock(
           title: title,
@@ -275,14 +289,36 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addWatchListStock(  //post request
+  void addWatchListStock(
+    //post request
     title,
     symbol,
     price,
     icon,
     didPriceIncrease,
     priceChange,
-  ) {
+  ) async {
+    try{
+       final selectedStock = Stock(
+      title: title,
+      symbol: symbol,
+      stockPrice: price,
+      didPriceIncrease: didPriceIncrease,
+      priceChange: priceChange,
+    );
+    final url = Uri.parse(
+        'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/watchlist.json?auth=$authToken');
+    final response = await http.post(url,
+        body: json.encode({
+          'title': selectedStock.title,
+          'symbol': selectedStock.symbol,
+          'stockPrice': selectedStock.stockPrice,
+          'didPriceIncrease': selectedStock.didPriceIncrease,
+          'priceChange': selectedStock.priceChange,
+        }));
+
+        print(response.body);
+
     _watchListStocks.putIfAbsent(
       symbol,
       () => Stock(
@@ -293,10 +329,16 @@ class StockProvider with ChangeNotifier {
         priceChange: priceChange,
       ),
     );
+    }catch(error){
+      print(error);
+      throw error;
+    }
+   
     notifyListeners();
   }
 
-  void calculatetotalProfit() {  //put request
+  void calculatetotalProfit() {
+    //put request
     _totalProfit = 0;
     _transactionsWithProfit.forEach((key, value) {
       _totalProfit += value.quantityOfStocks *
@@ -305,7 +347,8 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void calculatetotalLoss() {  //put request
+  void calculatetotalLoss() {
+    //put request
     _totalLoss = 0;
     _transactionsWithProfit.forEach((key, value) {
       _totalLoss += value.quantityOfStocks *
