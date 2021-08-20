@@ -77,7 +77,7 @@ class _ModalSheetState extends State<ModalSheet> {
                       style: TextStyle(
                         color: Colors.black,
                       ),
-                      controller: quantityController,
+                      // controller: quantityController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         hintText: '    quantity',
@@ -92,10 +92,13 @@ class _ModalSheetState extends State<ModalSheet> {
                           fontSize: deviceSize.width / 26,
                         ),
                       ),
-                      onSubmitted: (_) {
-                        setState(() {
-                          quantityOfStocks = int.parse(quantityController.text);
-                        });
+                      // onSubmitted: (_) {
+                      //   setState(() {
+                      //     quantityOfStocks = int.parse(quantityController.text);
+                      //   });
+                      // },
+                      onSubmitted: (val) {
+                        quantityOfStocks = int.parse(val);
                       },
                     ),
                   ),
@@ -119,7 +122,29 @@ class _ModalSheetState extends State<ModalSheet> {
             //Find a null safe package to implement slide to buy and slide to sell feature
 
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                // bool isBuy = await showDialog(
+                //     context: context,
+                //     builder: (bCtx) {
+                //       return AlertDialog(
+                //         content: Text('Do you want to execute this order'),
+                //         actions: [
+                //           TextButton(
+                //               onPressed: () {
+                //                 Navigator.of(context).pop(true);
+                //               },
+                //               child: Text('YES')),
+                //           TextButton(
+                //               onPressed: () {
+                //                 Navigator.of(context).pop(false);
+                //               },
+                //               child: Text('NO')),
+                //         ],
+                //       );
+                //     });
+                // if (isBuy == true) {
+                //   // print('bought ');
+                // }
                 stocksData.addNewTransaction(
                   detailDataProvider.name,
                   widget.stockSymbol,
@@ -137,6 +162,7 @@ class _ModalSheetState extends State<ModalSheet> {
                   3.2,
                   TransactionType.bought,
                 );
+
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

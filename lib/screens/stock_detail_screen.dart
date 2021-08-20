@@ -74,9 +74,13 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
           ? null
           : FloatingActionButton.extended(
               onPressed: () {
-                ModalSheet(
-                  stockSymbol: stockSymbol,
-                );
+                showModalBottomSheet(
+                    context: context,
+                    builder: (bctx) => ModalSheet(
+                          stockSymbol: stockSymbol,
+                        ));
+
+                print('modal sheet ');
               },
               label: const Text(
                 'Trade',
