@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
-<<<<<<< HEAD
+
 import 'package:stock_trader/providers/auth.dart';
-=======
+
 import 'package:stock_trader/providers/balance_provider.dart';
->>>>>>> origin/master
+
 import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/widgets/profile_screen_card.dart';
 import 'package:provider/provider.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   @override

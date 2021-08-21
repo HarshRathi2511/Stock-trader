@@ -71,10 +71,8 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
     final quantityController = TextEditingController();
     final balanceProvider = Provider.of<BalanceProvider>(context);
     late final int quantityOfStocks;
-<<<<<<< HEAD
-    // void 
-    // showModalBottomSheet(context: context, builder: (ctx)=>ModalSheet(stockSymbol: stockSymbol));    
-=======
+   
+
 
     void _showModalSheet(BuildContext ctx) {
       showModalBottomSheet(

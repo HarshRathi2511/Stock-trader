@@ -330,9 +330,6 @@ class StockProvider with ChangeNotifier {
 <<<<<<< HEAD
     try{
         //put request
-=======
-    //put request
->>>>>>> origin/master
     _totalLoss = 0;
     _transactionsWithProfit.forEach((key, value) {
       _totalLoss += value.quantityOfStocks *
