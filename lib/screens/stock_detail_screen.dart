@@ -342,19 +342,18 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                         width: deviceSize.width / 6,
                         height: deviceSize.width / 6,
                         child: Container(
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  detailDataProvider.logoUrl,
-                              placeholder: (context, url) => Image.asset(
-                                'assets/images/stock_icon.png',
-                                fit: BoxFit.fill,
-                              ),
-                              errorWidget: (context, url, error) => Image.asset(
-                                'assets/images/stock_icon.png',
-                                fit: BoxFit.fill,
-                              ),
+                          child: CachedNetworkImage(
+                            imageUrl: detailDataProvider.logoUrl,
+                            placeholder: (context, url) => Image.asset(
+                              'assets/images/stock_icon.png',
+                              fit: BoxFit.fill,
                             ),
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/images/stock_icon.png',
+                              fit: BoxFit.fill,
                             ),
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -363,9 +362,12 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                     Container(
                       child: Center(
                         child: Text(
-                          '${detailDataProvider.change.toString()[0] == '-'? detailDataProvider.change : '+${detailDataProvider.change}'}',
+                          '${detailDataProvider.change.toString()[0] == '-' ? detailDataProvider.change : '+${detailDataProvider.change}'}',
                           style: TextStyle(
-                            color: detailDataProvider.change.toString()[0] == "-"? kRed : kGreen,
+                            color:
+                                detailDataProvider.change.toString()[0] == "-"
+                                    ? kRed
+                                    : kGreen,
                             fontSize: deviceSize.width / 25,
                             fontWeight: FontWeight.bold,
                           ),
@@ -388,13 +390,25 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                     ElevatedButton(
                       onPressed: () {
                         stocksData.addWatchListStock(
-                            detailDataProvider.name,
-                            stockSymbol,
-                            detailDataProvider.currentPrice,
-                            detailDataProvider.logoUrl,
-                            detailDataProvider.change.toString()[0] == '-'? false : true,
-                            detailDataProvider.change,
-                          );
+                          detailDataProvider.name,
+                          stockSymbol,
+                          detailDataProvider.currentPrice,
+                          detailDataProvider.logoUrl,
+                          detailDataProvider.change.toString()[0] == '-'
+                              ? false
+                              : true,
+                          detailDataProvider.change,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Added to Watchlist',
+                            ),
+                            duration: Duration(
+                              milliseconds: 800,
+                            ),
+                          ),
+                        );
                       },
                       child: Container(
                         child: Text(
