@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
+import 'package:provider/provider.dart';
+import 'package:stock_trader/widgets/stock_card.dart';
+import 'package:stock_trader/providers/stock.dart';
+import './search_screen.dart';
 
 class WatchlistScreen extends StatelessWidget {
-  final inputStockController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final stockProvider = Provider.of<StockProvider>(context);
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -50,23 +55,29 @@ class WatchlistScreen extends StatelessWidget {
                   width: 10,
                 ),
                 Expanded(
-                  child: TextField(
-                    cursorColor: Colors.white,
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                    controller: inputStockController,
-                    onSubmitted: (_) {},
-                    decoration: InputDecoration(
-                      hintText: 'Search Stock',
-                      border: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                        fontSize: deviceSize.width / 26,
+                  child: GestureDetector(
+                    onTap: () {
+                        Navigator.pushNamed(context, SearchScreen.routeName);
+                      },
+                    child: TextField(
+                      // focusNode: FocusNode(),
+                      // enableInteractiveSelection: false,
+                      enabled: false,
+                      cursorColor: Colors.white,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                      decoration: InputDecoration(
+                        hintText: 'Search Stock',
+                        border: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: deviceSize.width / 26,
+                        ),
                       ),
                     ),
                   ),
@@ -77,28 +88,48 @@ class WatchlistScreen extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: deviceSize.height * 0.1,
-              ),
-              Text(
-                "Your watchlist is empty!",
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: deviceSize.width / 26,
+          SizedBox(
+            height: 10,
+          ),
+          stockProvider.watchListStockCount == 0
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: deviceSize.height * 0.1,
+                    ),
+                    Text(
+                      "Your watchlist is empty!",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: deviceSize.width / 26,
+                      ),
+                    ),
+                    Text(
+                      "Add stocks to track them here.",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: deviceSize.width / 26,
+                      ),
+                    ),
+                  ],
+                )
+              : Expanded(
+                  child: ListView(
+                    children: stockProvider.watchListStocks.values
+                        .toList()
+                        .map(
+                          (e) => StockCard(
+                            title: e.title,
+                            symbol: e.symbol,
+                            priceChange: e.priceChange,
+                            didPriceIncrease: e.didPriceIncrease,
+                            stockPrice: e.stockPrice,
+                          ),
+                        )
+                        .toList(),
+                  ),
                 ),
-              ),
-              Text(
-                "Add stocks to track them here.",
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: deviceSize.width / 26,
-                ),
-              ),
-            ],
-          )
         ],
       ),
     );

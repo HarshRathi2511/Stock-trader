@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
+import 'package:stock_trader/providers/balance_provider.dart';
+import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/widgets/profile_screen_card.dart';
+import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final stockProvider = Provider.of<StockProvider>(context);
+    final balanceProvider = Provider.of<BalanceProvider>(context);
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -25,19 +35,6 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Container(
-          //   width: double.infinity,
-          //   margin: EdgeInsets.all(10),
-          //   height: deviceSize.height * 0.4,
-          //   decoration: BoxDecoration(
-          //     color: kBlackGrey,
-          //     borderRadius: BorderRadius.circular(15),
-          //   ),
-          // )
-          // CircleAvatar(
-          //   child: Image.asset('assets/images/default profile.jpg', fit: BoxFit.fill,),
-          //   radius: 30,
-          // )
           SizedBox(
             height: deviceSize.height * 0.025,
           ),
@@ -64,72 +61,71 @@ class ProfileScreen extends StatelessWidget {
             height: deviceSize.height * 0.03,
           ),
           Expanded(
-            child: GridView(
-              padding: EdgeInsets.all(5),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: deviceSize.width * 3 / deviceSize.height,
-                crossAxisSpacing: 5,
-                mainAxisSpacing: 5,
-              ),
+            child: ListView(
+              padding: EdgeInsets.all(2),
               children: [
                 ProfileScreenCard(
                   message: Text(
-                    'Total Net Profit',
-                    style: profilePageStyle,
+                    'Balance',
+                    style: profilePageTextStyle,
                   ),
                   otherMessage: Text(
-                    '32.99 \$',
+                    '${balanceProvider.balance} \$',
+                    style: profilePageDataStyle,
+                  ),
+                ),
+                ProfileScreenCard(
+                  message: Text(
+                    'Total Net Profit',
+                    style: profilePageTextStyle,
+                  ),
+                  otherMessage: Text(
+                    '${stockProvider.totalProfit} \$',
                     style: profilePageDataStyle,
                   ),
                 ),
                 ProfileScreenCard(
                   message: Text(
                     'Total Net Loss',
-                    style: profilePageStyle,
+                    style: profilePageTextStyle,
                   ),
                   otherMessage: Text(
-                    '22.99 \$',
+                    '${stockProvider.totalLoss} \$',
                     style: profilePageDataStyle,
                   ),
                 ),
                 ProfileScreenCard(
                   message: Text(
                     'Positive Transactions',
-                    style: profilePageStyle,
+                    style: profilePageTextStyle,
                     textAlign: TextAlign.center,
                   ),
                   otherMessage: Text(
-                    '5',
+                    stockProvider.getTransactionsWithProfit.length.toString(),
                     style: profilePageDataStyle,
                   ),
                 ),
                 ProfileScreenCard(
                   message: Text(
                     'Negative Transactions',
-                    style: profilePageStyle,
+                    style: profilePageTextStyle,
                     textAlign: TextAlign.center,
                   ),
                   otherMessage: Text(
-                    '2',
+                    stockProvider.getTransactionsWithLoss.length.toString(),
                     style: profilePageDataStyle,
                   ),
                 ),
                 ProfileScreenCard(
                   message: Text(
                     'Privacy Policy',
-                    style: profilePageStyle,
-                  ),
-                  otherMessage: Icon(
-                    Icons.notes,
-                    size: 40,
-                    color: Colors.white,
+                    style: profilePageTextStyle,
                   ),
                 ),
                 ProfileScreenCard(
                   message: Text(
                     'About us',
-                    style: profilePageStyle,
+                    style: profilePageTextStyle,
                   ),
                 ),
               ],
