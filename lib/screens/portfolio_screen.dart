@@ -7,7 +7,18 @@ import 'package:stock_trader/providers/stock.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_trader/widgets/portfolio_card.dart';
 
-class PortfolioScreen extends StatelessWidget {
+class PortfolioScreen extends StatefulWidget {
+  @override
+  _PortfolioScreenState createState() => _PortfolioScreenState();
+}
+
+class _PortfolioScreenState extends State<PortfolioScreen> {
+
+  @override
+  void initState() {
+   Provider.of<StockProvider>(context,listen:false).fetchAndSetPortfolioStocks();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final stockProvider = Provider.of<StockProvider>(context);

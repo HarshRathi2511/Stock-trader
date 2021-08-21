@@ -66,7 +66,7 @@ class StockProvider with ChangeNotifier {
   final String? userId;
 
   StockProvider(this.authToken, this.userId, this._watchListStocks,
-      this._totalProfit, this._totalLoss);
+      this._totalProfit, this._totalLoss, this._transactedListStocks);
 
   final inputController = TextEditingController();
 
@@ -252,11 +252,11 @@ class StockProvider with ChangeNotifier {
           stockPriceWhenBought: double.parse(txStock['stockPriceWhenBought']),
           dateOfransaction: DateTime.now(),
           quantityOfStocks: int.parse(txStock['quantityOfStocks']),
-          // transactionType: txStock['transactionType'].contains('bought')
-              // ? TransactionType.bought
-          //     : TransactionType.sold,
-            transactionType: TransactionType.bought,   
+          transactionType: txStock['transactionType'].contains('bought')
+              ? TransactionType.bought
+              : TransactionType.sold,
         ),
+        // Unhandled Exception: type 'Null' is not a subtype of type 'String'
       });
     });
     notifyListeners();
@@ -269,21 +269,29 @@ class StockProvider with ChangeNotifier {
       int quantity,
       bool didPriceIncrease,
       double priceChange,
-      TransactionType transactionType) {
+      TransactionType transactionType) async {
     if (_portfolioStocks.containsKey(symbol)) {
       if (transactionType == TransactionType.bought) {
-        _portfolioStocks.update(
-          //  patch
-          symbol,
-          (value) => PortfolioStock(
-            title: value.title,
-            symbol: value.symbol,
-            quantity: value.quantity + quantity,
-            priceChange: value.priceChange,
-            stockPriceAtTheMoment: value.stockPriceAtTheMoment,
-            didPriceIncrease: value.didPriceIncrease,
-          ),
-        );
+        try {
+          _portfolioStocks.update(
+            //  patch
+            symbol,
+            (value) => PortfolioStock(
+              title: value.title,
+              symbol: value.symbol,
+              quantity: value.quantity + quantity,
+              priceChange: value.priceChange,
+              stockPriceAtTheMoment: value.stockPriceAtTheMoment,
+              didPriceIncrease: value.didPriceIncrease,
+            ),
+          );
+
+          final url = Uri.parse(
+              'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/portfolio.json?auth=$authToken');
+        } catch (error) {
+          print(error);
+          throw error;
+        }
       } else {
         _portfolioStocks.update(
           //patch
@@ -299,21 +307,64 @@ class StockProvider with ChangeNotifier {
         );
       }
     } else {
-      _portfolioStocks.putIfAbsent(
-        //post req
-        symbol,
-        () => PortfolioStock(
-          title: title,
-          symbol: symbol,
-          stockPriceAtTheMoment: stockPriceAtTheMoment,
-          quantity: quantity,
-          didPriceIncrease: didPriceIncrease,
-          priceChange: priceChange,
-        ),
-      );
+      try {
+        _portfolioStocks.putIfAbsent(
+          //post req
+          symbol,
+          () => PortfolioStock(
+            title: title,
+            symbol: symbol,
+            stockPriceAtTheMoment: stockPriceAtTheMoment,
+            quantity: quantity,
+            didPriceIncrease: didPriceIncrease,
+            priceChange: priceChange,
+          ),
+        );
+        final url = Uri.parse(
+            'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/portfolio.json?auth=$authToken');
+        http.post(url,
+            body: json.encode({
+              'title': title,
+              'symbol': symbol,
+              'stockPriceAtTheMoment': stockPriceAtTheMoment,
+              'quantity': quantity,
+              'didPriceIncrease': didPriceIncrease,
+              'priceChange': priceChange,
+            }));
+      } catch (error) {
+        print(error);
+      }
     }
+    // print("portfolio $_portfolioStocks");
+    notifyListeners();
+  }
 
-    print("portfolio $_portfolioStocks");
+  Future<void> fetchAndSetPortfolioStocks() async {
+    try {
+      final url = Uri.parse(
+          'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/portfolio.json?auth=$authToken');
+      final response = await http.get(url);
+      // print(response);
+      final extractedData =
+          Map<String, dynamic>.from(json.decode(response.body));
+      // print(extractedData);
+      //{-MheKmr6EFerGb1g0CZx: {didPriceIncrease: true, priceChange: 3.2, quantity: 5, stockPriceAtTheMoment: 680.26, symbol: TSLA, title: Tesla Inc},
+      //-MheMyanjE-ghfqyAwtu: {didPriceIncrease: true, priceChange: 3.2, quantity: 5, stockPriceAtTheMoment: 359.37, symbol: FB, title: Facebook Inc}}
+      extractedData.forEach((key, portData) {
+        _portfolioStocks.addAll({
+          key: PortfolioStock(
+              title: portData['title'],
+              symbol: portData['symbol'],
+              quantity: portData['quantity'],
+              priceChange: portData['priceChange'],
+              stockPriceAtTheMoment: portData['stockPriceAtTheMoment'],
+              didPriceIncrease: portData['didPriceIncrease']),
+        });
+      });
+      
+    } catch (error) {
+      print(error);
+    }
     notifyListeners();
   }
 
