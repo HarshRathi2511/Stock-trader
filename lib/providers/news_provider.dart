@@ -83,7 +83,7 @@ class NewsProvider with ChangeNotifier {
   Future<void> getStockNewsByQuery(query) async {
     //query will contain the symbol of the company
     final link = Uri.parse(
-        "https://finnhub.io/api/v1/company-news?symbol=AMZN&from=2021-03-01&to=2021-03-09&token=c4dlgpqad3icnt8rkag0");
+        "https://finnhub.io/api/v1/company-news?symbol=$query&from=2021-03-01&to=2021-03-09&token=c4dlgpqad3icnt8rkag0");
 
     //format and put the current date and previous date in the url using intl package
     //  final currentDate = DateFormat.yMd(DateTime.now());

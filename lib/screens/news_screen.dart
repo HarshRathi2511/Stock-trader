@@ -47,7 +47,8 @@ class _NewsScreenState extends State<NewsScreen> {
     return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: isNewsLoading
-            ? Expanded(
+            ? Container(
+                height: deviceSize.height,
                 child: Center(
                   child: CircularProgressIndicator(
                     color: kBlackGrey,
