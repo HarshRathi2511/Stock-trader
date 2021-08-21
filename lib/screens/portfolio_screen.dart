@@ -13,10 +13,11 @@ class PortfolioScreen extends StatefulWidget {
 }
 
 class _PortfolioScreenState extends State<PortfolioScreen> {
-
+Map<String,double> ?dataMap;
   @override
   void initState() {
    Provider.of<StockProvider>(context,listen:false).fetchAndSetPortfolioStocks();
+   Map<String,double> dataMap =Provider.of<StockProvider>(context).pData;
     super.initState();
   }
   @override
@@ -25,12 +26,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
 
-    Map<String, double> dataMap = {
-      "Reliance": 5,
-      "Amazon": 3,
-      "Siemens": 2,
-      "Blue Origin": 2,
-    };
+    // Map<String, double> dataMap = {
+    //   "Reliance": 5,
+    //   "Amazon": 3,
+    //   "Siemens": 2,
+    //   "Blue Origin": 2,
+    // };
     List<Color> colorList = [
       Colors.red,
       Colors.green,
@@ -136,7 +137,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                   width: deviceWidth * 0.9,
                   color: blackgrey,
                   child: PieChart(
-                    dataMap: dataMap,
+                    dataMap: dataMap!,
                     animationDuration: Duration(milliseconds: 800),
                     chartLegendSpacing: 32,
                     chartRadius: MediaQuery.of(context).size.width / 3.2,

@@ -249,9 +249,9 @@ class StockProvider with ChangeNotifier {
         key: TransactedStock(
           title: txStock['title'],
           symbol: txStock['symbol'],
-          stockPriceWhenBought: double.parse(txStock['stockPriceWhenBought']),
+          stockPriceWhenBought: txStock['stockPriceWhenBought'],
           dateOfransaction: DateTime.now(),
-          quantityOfStocks: int.parse(txStock['quantityOfStocks']),
+          quantityOfStocks: txStock['quantityOfStocks'],
           transactionType: txStock['transactionType'].contains('bought')
               ? TransactionType.bought
               : TransactionType.sold,
@@ -285,9 +285,11 @@ class StockProvider with ChangeNotifier {
               didPriceIncrease: value.didPriceIncrease,
             ),
           );
-
-          final url = Uri.parse(
-              'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/portfolio.json?auth=$authToken');
+          // final url = Uri.parse(
+          //     'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/portfolio.json?auth=$authToken');
+          //  await http.patch(url,body: json.encode({
+              
+          //  }));
         } catch (error) {
           print(error);
           throw error;
@@ -352,7 +354,7 @@ class StockProvider with ChangeNotifier {
       //-MheMyanjE-ghfqyAwtu: {didPriceIncrease: true, priceChange: 3.2, quantity: 5, stockPriceAtTheMoment: 359.37, symbol: FB, title: Facebook Inc}}
       extractedData.forEach((key, portData) {
         _portfolioStocks.addAll({
-          key: PortfolioStock(
+          portData['symbol']: PortfolioStock(
               title: portData['title'],
               symbol: portData['symbol'],
               quantity: portData['quantity'],
@@ -505,52 +507,17 @@ class StockProvider with ChangeNotifier {
       throw error;
     }
   }
-
-  Future<void> newUserData() async {
-    var url = Uri.parse(
-        "https://stock-trader-3e6f6-default-rtdb.firebaseio.com/admin.json");
-    var res = await http.post(url,
-        body: json.encode({
-          watchListStocks: _watchListStocks,
-          portfolioStocks: _portfolioStocks,
-          transactedListStocks: _transactedListStocks,
-        }));
-    print(res);
+  final Map<String,double> _pData ={};
+  Map<String,double> get pData {
+    return _pData;
+  }
+  void pieChartData() async {
+    _portfolioStocks.forEach((key, portStock) {
+      _pData.addAll({
+        portStock.title: portStock.quantity+0.0,
+      });
+     });
   }
 
-  Future<void> updateUserData(type) async {
-    if (type == StockType.watchlist) {
-      var url = Uri.parse(
-          "https://stock-trader-3e6f6-default-rtdb.firebaseio.com/admin.json");
-      var res = await http.patch(url,
-          body: json.encode({
-            watchListStocks: _watchListStocks,
-          }));
-      print(json.decode(res.body));
-    } else if (type == StockType.portfolio) {
-      var url = Uri.parse(
-          "https://stock-trader-3e6f6-default-rtdb.firebaseio.com/admin.json");
-      var res = await http.patch(url,
-          body: json.encode({
-            portfolioStocks: _portfolioStocks,
-          }));
-      print(json.decode(res.body));
-    } else {
-      var url = Uri.parse(
-          "https://stock-trader-3e6f6-default-rtdb.firebaseio.com/admin.json");
-      var res = await http.patch(url,
-          body: json.encode({
-            transactedListStocks: _transactedListStocks,
-          }));
-      print(json.decode(res.body));
-    }
-  }
-
-  Future<void> getUserData() async {
-    var url = Uri.parse(
-        "https://stock-trader-3e6f6-default-rtdb.firebaseio.com/admin.json");
-    var res = await http.get(url);
-    print(json.decode(res.body));
-    notifyListeners();
-  }
+ 
 }
