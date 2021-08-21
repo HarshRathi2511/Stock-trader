@@ -50,13 +50,7 @@ class PortfolioCard extends StatelessWidget {
                 width: deviceSize.width / 7.5,
                 height: deviceSize.width / 7.5,
                 child: Container(
-                  child: CachedNetworkImage(
-                    imageUrl: "https://logo.clearbit.com/$symbol.com",
-                    placeholder: (context, url) => Image.asset(
-                      'assets/images/stock_icon.png',
-                      fit: BoxFit.fill,
-                    ),
-                    errorWidget: (context, url, error) => Image.asset(
+                  child: Image.asset(
                       'assets/images/stock_icon.png',
                       fit: BoxFit.fill,
                     ),
@@ -64,7 +58,6 @@ class PortfolioCard extends StatelessWidget {
                 ),
               ),
             ),
-          ),
           SizedBox(
             width: 15,
           ),
@@ -115,6 +108,7 @@ class PortfolioCard extends StatelessWidget {
               right: 5,
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   stockPriceAtTheMoment.toString(),

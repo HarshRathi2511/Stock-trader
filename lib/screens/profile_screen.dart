@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
+import 'package:stock_trader/providers/balance_provider.dart';
 import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/widgets/profile_screen_card.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final stockProvider = Provider.of<StockProvider>(context);
+    final balanceProvider = Provider.of<BalanceProvider>(context);
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -59,19 +61,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
             height: deviceSize.height * 0.03,
           ),
           Expanded(
-            child: GridView(
+            child: ListView(
               padding: EdgeInsets.all(2),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: deviceSize.width * 3 / deviceSize.height,
-                crossAxisSpacing: 0,
-                mainAxisSpacing: 5,
-              ),
               children: [
                 ProfileScreenCard(
                   message: Text(
+                    'Balance',
+                    style: profilePageTextStyle,
+                  ),
+                  otherMessage: Text(
+                    '${balanceProvider.balance} \$',
+                    style: profilePageDataStyle,
+                  ),
+                ),
+                ProfileScreenCard(
+                  message: Text(
                     'Total Net Profit',
-                    style: profilePageStyle,
+                    style: profilePageTextStyle,
                   ),
                   otherMessage: Text(
                     '${stockProvider.totalProfit} \$',
@@ -81,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ProfileScreenCard(
                   message: Text(
                     'Total Net Loss',
-                    style: profilePageStyle,
+                    style: profilePageTextStyle,
                   ),
                   otherMessage: Text(
                     '${stockProvider.totalLoss} \$',
@@ -91,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ProfileScreenCard(
                   message: Text(
                     'Positive Transactions',
-                    style: profilePageStyle,
+                    style: profilePageTextStyle,
                     textAlign: TextAlign.center,
                   ),
                   otherMessage: Text(
@@ -102,7 +108,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ProfileScreenCard(
                   message: Text(
                     'Negative Transactions',
-                    style: profilePageStyle,
+                    style: profilePageTextStyle,
                     textAlign: TextAlign.center,
                   ),
                   otherMessage: Text(
@@ -113,18 +119,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ProfileScreenCard(
                   message: Text(
                     'Privacy Policy',
-                    style: profilePageStyle,
-                  ),
-                  otherMessage: Icon(
-                    Icons.notes,
-                    size: 40,
-                    color: Colors.white,
+                    style: profilePageTextStyle,
                   ),
                 ),
                 ProfileScreenCard(
                   message: Text(
                     'About us',
-                    style: profilePageStyle,
+                    style: profilePageTextStyle,
                   ),
                 ),
               ],

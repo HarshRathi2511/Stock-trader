@@ -93,6 +93,7 @@ class StockCard extends StatelessWidget {
                 right: 5,
               ),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     stockPrice.toString(),

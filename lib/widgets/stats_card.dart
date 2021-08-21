@@ -13,7 +13,7 @@ class StatsCard extends StatelessWidget {
       child: Container(
         // margin: EdgeInsets.all(deviceHeight * 0.02),
         // padding: EdgeInsets.all(deviceHeight * 0.02),
-        height: deviceSize.height * 0.35,
+        height: deviceSize.height * 0.5,
         width: double.infinity,
         // color: blackgrey,
         child: Column(
@@ -39,9 +39,6 @@ class StatsCard extends StatelessWidget {
               dataType: 'PREV CLOSE',
               value: detailDataProvider.closePrice.toString(),
             ),
-            SizedBox(
-              height: 10,
-            ),
             TextRow(
               dataType: 'HIGH',
               value: detailDataProvider.todaysHigh.toString(),
@@ -49,9 +46,6 @@ class StatsCard extends StatelessWidget {
             TextRow(
               dataType: 'LOW',
               value: detailDataProvider.todaysLow.toString(),
-            ),
-            SizedBox(
-              height: 10,
             ),
             TextRow(
               dataType: '52 WK HIGH',
@@ -61,9 +55,6 @@ class StatsCard extends StatelessWidget {
               dataType: '52 WK LOW',
               value: detailDataProvider.weekLow,
             ),
-            SizedBox(
-              height: 10,
-            ),
             TextRow(
               dataType: 'MKT CAP',
               value: detailDataProvider.marketCap,
@@ -71,9 +62,6 @@ class StatsCard extends StatelessWidget {
             TextRow(
               dataType: 'CUR',
               value: detailDataProvider.currency,
-            ),
-            SizedBox(
-              height: 10,
             ),
           ],
         ),
