@@ -207,7 +207,7 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addNewTransaction(
+  void addNewTransaction( //post request
     title,
     symbol,
     price,
@@ -233,7 +233,7 @@ class StockProvider with ChangeNotifier {
       int quantity, bool didPriceIncrease,double priceChange,TransactionType transactionType) {
     if (_portfolioStocks.containsKey(symbol)) {
       if (transactionType == TransactionType.bought) {
-        _portfolioStocks.update(
+        _portfolioStocks.update( //  patch 
           symbol,
           (value) => PortfolioStock(
             title: value.title,
@@ -245,7 +245,7 @@ class StockProvider with ChangeNotifier {
           ),
         );
       } else {
-        _portfolioStocks.update(
+        _portfolioStocks.update(  //patch 
           symbol,
           (value) => PortfolioStock(
             title: value.title,
@@ -258,7 +258,7 @@ class StockProvider with ChangeNotifier {
         );
       }
     } else {
-      _portfolioStocks.putIfAbsent(
+      _portfolioStocks.putIfAbsent( //post req
         symbol,
         () => PortfolioStock(
           title: title,
@@ -275,7 +275,7 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addWatchListStock(
+  void addWatchListStock(  //post request
     title,
     symbol,
     price,
@@ -296,7 +296,7 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void calculatetotalProfit() {
+  void calculatetotalProfit() {  //put request
     _totalProfit = 0;
     _transactionsWithProfit.forEach((key, value) {
       _totalProfit += value.quantityOfStocks *
@@ -305,7 +305,7 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void calculatetotalLoss() {
+  void calculatetotalLoss() {  //put request
     _totalLoss = 0;
     _transactionsWithProfit.forEach((key, value) {
       _totalLoss += value.quantityOfStocks *

@@ -9,6 +9,7 @@ import 'package:stock_trader/widgets/pie_chart_detail.dart';
 import 'package:stock_trader/widgets/stats_card.dart';
 import 'package:stock_trader/widgets/text_row.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../widgets/modal_sheet.dart';
 
 class StockDetailScreen extends StatefulWidget {
   static const routeName = '/stock-detail';
@@ -20,33 +21,34 @@ class StockDetailScreen extends StatefulWidget {
 class _StockDetailScreenState extends State<StockDetailScreen> {
   var isLoading = true;
   Future<void> getData() async {
-    await Provider.of<DetailProvider>(context, listen: false)
-        .getCompanyOverviewData('AMZN');
-    await Provider.of<DetailProvider>(context, listen: false)
-        .getCurrentCompanyPrice('AMZN');
-    setState(() {
-      isLoading = false;
-    });
-    // } catch (_) {
-    //   print(_);
-    //   showDialog(
-    //       context: context,
-    //       builder: (_) {
-    //         return AlertDialog(
-    //           detailDataProvider.name: Text('An error occurred!'),
-    //           content: Text('Try again later'),
-    //           actions: [
-    //             TextButton(
-    //               onPressed: () => Navigator.pop(context, 'OK'),
-    //               child: const Text('OK'),
-    //             ),
-    //           ],
-    //         );
-    //       });
-    // setState(() {
-    //   isLoading = false;
-    // });
-    // }
+    try {
+      await Provider.of<DetailProvider>(context, listen: false)
+          .getCompanyOverviewData('AMZN');
+      await Provider.of<DetailProvider>(context, listen: false)
+          .getCurrentCompanyPrice('AMZN');
+      setState(() {
+        isLoading = false;
+      });
+    } catch (_) {
+      print(_);
+      showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              title: Text('An error occurred!'),
+              content: Text('Try again later'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'OK'),
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          });
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   var stockSymbol;
@@ -68,9 +70,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final stocksData = Provider.of<StockProvider>(context, listen: false);
-    final quantityController = TextEditingController();
     final detailDataProvider = Provider.of<DetailProvider>(context);
-
     late final int quantityOfStocks;
 
     void _showModalSheet(BuildContext ctx) {
@@ -251,13 +251,18 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
         ),
       );
     }
-
     return Scaffold(
       floatingActionButton: isLoading
           ? null
           : FloatingActionButton.extended(
               onPressed: () {
-                _showModalSheet(context);
+                showModalBottomSheet(
+                    context: context,
+                    builder: (bctx) => ModalSheet(
+                          stockSymbol: stockSymbol,
+                        ));
+
+                print('modal sheet ');
               },
               label: const Text(
                 'Trade',

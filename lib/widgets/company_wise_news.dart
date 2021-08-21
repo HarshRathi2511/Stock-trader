@@ -33,31 +33,6 @@ class _CompanyNewsState extends State<CompanyNews> {
   @override
   Widget build(BuildContext context) {
     final newsProvider = Provider.of<NewsProvider>(context, listen: false);
-
-    // return ClipRRect(
-    //   borderRadius: BorderRadius.circular(20),
-    //   child: Container(
-    //     // margin: EdgeInsets.all(deviceHeight * 0.02),
-    //     // padding: EdgeInsets.all(deviceHeight * 0.02),
-    //     height: deviceSize.height * 0.9,
-    //     width: double.infinity,
-    //     // color: blackgrey,
-    //     child: Expanded(
-    //       child: ListView.builder(
-    //         itemCount: newsProvider.companyWiseNews.length,
-    //         itemBuilder: (_, index) {
-    //           return NewsCard(
-    //             title: newsProvider.companyWiseNews[index].title,
-    //             description:
-    //                 newsProvider.companyWiseNews[index].description,
-    //             urlToImage: newsProvider.companyWiseNews[index].urlToImage,
-    //             index: index,
-    //           );
-    //         },
-    //       ),
-    //     ),
-    //   ),
-    // );
     return Column(
       children: newsProvider.companyWiseNews
           .map(

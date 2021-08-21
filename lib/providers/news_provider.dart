@@ -50,8 +50,8 @@ class NewsProvider with ChangeNotifier {
     final res = json.decode(response.body);
 
     for (var news in res) {
-      print(length);
-      print(news);
+      // print(length);
+      // print(news);
       if (news['headline'] != null &&
           news['related'] != null &&
           news['url'] != null &&
@@ -76,7 +76,7 @@ class NewsProvider with ChangeNotifier {
         }
       }
     }
-    print("Latest headlines $_latestHeadlines");
+    // print("Latest headlines $_latestHeadlines");
   }
 
   //https://finnhub.io/api/v1/company-news?symbol=AMZN&from=2021-03-01&to=2021-03-09&token=c4dlgpqad3icnt8rkag0
@@ -90,7 +90,7 @@ class NewsProvider with ChangeNotifier {
     //  final someDaysBehind = DateFormat.yMd(DateTime.now().subtract(Duration(days: 2)));
     final response = await http.get(link);
     final res = json.decode(response.body);
-    print(res);
+    // print(res);
 
     var newsCount = 0;
 

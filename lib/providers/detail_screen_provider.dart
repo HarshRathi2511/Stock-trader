@@ -107,7 +107,7 @@ class DetailProvider with ChangeNotifier {
       if (res["symbol"].indexOf('.') == -1 && res["symbol"].indexOf(":") == -1) {
         _searchResults
             .add({'symbol': res["symbol"], 'name': res["description"]});
-        print(_searchResults[0].values.toList());
+        // print(_searchResults[0].values.toList());
       }
     }
     _searchResultsCount = _searchResults.length;
@@ -128,7 +128,7 @@ class DetailProvider with ChangeNotifier {
 
     final details = json.decode(profileResponse.body);
 
-    print("Change ${data["d"]}");
+    // print("Change ${data["d"]}");
 
     _logoURL = details["logo"];
     _exchangePlatform = details['exchange'];
@@ -153,7 +153,7 @@ class DetailProvider with ChangeNotifier {
     final response = await http.get(url);
     // print(response.body);
     final detailData = json.decode(response.body);
-    print("detailed data $detailData");
+    // print("detailed data $detailData");
     _weekLow = detailData["metric"]['52WeekLow'].toString();
     _weekHigh = detailData["metric"]['52WeekHigh'].toString();
 

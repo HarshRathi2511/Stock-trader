@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stock_trader/providers/stock.dart';
 import '../constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
