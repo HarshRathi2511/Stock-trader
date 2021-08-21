@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
+
+import 'package:stock_trader/providers/auth.dart';
+
 import 'package:stock_trader/providers/balance_provider.dart';
+
 import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/widgets/profile_screen_card.dart';
 import 'package:provider/provider.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -52,10 +57,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(
             height: deviceSize.height * 0.02,
           ),
-          Text(
-            'Admin',
-            style: TextStyle(
-                color: Colors.white, fontSize: deviceSize.height * 0.035),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                'Admin',
+                style: TextStyle(
+                    color: Colors.white, fontSize: deviceSize.height * 0.035),
+              ),
+              //will add button in a better place later
+              RaisedButton(
+                  onPressed: () async {
+                    bool isLogOut = await showDialog(
+                        context: context,
+                        builder: (bctx) => AlertDialog(
+                              content: Text('Do you want to log out ?'),
+                              actions: [
+                                RaisedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  child: Text('YES',style: TextStyle(color: Colors.white),),
+                                  color: blackgrey,
+                                ),
+                                RaisedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(false);
+                                  },
+                                  child: Text('NO',style: TextStyle(color: Colors.white),),
+                                  color: blackgrey,
+                                ),
+                              ],
+                            ));
+                    isLogOut
+                        ? Provider.of<Auth>(context, listen: false).logout()
+                        : print('harsh');
+                  },
+                  child: Text('LOG OUT',style: profilePageStyle,),
+                  color: blackgrey,
+                  elevation: 8,
+                  ),
+            ],
           ),
           SizedBox(
             height: deviceSize.height * 0.03,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:stock_trader/constants.dart';
+import 'package:stock_trader/providers/auth.dart';
 import '../models/http_exceptions.dart';
 
 
@@ -112,12 +114,12 @@ class _AuthCardState extends State<AuthCard> {
     try {
       if (_authMode == AuthMode.Login) {
         // Log user in
-        // await Provider.of<Auth>(context, listen: false)
-        //     .login(_authData['email'], _authData['password']);
+        await Provider.of<Auth>(context, listen: false)
+            .login(_authData['email']!, _authData['password']!);
       } else {
-        //signup user in
-        // await Provider.of<Auth>(context, listen: false)
-        //     .signup(_authData['email'], _authData['password']);
+        // signup user in
+        await Provider.of<Auth>(context, listen: false)
+            .signup(_authData['email']!, _authData['password']!);
       }
     } on HttpExceptions catch (error) {
       //to specify the error class use on <ErrorClass> name

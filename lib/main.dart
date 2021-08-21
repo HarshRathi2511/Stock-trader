@@ -1,4 +1,5 @@
 import 'package:provider/provider.dart';
+import 'package:stock_trader/providers/auth.dart';
 import 'package:stock_trader/providers/balance_provider.dart';
 import 'package:stock_trader/providers/detail_screen_provider.dart';
 import 'package:stock_trader/providers/news_provider.dart';
@@ -28,15 +29,23 @@ void main() {
 //   runApp(MyApp());
 // }
 
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (ctx) => StockProvider(),
+        ChangeNotifierProvider(create: (ctx) => Auth()),
+        ChangeNotifierProxyProvider<Auth,StockProvider>(
+          create: (ctx) => StockProvider('authtoken', 'user-id',{}),
+          update: (ctx,auth,prevStockProviderData)=>StockProvider(
+             auth.tokenData,//token
+             auth.userId, //userid 
+             prevStockProviderData!.watchListStocks,
+          ),
         ),
+        // ChangeNotifierProvider(create: (ctx)=>StockProvider(),),
         ChangeNotifierProvider(
           create: (_) => NewsProvider(),
         ),
@@ -47,29 +56,31 @@ class MyApp extends StatelessWidget {
           create: (_) => BalanceProvider(),
         ),
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primaryColor: Colors.white, //Color(0xFF17242D),
-          // accentColor: Color(0xFF17242D),
-          fontFamily: 'Raleway',
-          // scaffoldBackgroundColor: Color(0xFF151A1A),
-          scaffoldBackgroundColor: Colors.black87,
-          appBarTheme: AppBarTheme(
-            backgroundColor: Colors.red,
+      child: Consumer<Auth>(
+        builder: (c, auth, _) => MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            primaryColor: Colors.white, //Color(0xFF17242D),
+            // accentColor: Color(0xFF17242D),
+            fontFamily: 'Raleway',
+            // scaffoldBackgroundColor: Color(0xFF151A1A),
+            scaffoldBackgroundColor: Colors.black87,
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.red,
+            ),
           ),
+          // initialRoute: initScreen == 0 || initScreen == null ? NewsDetailScreen.routeName : "/",
+          home:
+              auth.isAuth?TabsScreen():AuthScreen(), //show diff screens on the basis whether user is authenticated or not
+          routes: {
+            // StockDetailScreen.routeName :(ctx) => StockDetailScreen(),
+            NewsDetailScreen.routeName: (ctx) => NewsDetailScreen(),
+            // TabsScreen.routeName: (ctx) => TabsScreen(),
+            StockDetailScreen.routeName: (ctx) => StockDetailScreen(),
+            SearchScreen.routeName: (ctx) => SearchScreen(),
+            // NewsDetailScreen.routeName:(ctx)=>NewUserScreen()
+          },
         ),
-        // initialRoute: initScreen == 0 || initScreen == null ? NewsDetailScreen.routeName : "/",
-        home:
-            TabsScreen(), //show diff screens on the basis whether user is authenticated or not
-        routes: {
-          // StockDetailScreen.routeName :(ctx) => StockDetailScreen(),
-          NewsDetailScreen.routeName: (ctx) => NewsDetailScreen(),
-          // TabsScreen.routeName: (ctx) => TabsScreen(),
-          StockDetailScreen.routeName: (ctx) => StockDetailScreen(),
-          SearchScreen.routeName: (ctx) => SearchScreen(),
-          // NewsDetailScreen.routeName:(ctx)=>NewUserScreen()
-        },
       ),
     );
   }

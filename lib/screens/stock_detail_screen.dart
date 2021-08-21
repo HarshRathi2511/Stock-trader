@@ -40,6 +40,8 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
     final quantityController = TextEditingController();
     final balanceProvider = Provider.of<BalanceProvider>(context);
     late final int quantityOfStocks;
+   
+
 
     void _showModalSheet(BuildContext ctx) {
       showModalBottomSheet(
@@ -324,6 +326,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
         ),
       );
     }
+
 
     return Scaffold(
       floatingActionButton: isLoading
