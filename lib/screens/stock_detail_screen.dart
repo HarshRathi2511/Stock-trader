@@ -17,37 +17,6 @@ class StockDetailScreen extends StatefulWidget {
 
 class _StockDetailScreenState extends State<StockDetailScreen> {
   var isLoading = true;
-  Future<void> getData() async {
-    try {
-      await Provider.of<DetailProvider>(context, listen: false)
-          .getCompanyOverviewData('AMZN');
-      await Provider.of<DetailProvider>(context, listen: false)
-          .getCurrentCompanyPrice('AMZN');
-      setState(() {
-        isLoading = false;
-      });
-    } catch (_) {
-      print(_);
-      showDialog(
-          context: context,
-          builder: (_) {
-            return AlertDialog(
-              title: Text('An error occurred!'),
-              content: Text('Try again later'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'OK'),
-                  child: const Text('OK'),
-                ),
-              ],
-            );
-          });
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
   var stockSymbol;
 
   @override
