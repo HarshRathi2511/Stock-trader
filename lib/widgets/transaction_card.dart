@@ -59,6 +59,7 @@ class TransactionCard extends StatelessWidget {
           ),
           Container(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -78,7 +79,7 @@ class TransactionCard extends StatelessWidget {
                   maxLines: 1,
                   style: TextStyle(
                     color: Colors.grey,
-                    fontSize: deviceSize.width / 25,
+                    fontSize: deviceSize.width / 30,
                   ),
                 )
               ],
