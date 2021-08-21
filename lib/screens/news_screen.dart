@@ -10,7 +10,6 @@ class NewsScreen extends StatefulWidget {
 }
 
 class _NewsScreenState extends State<NewsScreen> {
-  var didErrorOccur = false;
   @override
   void didChangeDependencies() async {
     final newsProvider = Provider.of<NewsProvider>(context);
@@ -36,7 +35,6 @@ class _NewsScreenState extends State<NewsScreen> {
           });
       setState(() {
         isNewsLoading = false;
-        didErrorOccur = true;
       });
     }
     super.didChangeDependencies();
@@ -48,39 +46,47 @@ class _NewsScreenState extends State<NewsScreen> {
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              Container(
+        body: isNewsLoading
+            ? Expanded(
                 child: Center(
-                  child: Text(
-                    'Latest News',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: deviceSize.width / 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
+                  child: CircularProgressIndicator(
+                    color: kBlackGrey,
                   ),
                 ),
-              ),
-              ...newsProvider.latestHeadlines
-                  .map(
-                    (e) => NewsCard(
-                      title: e.title,
-                      description: e.description,
-                      urlToImage: e.urlToImage,
-                      url: e.url,
-                      use: 'everything',
+              )
+            : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 20,
                     ),
-                  )
-                  .toList()
-            ],
-          ),
-        ));
+                    Container(
+                      child: Center(
+                        child: Text(
+                          'Latest News',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: deviceSize.width / 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                    ...newsProvider.latestHeadlines
+                        .map(
+                          (e) => NewsCard(
+                            title: e.title,
+                            description: e.description,
+                            urlToImage: e.urlToImage,
+                            url: e.url,
+                            use: 'everything',
+                          ),
+                        )
+                        .toList()
+                  ],
+                ),
+              ));
   }
 }

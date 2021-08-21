@@ -104,7 +104,7 @@ class PortfolioCard extends StatelessWidget {
                   maxLines: 1,
                   style: TextStyle(
                     color: Colors.grey,
-                    fontSize: deviceSize.width / 25,
+                    fontSize: deviceSize.width / 30,
                   ),
                 )
               ],

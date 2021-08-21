@@ -6,6 +6,7 @@ import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/widgets/company_wise_news.dart';
 import 'package:stock_trader/widgets/detail_screen_chart_widget.dart';
 import 'package:stock_trader/widgets/pie_chart_detail.dart';
+import 'package:stock_trader/widgets/stats_card.dart';
 import 'package:stock_trader/widgets/text_row.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -72,21 +73,12 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
 
     late final int quantityOfStocks;
 
-    final List<Color> colorList = [
-      Colors.green,
-      blackgrey,
-    ];
-
-    // final ordersData = Provider.of<Orders>(context, listen: false);
-
-    // This will NEVER fail
-
     void _showModalSheet(BuildContext ctx) {
       showModalBottomSheet(
         context: ctx,
         builder: (bctx) => SingleChildScrollView(
           child: Container(
-            // height: deviceSize.height * 0.5,
+            height: deviceSize.height * 0.5,
             padding: EdgeInsets.only(
                 top: 10,
                 left: 10,
@@ -181,9 +173,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                     ],
                   ),
                 ),
-
-                //Find a null safe package to implement slide to buy and slide to sell feature
-
                 ElevatedButton(
                   onPressed: () {
                     stocksData.addNewTransaction(
@@ -220,7 +209,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                     style: profilePageDataStyle,
                   ),
                 ),
-
                 ElevatedButton(
                   onPressed: () {
                     stocksData.addNewTransaction(
@@ -425,105 +413,8 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        // margin: EdgeInsets.all(deviceHeight * 0.02),
-                        // padding: EdgeInsets.all(deviceHeight * 0.02),
-                        height: deviceSize.height * 0.35,
-                        width: double.infinity,
-                        // color: blackgrey,
-                        child: Column(
-                          children: [
-                            Text(
-                              'Stats',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                TextRow(
-                                  dataType: 'OPEN',
-                                  value:
-                                      detailDataProvider.openPrice.toString(),
-                                ),
-                                Spacer(),
-                                TextRow(
-                                  dataType: 'PREV CLOSE',
-                                  value:
-                                      detailDataProvider.closePrice.toString(),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                //yet to be done
-                                TextRow(
-                                  dataType: 'HIGH',
-                                  value:
-                                      detailDataProvider.todaysHigh.toString(),
-                                ),
-                                Spacer(),
-                                TextRow(
-                                  dataType: 'LOW',
-                                  value:
-                                      detailDataProvider.todaysLow.toString(),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                TextRow(
-                                  dataType: '52 WK HIGH',
-                                  value: detailDataProvider.weekHigh,
-                                ),
-                                Spacer(),
-                                TextRow(
-                                  dataType: '52 WK LOW',
-                                  value: detailDataProvider.weekLow,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                TextRow(
-                                  dataType: 'MKT CAP',
-                                  value: detailDataProvider.marketCap,
-                                ),
-                                Spacer(),
-                                TextRow(
-                                  dataType: 'CUR',
-                                  value: detailDataProvider.currency,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                     // PieChartDetail(colorList, marketSentimentMap),
+                    StatsCard(),
                     Text(
                       'Latest News',
                       style: profilePageStyle,
