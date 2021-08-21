@@ -14,6 +14,7 @@ class TextRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             dataType,

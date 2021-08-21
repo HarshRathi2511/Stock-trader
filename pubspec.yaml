@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  transformer_page_view:  
+  transformer_page_view:
   google_nav_bar: ^5.0.5
   # curved_navigation_bar: ^1.0.1
   pie_chart: ^5.0.0

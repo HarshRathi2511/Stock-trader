@@ -127,9 +127,26 @@ class StockProvider with ChangeNotifier {
     return _totalLoss;
   }
 
-  // int get ordersListStockCount {
-  //   return _orderedStocks.length;
-  // }
+  bool isSellingPossible(String symbol, int quantity) {
+    if (portfolioStocks.containsKey(symbol)) {
+      final stocksCount = portfolioStocks[symbol]!.quantity;
+      if (stocksCount-quantity >= 0) {
+        portfolioStocks.update(
+          symbol,
+          (value) => PortfolioStock(
+            title: value.title,
+            symbol: value.symbol,
+            quantity: value.quantity - quantity,
+            priceChange: value.priceChange,
+            stockPriceAtTheMoment: value.stockPriceAtTheMoment,
+            didPriceIncrease: value.didPriceIncrease,
+          ),
+        );
+        return true;
+      }
+    }
+    return false;
+  }
 
   void transactionsWithProfit() {
     _transactedListStocks.forEach((key, value) {
@@ -310,8 +327,12 @@ class StockProvider with ChangeNotifier {
   }
 
   void calculatetotalLoss() {
+<<<<<<< HEAD
     try{
         //put request
+=======
+    //put request
+>>>>>>> origin/master
     _totalLoss = 0;
     _transactionsWithProfit.forEach((key, value) {
       _totalLoss += value.quantityOfStocks *
