@@ -4,7 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:stock_trader/providers/detail_screen_provider.dart';
 import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/widgets/company_wise_news.dart';
-import 'package:stock_trader/widgets/stats..dart';
+import 'package:stock_trader/widgets/detail_screen_chart_widget.dart';
+import 'package:stock_trader/widgets/pie_chart_detail.dart';
+import 'package:stock_trader/widgets/stats_card.dart';
+import 'package:stock_trader/widgets/text_row.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../widgets/modal_sheet.dart';
 
@@ -68,7 +71,186 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
     final deviceSize = MediaQuery.of(context).size;
     final stocksData = Provider.of<StockProvider>(context, listen: false);
     final detailDataProvider = Provider.of<DetailProvider>(context);
+    late final int quantityOfStocks;
 
+    void _showModalSheet(BuildContext ctx) {
+      showModalBottomSheet(
+        context: ctx,
+        builder: (bctx) => SingleChildScrollView(
+          child: Container(
+            height: deviceSize.height * 0.5,
+            padding: EdgeInsets.only(
+                top: 10,
+                left: 10,
+                right: 10,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 50),
+            child: Column(
+              children: [
+                Container(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        stockSymbol,
+                        style: TextStyle(
+                          fontSize: deviceSize.height * 0.04,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Expanded(child: Text(' ')),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      vertical: deviceSize.height * 0.03, horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text('Quantity', style: kmodalSheet),
+                      Text('Current Price', style: kmodalSheet),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(
+                    vertical: deviceSize.height * 0.001,
+                    horizontal: deviceSize.width * 0.02,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        height: deviceSize.height * 0.05,
+                        width: deviceSize.width * 0.25,
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                          width: 1,
+                        )),
+                        child: TextField(
+                          cursorColor: Colors.black87,
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                          controller: quantityController,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            hintText: '    quantity',
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            // enabledBorder: InputBorder.,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                              fontSize: deviceSize.width / 26,
+                            ),
+                          ),
+                          onSubmitted: (_) {
+                            setState(() {
+                              quantityOfStocks =
+                                  int.parse(quantityController.text);
+                            });
+                          },
+                        ),
+                      ),
+                      Chip(
+                        label: Text(
+                          '\$' + detailDataProvider.currentPrice.toString(),
+                          style: TextStyle(
+                              fontSize: deviceSize.height * 0.03,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        shadowColor: Colors.green[200],
+                        elevation: 7,
+                        padding: EdgeInsets.all(8),
+                        backgroundColor: Colors.blueGrey[900],
+                      ),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    stocksData.addNewTransaction(
+                      detailDataProvider.name,
+                      stockSymbol,
+                      detailDataProvider.currentPrice,
+                      DateTime.now(),
+                      quantityOfStocks,
+                      TransactionType.bought,
+                    );
+                    stocksData.addPortfolioStock(
+                      detailDataProvider.name,
+                      stockSymbol,
+                      detailDataProvider.currentPrice,
+                      quantityOfStocks,
+                      true,
+                      3.2,
+                      TransactionType.bought,
+                    );
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Stocks bought',
+                        ),
+                        duration: Duration(
+                          milliseconds: 800,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'BUY',
+                    style: profilePageDataStyle,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    stocksData.addNewTransaction(
+                      detailDataProvider.name,
+                      stockSymbol,
+                      detailDataProvider.currentPrice,
+                      DateTime.now(),
+                      quantityOfStocks,
+                      TransactionType.sold,
+                    );
+                    stocksData.addPortfolioStock(
+                      detailDataProvider.name,
+                      stockSymbol,
+                      detailDataProvider.currentPrice,
+                      quantityOfStocks,
+                      true,
+                      3.2,
+                      TransactionType.sold,
+                    );
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Stocks sold',
+                        ),
+                        duration: Duration(
+                          milliseconds: 800,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    'SELL',
+                    style: profilePageDataStyle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       floatingActionButton: isLoading
           ? null

@@ -104,7 +104,7 @@ class DetailProvider with ChangeNotifier {
     final result = json.decode(response.body);
     _searchResults = [];
     for (var res in result["result"]) {
-      if (res["symbol"].indexOf('.') == -1) {
+      if (res["symbol"].indexOf('.') == -1 && res["symbol"].indexOf(":") == -1) {
         _searchResults
             .add({'symbol': res["symbol"], 'name': res["description"]});
         // print(_searchResults[0].values.toList());
