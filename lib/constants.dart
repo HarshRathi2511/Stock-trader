@@ -6,13 +6,18 @@ const Color kBlackGrey = Color(0xFF22262B);
 
 const TextStyle profilePageStyle = TextStyle(
   color: Colors.white,
-  fontSize: 16,
+  fontSize: 20,
+);
+
+const TextStyle profilePageTextStyle = TextStyle(
+  color: Colors.white,
+  fontSize: 20,
+  fontWeight: FontWeight.bold,
 );
 
 const TextStyle profilePageDataStyle = TextStyle(
   color: Colors.white,
-  fontSize: 32,
-  fontWeight: FontWeight.bold,
+  fontSize: 28,
 );
 
 const TextStyle kmodalSheet = TextStyle(fontSize: 21, color: Colors.black);

@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:stock_trader/constants.dart';
 import 'package:provider/provider.dart';
+import 'package:stock_trader/providers/balance_provider.dart';
 import 'package:stock_trader/providers/detail_screen_provider.dart';
 import 'package:stock_trader/providers/stock.dart';
 import 'package:stock_trader/widgets/company_wise_news.dart';
-import 'package:stock_trader/widgets/detail_screen_chart_widget.dart';
-import 'package:stock_trader/widgets/pie_chart_detail.dart';
 import 'package:stock_trader/widgets/stats_card.dart';
-import 'package:stock_trader/widgets/text_row.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../widgets/modal_sheet.dart';
 
 class StockDetailScreen extends StatefulWidget {
   static const routeName = '/stock-detail';
@@ -71,6 +68,8 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
     final deviceSize = MediaQuery.of(context).size;
     final stocksData = Provider.of<StockProvider>(context, listen: false);
     final detailDataProvider = Provider.of<DetailProvider>(context);
+    final quantityController = TextEditingController();
+    final balanceProvider = Provider.of<BalanceProvider>(context);
     late final int quantityOfStocks;
 
     void _showModalSheet(BuildContext ctx) {
@@ -78,7 +77,6 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
         context: ctx,
         builder: (bctx) => SingleChildScrollView(
           child: Container(
-            height: deviceSize.height * 0.5,
             padding: EdgeInsets.only(
                 top: 10,
                 left: 10,
@@ -175,32 +173,89 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    stocksData.addNewTransaction(
-                      detailDataProvider.name,
-                      stockSymbol,
-                      detailDataProvider.currentPrice,
-                      DateTime.now(),
-                      quantityOfStocks,
-                      TransactionType.bought,
-                    );
-                    stocksData.addPortfolioStock(
-                      detailDataProvider.name,
-                      stockSymbol,
-                      detailDataProvider.currentPrice,
-                      quantityOfStocks,
-                      true,
-                      3.2,
-                      TransactionType.bought,
-                    );
-                    Navigator.of(context).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Text(
+                          'Are you sure ?',
+                        ),
                         content: Text(
-                          'Stocks bought',
+                          'Do you want to proceed and buy $quantityOfStocks stocks?',
                         ),
-                        duration: Duration(
-                          milliseconds: 800,
-                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              if (balanceProvider.isBuyingPossible(
+                                detailDataProvider.currentPrice,
+                                quantityOfStocks,
+                              )) {
+                                stocksData.addNewTransaction(
+                                  detailDataProvider.name,
+                                  stockSymbol,
+                                  detailDataProvider.currentPrice,
+                                  DateTime.now(),
+                                  quantityOfStocks,
+                                  TransactionType.bought,
+                                );
+                                stocksData.addPortfolioStock(
+                                  detailDataProvider.name,
+                                  stockSymbol,
+                                  detailDataProvider.currentPrice,
+                                  quantityOfStocks,
+                                  true,
+                                  3.2,
+                                  TransactionType.bought,
+                                );
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Stocks bought',
+                                    ),
+                                    duration: Duration(
+                                      milliseconds: 800,
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                Navigator.of(context).pop();
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                    title: Text('Transaction failed'),
+                                    content: Text(
+                                      "You don't have enough balance",
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text('Ok'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text(
+                              'Yes',
+                              textAlign: TextAlign.end,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'Cancel',
+                              textAlign: TextAlign.end,
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -211,32 +266,81 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    stocksData.addNewTransaction(
-                      detailDataProvider.name,
-                      stockSymbol,
-                      detailDataProvider.currentPrice,
-                      DateTime.now(),
-                      quantityOfStocks,
-                      TransactionType.sold,
-                    );
-                    stocksData.addPortfolioStock(
-                      detailDataProvider.name,
-                      stockSymbol,
-                      detailDataProvider.currentPrice,
-                      quantityOfStocks,
-                      true,
-                      3.2,
-                      TransactionType.sold,
-                    );
-                    Navigator.of(context).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Text(
+                          'Are you sure ?',
+                        ),
                         content: Text(
-                          'Stocks sold',
+                          'Do you want to proceed and sell $quantityOfStocks stocks?',
                         ),
-                        duration: Duration(
-                          milliseconds: 800,
-                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              if (stocksData.isSellingPossible(
+                                  stockSymbol, quantityOfStocks)) {
+                                stocksData.addNewTransaction(
+                                  detailDataProvider.name,
+                                  stockSymbol,
+                                  detailDataProvider.currentPrice,
+                                  DateTime.now(),
+                                  quantityOfStocks,
+                                  TransactionType.sold,
+                                );
+                                stocksData.addPortfolioStock(
+                                  detailDataProvider.name,
+                                  stockSymbol,
+                                  detailDataProvider.currentPrice,
+                                  quantityOfStocks,
+                                  true,
+                                  3.2,
+                                  TransactionType.sold,
+                                );
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Stocks sold',
+                                    ),
+                                    duration: Duration(
+                                      milliseconds: 800,
+                                    ),
+                                  ),
+                                );
+                              }else{
+                                Navigator.of(context).pop();
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                    title: Text('Transaction failed'),
+                                    content: Text(
+                                      "You don't have $quantityOfStocks available for selling",
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text('Ok'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
+                            child: Text('Yes'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Cancel'),
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -251,18 +355,13 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
         ),
       );
     }
+
     return Scaffold(
       floatingActionButton: isLoading
           ? null
           : FloatingActionButton.extended(
               onPressed: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (bctx) => ModalSheet(
-                          stockSymbol: stockSymbol,
-                        ));
-
-                print('modal sheet ');
+                _showModalSheet(context);
               },
               label: const Text(
                 'Trade',

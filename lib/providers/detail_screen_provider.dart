@@ -128,8 +128,6 @@ class DetailProvider with ChangeNotifier {
 
     final details = json.decode(profileResponse.body);
 
-    // print("Change ${data["d"]}");
-
     _logoURL = details["logo"];
     _exchangePlatform = details['exchange'];
     _currency = details['currency'];

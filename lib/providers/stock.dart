@@ -161,9 +161,26 @@ class StockProvider with ChangeNotifier {
     return _totalLoss;
   }
 
-  // int get ordersListStockCount {
-  //   return _orderedStocks.length;
-  // }
+  bool isSellingPossible(String symbol, int quantity) {
+    if (portfolioStocks.containsKey(symbol)) {
+      final stocksCount = portfolioStocks[symbol]!.quantity;
+      if (stocksCount-quantity >= 0) {
+        portfolioStocks.update(
+          symbol,
+          (value) => PortfolioStock(
+            title: value.title,
+            symbol: value.symbol,
+            quantity: value.quantity - quantity,
+            priceChange: value.priceChange,
+            stockPriceAtTheMoment: value.stockPriceAtTheMoment,
+            didPriceIncrease: value.didPriceIncrease,
+          ),
+        );
+        return true;
+      }
+    }
+    return false;
+  }
 
   void transactionsWithProfit() {
     _transactedListStocks.forEach((key, value) {
@@ -207,7 +224,8 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addNewTransaction( //post request
+  void addNewTransaction(
+    //post request
     title,
     symbol,
     price,
@@ -229,11 +247,18 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addPortfolioStock(String title, String symbol, double stockPriceAtTheMoment,
-      int quantity, bool didPriceIncrease,double priceChange,TransactionType transactionType) {
+  void addPortfolioStock(
+      String title,
+      String symbol,
+      double stockPriceAtTheMoment,
+      int quantity,
+      bool didPriceIncrease,
+      double priceChange,
+      TransactionType transactionType) {
     if (_portfolioStocks.containsKey(symbol)) {
       if (transactionType == TransactionType.bought) {
-        _portfolioStocks.update( //  patch 
+        _portfolioStocks.update(
+          //  patch
           symbol,
           (value) => PortfolioStock(
             title: value.title,
@@ -245,7 +270,8 @@ class StockProvider with ChangeNotifier {
           ),
         );
       } else {
-        _portfolioStocks.update(  //patch 
+        _portfolioStocks.update(
+          //patch
           symbol,
           (value) => PortfolioStock(
             title: value.title,
@@ -258,7 +284,8 @@ class StockProvider with ChangeNotifier {
         );
       }
     } else {
-      _portfolioStocks.putIfAbsent( //post req
+      _portfolioStocks.putIfAbsent(
+        //post req
         symbol,
         () => PortfolioStock(
           title: title,
@@ -275,7 +302,8 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addWatchListStock(  //post request
+  void addWatchListStock(
+    //post request
     title,
     symbol,
     price,
@@ -296,7 +324,8 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void calculatetotalProfit() {  //put request
+  void calculatetotalProfit() {
+    //put request
     _totalProfit = 0;
     _transactionsWithProfit.forEach((key, value) {
       _totalProfit += value.quantityOfStocks *
@@ -305,7 +334,8 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void calculatetotalLoss() {  //put request
+  void calculatetotalLoss() {
+    //put request
     _totalLoss = 0;
     _transactionsWithProfit.forEach((key, value) {
       _totalLoss += value.quantityOfStocks *

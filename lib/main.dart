@@ -1,4 +1,5 @@
 import 'package:provider/provider.dart';
+import 'package:stock_trader/providers/balance_provider.dart';
 import 'package:stock_trader/providers/detail_screen_provider.dart';
 import 'package:stock_trader/providers/news_provider.dart';
 import 'package:stock_trader/providers/stock.dart';
@@ -27,8 +28,6 @@ void main() {
 //   runApp(MyApp());
 // }
 
-
-
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -43,6 +42,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => DetailProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => BalanceProvider(),
         ),
       ],
       child: MaterialApp(
