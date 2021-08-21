@@ -47,7 +47,7 @@ class Auth with ChangeNotifier {
             'password': password,
             'returnSecureToken': true, //in the docs
           }));
-      print(json.decode(response.body));
+      // print(json.decode(response.body));
       //returns a map of
 //Property Name	Type	Description
 // idToken	   string	  A Firebase Auth ID token for the newly created user.

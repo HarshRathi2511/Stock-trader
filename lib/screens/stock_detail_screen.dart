@@ -358,7 +358,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
       );
     }
 
->>>>>>> origin/master
+
     return Scaffold(
       floatingActionButton: isLoading
           ? null

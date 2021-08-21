@@ -5,7 +5,19 @@ import 'package:stock_trader/widgets/stock_card.dart';
 import 'package:stock_trader/providers/stock.dart';
 import './search_screen.dart';
 
-class WatchlistScreen extends StatelessWidget {
+class WatchlistScreen extends StatefulWidget {
+  @override
+  _WatchlistScreenState createState() => _WatchlistScreenState();
+}
+
+
+class _WatchlistScreenState extends State<WatchlistScreen> {
+
+  @override
+  void initState() {
+    Provider.of<StockProvider>(context,listen:false).fetchAndSetWatchlistStocks();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;

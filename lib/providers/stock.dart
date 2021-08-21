@@ -65,10 +65,10 @@ class StockProvider with ChangeNotifier {
   final String? authToken;
   final String? userId;
 
-  StockProvider({this.authToken, this.userId});
+  StockProvider(this.authToken, this.userId, this._watchListStocks);
 
   final inputController = TextEditingController();
-  
+
   List<Stock> _stocks = [];
   Map<String, Stock> _watchListStocks = {};
   Map<String, PortfolioStock> _portfolioStocks = {};
@@ -130,7 +130,7 @@ class StockProvider with ChangeNotifier {
   bool isSellingPossible(String symbol, int quantity) {
     if (portfolioStocks.containsKey(symbol)) {
       final stocksCount = portfolioStocks[symbol]!.quantity;
-      if (stocksCount-quantity >= 0) {
+      if (stocksCount - quantity >= 0) {
         portfolioStocks.update(
           symbol,
           (value) => PortfolioStock(
@@ -268,6 +268,36 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> fetchAndSetWatchlistStocks() async {
+    try {
+      final url = Uri.parse(
+          'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/watchlist.json?auth=$authToken');
+      final response = await http.get(url);
+      // print(response.body);
+      final extractedData =
+          Map<String, dynamic>.from(json.decode(response.body));
+      print(extractedData);
+      //{-Mh_-r_l-yM0gsBQSJcg: {didPriceIncrease: false, priceChange: -4.455, stockPrice: 3183.295, symbol: AMZN, title: Amazon.com Inc},
+      // -MhbwCW8A9Bf5uw_BVH2: {didPriceIncrease: true, priceChange: 12.2, stockPrice: 3199.95, symbol: AMZN, title: Amazon.com Inc},
+      //-Mhbzx_2BnHZ_CL1PpEX: {didPriceIncrease: true, priceChange: 6.79, stockPrice: 680.26, symbol: TSLA, title: Tesla Inc},
+      //-MhcEBNlawcH7pn4CP4N: {didPriceIncrease: true, priceChange: 12.2, stockPrice: 3199.95, symbol: AMZN, title: Amazon.com Inc}, -MhcEP9scBH6qmyPO6ZF: {didPriceIncrease: true, priceChange: 6.79, stockPrice: 680.26, symbol: TSLA, title: Tesla Inc}}
+      extractedData.forEach((key, stockData) {
+        _watchListStocks.addAll({
+          stockData['symbol']: Stock(
+              didPriceIncrease: stockData['didPriceIncrease'],
+              priceChange: stockData['priceChange'],
+              symbol: stockData['symbol'],
+              title: stockData['title'],
+              stockPrice: stockData['stockPrice']),              
+        });
+      });
+    } catch (error) {
+      print(error);
+      throw error;
+    }
+    notifyListeners();
+  }
+
   void addWatchListStock(
     //post request
     title,
@@ -327,24 +357,22 @@ class StockProvider with ChangeNotifier {
   }
 
   void calculatetotalLoss() {
-<<<<<<< HEAD
-    try{
-        //put request
-    _totalLoss = 0;
-    _transactionsWithProfit.forEach((key, value) {
-      _totalLoss += value.quantityOfStocks *
-          (value.stockPriceWhenBought - value.stockPriceWhenSold!);
-    });
-    final url = Uri.parse(
-        'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/totalLoss.json?auth=$authToken');
-     http.put(url,body: {
-       'loss' : _totalLoss,
-     });  
-    }
-    catch(error) {
+    try {
+      //put request
+      _totalLoss = 0;
+      _transactionsWithProfit.forEach((key, value) {
+        _totalLoss += value.quantityOfStocks *
+            (value.stockPriceWhenBought - value.stockPriceWhenSold!);
+      });
+      final url = Uri.parse(
+          'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/totalLoss.json?auth=$authToken');
+      http.put(url, body: {
+        'loss': _totalLoss,
+      });
+    } catch (error) {
       print(error);
     }
-   
+
     notifyListeners();
   }
 
