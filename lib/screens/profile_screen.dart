@@ -17,6 +17,11 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
+  void initState() {
+    Provider.of<StockProvider>(context,listen: false).fetchTotalProfitLoss();
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     final stockProvider = Provider.of<StockProvider>(context);
     final balanceProvider = Provider.of<BalanceProvider>(context);

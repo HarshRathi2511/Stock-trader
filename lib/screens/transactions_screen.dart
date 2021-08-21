@@ -3,9 +3,20 @@ import 'package:stock_trader/providers/stock.dart';
 import 'package:provider/provider.dart';
 import '../widgets/transaction_card.dart';
 
-class TransactionScreen extends StatelessWidget {
+class TransactionScreen extends StatefulWidget {
   const TransactionScreen({Key? key}) : super(key: key);
 
+  @override
+  _TransactionScreenState createState() => _TransactionScreenState();
+}
+
+class _TransactionScreenState extends State<TransactionScreen> {
+
+  @override
+  void initState() {
+    Provider.of<StockProvider>(context,listen:false).fetchAndSetTransactions();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final stockProvider = Provider.of<StockProvider>(context);
