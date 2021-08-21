@@ -65,7 +65,8 @@ class StockProvider with ChangeNotifier {
   final String? authToken;
   final String? userId;
 
-  StockProvider(this.authToken, this.userId, this._watchListStocks);
+  StockProvider(this.authToken, this.userId, this._watchListStocks,
+      this._totalProfit, this._totalLoss);
 
   final inputController = TextEditingController();
 
@@ -198,18 +199,66 @@ class StockProvider with ChangeNotifier {
     dateOfTransaction,
     quantityOfStocks,
     transactionType,
-  ) {
-    _transactedListStocks.putIfAbsent(
-      dateOfTransaction.toString(),
-      () => TransactedStock(
-        title: title,
-        symbol: symbol,
-        stockPriceWhenBought: price,
-        dateOfransaction: dateOfTransaction,
-        quantityOfStocks: quantityOfStocks,
-        transactionType: transactionType,
-      ),
-    );
+  ) async {
+    try {
+      final url = Uri.parse(
+          'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/transactions.json?auth=$authToken');
+
+      _transactedListStocks.putIfAbsent(
+        dateOfTransaction.toString(),
+        () => TransactedStock(
+          title: title,
+          symbol: symbol,
+          stockPriceWhenBought: price,
+          dateOfransaction: dateOfTransaction,
+          quantityOfStocks: quantityOfStocks,
+          transactionType: transactionType,
+        ),
+      );
+      final response = await http.post(url,
+          body: json.encode({
+            'title': title,
+            'symbol': symbol,
+            'stockPriceWhenBought': price,
+            // 'dateOfTransaction': dateOfTransaction.toIso8601String(),
+            'quantityOfStocks': quantityOfStocks,
+            'transactionType':
+                transactionType == TransactionType.sold ? 'sold' : 'bought',
+          }));
+      // print(response.body);
+      // print(response.statusCode);
+      print('posted tx successfully');
+    } catch (error) {
+      print(error);
+      throw error;
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> fetchAndSetTransactions() async {
+    final url = Uri.parse(
+        'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/transactions.json?auth=$authToken');
+    final response = await http.get(url);
+    final extractedData = Map<String, dynamic>.from(json.decode(response.body));
+    print('transaction data extracted ');
+    print(extractedData);
+    //{-MhckuFXvGmzPhY6JsTR: {price: 680.26, quantityOfStocks: 5, symbol: TSLA, title: Tesla Inc, transactionType: bought}}
+    extractedData.forEach((key, txStock) {
+      _transactedListStocks.addAll({
+        key: TransactedStock(
+          title: txStock['title'],
+          symbol: txStock['symbol'],
+          stockPriceWhenBought: double.parse(txStock['stockPriceWhenBought']),
+          dateOfransaction: DateTime.now(),
+          quantityOfStocks: int.parse(txStock['quantityOfStocks']),
+          // transactionType: txStock['transactionType'].contains('bought')
+              // ? TransactionType.bought
+          //     : TransactionType.sold,
+            transactionType: TransactionType.bought,   
+        ),
+      });
+    });
     notifyListeners();
   }
 
@@ -288,7 +337,7 @@ class StockProvider with ChangeNotifier {
               priceChange: stockData['priceChange'],
               symbol: stockData['symbol'],
               title: stockData['title'],
-              stockPrice: stockData['stockPrice']),              
+              stockPrice: stockData['stockPrice']),
         });
       });
     } catch (error) {
@@ -346,17 +395,28 @@ class StockProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void calculatetotalProfit() {
+  void calculatetotalProfit() async {
     //put request
-    _totalProfit = 0;
-    _transactionsWithProfit.forEach((key, value) {
-      _totalProfit += value.quantityOfStocks *
-          (value.stockPriceWhenSold! - value.stockPriceWhenBought);
-    });
+    try {
+      final url = Uri.parse(
+          'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/totalProfit.json?auth=$authToken');
+      _totalProfit = 0;
+      _transactionsWithProfit.forEach((key, value) {
+        _totalProfit += value.quantityOfStocks *
+            (value.stockPriceWhenSold! - value.stockPriceWhenBought);
+      });
+      final response = await http.put(url, body: {
+        'profit': _totalProfit,
+      });
+      print(response.body);
+    } catch (error) {
+      print(error);
+      throw error;
+    }
     notifyListeners();
   }
 
-  void calculatetotalLoss() {
+  void calculatetotalLoss() async {
     try {
       //put request
       _totalLoss = 0;
@@ -366,14 +426,33 @@ class StockProvider with ChangeNotifier {
       });
       final url = Uri.parse(
           'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/totalLoss.json?auth=$authToken');
-      http.put(url, body: {
+      final response = await http.put(url, body: {
         'loss': _totalLoss,
       });
+      print(response.body);
     } catch (error) {
       print(error);
     }
 
     notifyListeners();
+  }
+
+  Future<void> fetchTotalProfitLoss() async {
+    try {
+      final urlLoss = Uri.parse(
+          'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/totalLoss.json?auth=$authToken');
+      final responseLoss = await http.get(urlLoss);
+      print(responseLoss.body);
+      _totalLoss = json.decode(responseLoss.body)['loss'];
+      final urlProfit = Uri.parse(
+          'https://stock-trader-563c6-default-rtdb.firebaseio.com/$userId/totalProfit.json?auth=$authToken');
+      final responseProfit = await http.get(urlProfit);
+      _totalProfit = json.decode(responseProfit.body);
+      notifyListeners();
+    } catch (error) {
+      print(error);
+      throw error;
+    }
   }
 
   Future<void> newUserData() async {
