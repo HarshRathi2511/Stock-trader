@@ -7,19 +7,31 @@ import 'package:stock_trader/providers/stock.dart';
 import 'package:provider/provider.dart';
 import 'package:stock_trader/widgets/portfolio_card.dart';
 
-class PortfolioScreen extends StatelessWidget {
+class PortfolioScreen extends StatefulWidget {
+  @override
+  _PortfolioScreenState createState() => _PortfolioScreenState();
+}
+
+class _PortfolioScreenState extends State<PortfolioScreen> {
+Map<String,double> ?dataMap;
+  @override
+  void initState() {
+   Provider.of<StockProvider>(context,listen:false).fetchAndSetPortfolioStocks();
+   Map<String,double> dataMap =Provider.of<StockProvider>(context).pData;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     final stockProvider = Provider.of<StockProvider>(context);
     final deviceHeight = MediaQuery.of(context).size.height;
     final deviceWidth = MediaQuery.of(context).size.width;
 
-    Map<String, double> dataMap = {
-      "Reliance": 5,
-      "Amazon": 3,
-      "Siemens": 2,
-      "Blue Origin": 2,
-    };
+    // Map<String, double> dataMap = {
+    //   "Reliance": 5,
+    //   "Amazon": 3,
+    //   "Siemens": 2,
+    //   "Blue Origin": 2,
+    // };
     List<Color> colorList = [
       Colors.red,
       Colors.green,
@@ -125,7 +137,7 @@ class PortfolioScreen extends StatelessWidget {
                   width: deviceWidth * 0.9,
                   color: blackgrey,
                   child: PieChart(
-                    dataMap: dataMap,
+                    dataMap: dataMap!,
                     animationDuration: Duration(milliseconds: 800),
                     chartLegendSpacing: 32,
                     chartRadius: MediaQuery.of(context).size.width / 3.2,

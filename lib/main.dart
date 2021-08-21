@@ -38,13 +38,14 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (ctx) => Auth()),
         ChangeNotifierProxyProvider<Auth,StockProvider>(
-          create: (ctx) => StockProvider('authtoken', 'user-id',{},0,0),
+          create: (ctx) => StockProvider('authtoken', 'user-id',{},0,0,{}),
           update: (ctx,auth,prevStockProviderData)=>StockProvider(
              auth.tokenData,//token
              auth.userId, //userid 
              prevStockProviderData!.watchListStocks,
              prevStockProviderData.totalProfit,
              prevStockProviderData.totalLoss,
+             prevStockProviderData.transactedListStocks,
           ),
         ),
         // ChangeNotifierProvider(create: (ctx)=>StockProvider(),),
